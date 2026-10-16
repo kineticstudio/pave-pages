@@ -1,0 +1,380 @@
+/* Existing Pave navigation chrome, copied from calculator.html on 2026-09-23.
+   No framework or parallel navigation behavior: shared nav.js still owns it.
+   Kept page-scoped until the prototype's shared-shell extraction. */
+    /* ── Nav (light variant) ─────────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 50;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease, box-shadow 0.3s ease;
+    }
+    /* Hidden while scrolling down; slides back in the moment you scroll up */
+    .nav.nav-hidden { transform: translateY(-100%); }
+    /* Past the hero, give the nav a readable frosted backdrop. The bar adapts
+       to the tone of the section behind it (set per-scroll from data-nav-tone):
+       dark frost over dark sections, light frost over light ones. */
+    /* Progressive blur: the frosted panel lives in ::before, extends past the
+       bar's bottom, and is masked so the blur + tint fade out gradually — no
+       hard cutoff line at the bottom edge. (Hunter 2026-07-22) */
+    .nav.nav-solid { background: transparent; }
+    .nav.nav-solid::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: -38px;               /* blur bleeds below the bar, then dissolves */
+      z-index: -1;
+      pointer-events: none;
+      background: linear-gradient(to bottom,
+        rgba(9, 12, 24, 0.74) 0%,
+        rgba(9, 12, 24, 0.56) 52%,
+        rgba(9, 12, 24, 0) 100%);
+      -webkit-backdrop-filter: blur(16px) saturate(1.4);
+      backdrop-filter: blur(16px) saturate(1.4);
+      -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 42%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 0%, #000 42%, transparent 100%);
+    }
+    .nav.nav-solid.nav-light::before {
+      background: linear-gradient(to bottom,
+        rgba(255, 255, 255, 0.86) 0%,
+        rgba(255, 255, 255, 0.64) 52%,
+        rgba(255, 255, 255, 0) 100%);
+    }
+    /* Over a light section, flip the logo / links / buttons to dark ink */
+    .nav.nav-light .logo,
+    .nav.nav-light .nav-link,
+    .nav.nav-light .nav-link.dd-open,
+    .nav.nav-light .nav-burger { color: #101014; }
+    .nav.nav-light .nav-link:hover,
+    .nav.nav-light .nav-link.dd-open { background: rgba(16, 16, 20, 0.06); }
+    /* Light nav: Sign In is a solid white pill (the translucent-dark version
+       read muddy over the light frost) */
+    .nav.nav-light .btn-secondary {
+      background: #fff;
+      color: #101014;
+      box-shadow: 0 1px 2px rgba(16, 16, 20, 0.10), inset 0 0 0 1px rgba(16, 16, 20, 0.05);
+    }
+    .nav.nav-light .btn-secondary:hover {
+      background: #fff;
+      color: #101014;
+      box-shadow: 0 2px 6px rgba(16, 16, 20, 0.14), inset 0 0 0 1px rgba(16, 16, 20, 0.08);
+    }
+    /* Don't hide the bar while a dropdown or the mobile sheet is open */
+    .nav:hover, .nav.dd-any, .nav.nm-open { transform: none !important; }
+
+    /* Logo */
+    .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; text-decoration: none; color: var(--ink); }
+
+    /* CSS-built Pave mark (mirrors index.html): blue shapes cycle one slot
+       clockwise per hover, morphing circle↔rounded-rect */
+    .pv-mark { position: relative; width: 29.2px; height: 25.6px; }
+    .pv-s { position: absolute; height: 12px; background: var(--blue); }
+    .pv-tl { left: 0;      top: 0;      width: 15.6px; border-radius: 3.1px; }
+    .pv-tr { left: 17.2px; top: 0;      width: 12px;   border-radius: 50%; }
+    .pv-bl { left: 0;      top: 13.6px; width: 12px;   border-radius: 50%; }
+    .pv-br { left: 13.6px; top: 13.6px; width: 15.6px; border-radius: 3.1px; }
+    .logo:hover .pv-tl { animation: pv-step-tl 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    .logo:hover .pv-tr { animation: pv-step-tr 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.05s forwards; }
+    .logo:hover .pv-br { animation: pv-step-br 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards; }
+    .logo:hover .pv-bl { animation: pv-step-bl 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards; }
+    @keyframes pv-step-tl { to { left: 17.2px; top: 0;      width: 12px;   border-radius: 50%; } }
+    @keyframes pv-step-tr { to { left: 13.6px; top: 13.6px; width: 15.6px; border-radius: 3.1px; } }
+    @keyframes pv-step-br { to { left: 0;      top: 13.6px; width: 12px;   border-radius: 50%; } }
+    @keyframes pv-step-bl { to { left: 0;      top: 0;      width: 15.6px; border-radius: 3.1px; } }
+    .pv-word { transform: translateY(3px); }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 40px;
+      padding: 0 16px;
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 15px;
+      color: var(--ink);   /* full strength — muted links read as disabled */
+      text-decoration: none;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .nav-link:hover,
+    .nav-link.dd-open { color: var(--ink); background: rgba(16, 16, 20, 0.05); }
+    .nav-link svg { flex-shrink: 0; opacity: 0.6; transition: transform 0.25s cubic-bezier(0.22,1,0.36,1); }
+    .nav-link.dd-open svg { transform: rotate(180deg); opacity: 1; }
+    .nav-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .btn {
+      /* anchors as well as buttons now (Sign In / Book a demo are real links) */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      white-space: nowrap;
+      height: 40px;
+      padding: 0 16px;
+      border: none;
+      border-radius: 10px;
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 15px;
+      cursor: pointer;
+      transition: border-radius 0.25s cubic-bezier(0.33,1,0.4,1), background 0.15s;
+    }
+    .btn:hover { border-radius: 999px; }
+    .btn-secondary { background: rgba(16, 16, 20, 0.06); color: var(--ink); }
+    .btn-secondary:hover { background: rgba(16, 16, 20, 0.10); }
+    .btn-primary { background: var(--yellow); color: var(--ink); }
+
+    /* ── Floating dropdown: morphing shell + menu layers (same as index) ─── */
+    .nav-float {
+      position: absolute;
+      top: 74px;
+      left: 50%;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid rgba(16, 16, 20, 0.08);   /* keeps the card readable on white */
+      box-shadow: 0 32px 90px rgba(4, 10, 30, 0.18), 0 6px 20px rgba(4, 10, 30, 0.08);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-50%) translateY(8px) scale(0.985);
+      transition: opacity 0.22s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.22s cubic-bezier(0.22,1,0.36,1),
+                  width 0.34s cubic-bezier(0.22,1,0.36,1),
+                  height 0.34s cubic-bezier(0.22,1,0.36,1);
+    }
+    .nav-float.no-anim { transition: none; }
+    .nav-float.open { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0) scale(1); }
+    .nav-card {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: grid;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.16s ease, transform 0.34s cubic-bezier(0.22,1,0.36,1);
+    }
+    .nav-card.active {
+      opacity: 1;
+      pointer-events: auto;
+      transition: opacity 0.24s ease 0.06s, transform 0.34s cubic-bezier(0.22,1,0.36,1);
+    }
+    .nav-card--platform { width: min(920px, calc(100vw - 32px)); grid-template-columns: repeat(3, 1fr); padding: 10px; }
+    /* Platform bento columns (mirrors index.html) */
+    .nvb { padding: 16px 18px; min-width: 0; }
+    /* Platform-wide row: spans all three columns so Pricing reads as global */
+    .nvb-global { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 8px 8px 0; padding-top: 10px; border-top: 1px solid rgba(16,16,20,0.09); }
+    .nvg { display: flex; align-items: flex-start; gap: 11px; padding: 11px 12px; border-radius: 12px; text-decoration: none; transition: background 0.15s ease; }
+    .nvg:hover { background: rgba(35, 92, 243, 0.07); }
+    .nvg-ico { flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 9px; color: var(--blue); background: rgba(35,92,243,0.10); transition: background 0.15s ease, color 0.15s ease; }
+    .nvg:hover .nvg-ico { color: #fff; background: var(--blue); }
+    .nvg strong { display: block; font-family: var(--font-display); font-size: 15px; font-weight: 500; color: var(--ink); transition: color 0.15s ease; }
+    .nvg:hover strong { color: var(--blue); }
+    .nvg em { display: block; margin-top: 2px; font-style: normal; font-size: 12.5px; line-height: 1.4; color: rgba(16,16,20,0.55); }
+    @media (max-width: 700px) { .nvb-global { grid-template-columns: 1fr; } }
+    .nvb-tile {
+      position: relative; display: flex; align-items: flex-end;
+      height: 178px; margin-bottom: 14px; padding: 16px 18px;
+      border-radius: 14px; overflow: hidden;
+      background: #0f2352;   /* solid navy — Market Data + Workflows */
+      color: #fff; font-family: var(--font-display); font-weight: 500; font-size: 17px;
+      text-decoration: none;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    /* Pave Agent tile keeps the living mesh "shader" look (class-targeted —
+       the agent column is FIRST in the new IA, not last) */
+    .nvb-tile--agent {
+      background: linear-gradient(135deg, #0a1a3f, #2f6bff, #16307a, #0a1a3f);
+      background-size: 320% 320%;
+      animation: nvbShader 9s ease-in-out infinite;
+    }
+    @keyframes nvbShader {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Click affordance on the three product tiles — the tiles were fully
+       linked but read as art, so nothing said "go here". Circle sits bottom
+       right; the tile reserves padding for it so labels never run under. */
+    .nvb-tile { padding-right: 58px; }
+    .nvb-arrow {
+      position: absolute;
+      right: 16px;
+      bottom: 16px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(6px);
+      transition: background 0.2s ease, color 0.2s ease, transform 0.25s cubic-bezier(0.22,1,0.36,1);
+    }
+    .nvb-tile:hover .nvb-arrow {
+      color: #101014;
+      background: #fff;
+      transform: translate(2px, -2px);
+    }
+    .nvb-tile:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 18px 40px rgba(4, 8, 25, 0.45); }
+    /* Hover: tile lifts + glows, the micro-UI slides in (no rotation) */
+    .nvb-tile::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(120% 90% at 80% 8%, rgba(77, 148, 187, 0.40), transparent 62%);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .nvb-tile:hover::before { opacity: 1; }
+    .nvx { transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+    .nvb-tile:hover .nvx { transform: translate(-7px, 4px) scale(1.05); }
+    .nvx-bars i { transform-origin: bottom; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .nvb-tile:hover .nvx-bars i { transform: scaleY(1.3); }
+    .nvb-tile:hover .nvx-bars i:nth-child(2) { transition-delay: 0.05s; }
+    .nvb-tile:hover .nvx-bars i:nth-child(3) { transition-delay: 0.1s; }
+    .nvb-tile:hover .nvx-bars i:nth-child(4) { transition-delay: 0.15s; }
+    .nvb-tile:hover .nvx-bars i:nth-child(5) { transition-delay: 0.2s; }
+    /* Product-specific micro-UIs on the tiles (mirrors index.html) */
+    .nvx {
+      position: absolute; top: 13px; right: -14px; width: 152px; padding: 10px 12px;
+      border-radius: 10px; background: #fff; box-shadow: 0 8px 24px rgba(4, 8, 25, 0.35);
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .nvx-row { display: flex; align-items: center; gap: 5px; font: 600 7.5px var(--font-body); color: #101014; }
+    .nvx-row em { margin-left: auto; font-style: normal; font-weight: 500; font-variant-numeric: tabular-nums; color: rgba(16,16,20,0.72); }
+    .nvx-dots { display: inline-flex; gap: 2px; }
+    .nvx-dots i { width: 6px; height: 4px; border-radius: 1.5px; background: #e6eaf2; }
+    .nvx-wf { flex-direction: row; align-items: center; gap: 8px; }
+    .nvx-donut {
+      position: relative; width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%;
+      display: grid; place-items: center;
+      background: conic-gradient(#235cf3 0 55%, #14204e 55% 70%, #4bc36b 70% 87%, #a78bfa 87% 100%);
+    }
+    .nvx-donut::before { content: ''; position: absolute; inset: 8px; border-radius: 50%; background: #fff; }
+    .nvx-donut b { position: relative; font: 600 7px var(--font-body); color: #101014; }
+    .nvx-col { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+    .nvx-legend { display: flex; align-items: center; gap: 4px; font: 500 7.5px var(--font-body); color: rgba(16,16,20,0.72); white-space: nowrap; }
+    .nvx-legend i { width: 6px; height: 6px; border-radius: 2px; flex-shrink: 0; }
+    .nvx-legend em { margin-left: auto; font-style: normal; font-weight: 600; color: #101014; }
+    .nvx-ag { background: #0b1430; }
+    .nvx-q {
+      font: 500 7px var(--font-mono, monospace); letter-spacing: 0.2px; color: #cdd9ee;
+      background: rgba(255, 255, 255, 0.09); border-radius: 4px; padding: 4px 6px;
+      white-space: nowrap; overflow: hidden;
+    }
+    .nvx-bars { display: flex; align-items: flex-end; gap: 3px; height: 17px; padding: 0 2px; }
+    .nvx-bars i { width: 11px; border-radius: 2px 2px 0 0; background: rgba(35, 92, 243, 0.6); }
+    .nvx-bars i.on { background: #0fcf52; }
+    .nav-card--insights { width: min(620px, calc(100vw - 32px)); grid-template-columns: 1fr 300px; }
+    .nav-card--customers { width: min(340px, calc(100vw - 32px)); grid-template-columns: 1fr; }
+    .nav-card--company { width: min(540px, calc(100vw - 32px)); grid-template-columns: 1fr 1fr; }
+    .nc-col--divide { border-left: 1px solid rgba(16,16,20,0.08); }
+
+    /* Top padding minus pill padding = pill's left inset (14px), so the
+       top-left hover pill sits equidistant from the card's top and left */
+    .nc-col { padding: 14px 26px 20px; min-width: 0; }
+    .nc-col--explore, .nc-col--feature { border-left: 1px solid rgba(16,16,20,0.08); }
+    .nc-h { font-size: 13px; color: rgba(16,16,20,0.5); margin-bottom: 16px; }
+    /* Menu links — .nc-item (Resources) + .nc-mini (Platform) share one
+       type size + hover: brand-blue ghost pill, text flips blue, no arrow */
+    .nc-item, .nc-mini { display: block; text-decoration: none; margin: 0 -12px; padding: 9px 12px; border-radius: 10px; transition: color 0.15s ease, background 0.15s ease; }
+    .nc-item { color: var(--ink); }
+    .nc-item:hover, .nc-mini:hover { background: rgba(35, 92, 243, 0.07); }
+    .nc-item strong, .nc-mini { display: block; font-family: var(--font-display); font-size: 15px; font-weight: 500; color: var(--ink); transition: color 0.15s ease; }
+    .nc-item span { display: block; margin-top: 4px; font-size: 13px; line-height: 1.45; color: rgba(16,16,20,0.55); }
+    .nc-item:hover strong, .nc-mini:hover { color: var(--blue); }
+    .nc-feature { display: block; text-decoration: none; }
+    .nc-feature-tile {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      height: 118px; border-radius: 12px;
+      background: radial-gradient(120% 160% at 12% 0%, #045419 0%, #002804 78%);
+      margin-bottom: 12px;
+    }
+    .nc-ft-sq { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 10px; background: #fff; }
+    .nc-ft-sq svg { width: 22px; height: 22px; }
+    .nc-ft-arr { color: rgba(255,255,255,0.85); font-size: 14px; }
+    .nc-feature strong { display: block; font-family: var(--font-display); font-size: 15px; font-weight: 500; line-height: 1.3; color: var(--ink); transition: color 0.15s ease; }
+    .nc-feature:hover strong { color: var(--blue); }
+    .nc-feature-sub { display: block; margin-top: 5px; font-size: 12.5px; line-height: 1.45; color: rgba(16,16,20,0.55); }
+    .nc-read { display: inline-block; margin-top: 8px; font-family: var(--font-display); font-size: 13.5px; font-weight: 500; color: var(--blue); }
+
+    @media (max-width: 1040px) {
+      .nav-card--platform, .nav-card--insights, .nav-card--company { grid-template-columns: 1fr 1fr; }
+      .nav-card .nc-col--explore { grid-column: 1 / -1; border-left: none; border-top: 1px solid rgba(16,16,20,0.08); }
+    }
+    @media (max-width: 700px) {
+      .nav-float {
+        position: fixed;
+        top: 84px; left: 16px; right: 16px;
+        width: auto !important;
+        height: auto !important;
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+        transform: translateY(8px) scale(0.985);
+      }
+      .nav-float.open { transform: translateY(0) scale(1); }
+      .nav-card { display: none; position: static; transform: none !important; }
+      .nav-card.active { display: grid; }
+      .nav-card--platform, .nav-card--insights,
+      .nav-card--customers, .nav-card--company { grid-template-columns: 1fr; }
+      .nav-card .nc-col--explore { grid-column: auto; }
+      .nc-col--divide { border-left: none; }
+    }
+
+    /* ── Responsive nav: hamburger + mobile sheet (mirrors index.html) ───── */
+    .nav-burger {
+      display: none;
+      width: 40px; height: 40px;
+      border: none; background: transparent; border-radius: 8px;
+      cursor: pointer;
+      flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+      color: var(--ink);
+    }
+    .nav-burger span { width: 20px; height: 2px; background: currentColor; border-radius: 1px; transition: transform 0.25s ease, opacity 0.2s ease; }
+    .nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .nav-mobile {
+      position: fixed; top: 80px; left: 0; right: 0; bottom: 0; z-index: 90;
+      background: #fff; overflow-y: auto; padding: 8px 22px 48px; display: none;
+      border-top: 1px solid rgba(16,16,20,0.08);
+    }
+    .nav-mobile.open { display: block; }
+    html.nm-lock, html.nm-lock body { overflow: hidden; }
+    .nm-sec { border-bottom: 1px solid rgba(16,16,20,0.08); }
+    .nm-head {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; padding: 18px 0; border: none; background: none;
+      font-family: var(--font-display); font-size: 19px; font-weight: 500; color: var(--ink); cursor: pointer;
+    }
+    .nm-plus { font-size: 22px; line-height: 1; color: rgba(16,16,20,0.45); transition: transform 0.25s ease; }
+    .nm-sec.open .nm-plus { transform: rotate(45deg); }
+    .nm-body { display: none; padding-bottom: 12px; }
+    .nm-sec.open .nm-body { display: block; }
+    .nm-card { display: block; box-shadow: none; border: none; }
+    .nm-card .nc-col { padding: 18px 4px; }
+    .nm-card .nc-col--explore, .nm-card .nc-col--feature { border-left: none; border-top: 1px solid rgba(16,16,20,0.08); }
+    .nm-link {
+      display: block; padding: 18px 0;
+      border-bottom: 1px solid rgba(16,16,20,0.08);
+      font-family: var(--font-display); font-size: 19px; font-weight: 500;
+      color: var(--ink); text-decoration: none;
+    }
+    .nm-cta { margin-top: 22px; width: 100%; height: 52px; font-size: 17px; }
+    @media (max-width: 860px) {
+      .nav-links { display: none; }
+      .nav-actions .btn-secondary { display: none; }
+      .nav-burger { display: flex; }
+    }

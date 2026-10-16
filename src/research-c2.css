@@ -1,0 +1,47 @@
+/* Ruled V2 (research-c2.html): Pave's October 14 comments on Ruled. Loads
+   after research-v4.css; everything here is scoped to this page, so Ruled
+   (research-c.html), which Pave has seen, stays as it was. Ruled V3
+   (research-c3.html, the October 15 hiring line) uses it unchanged. */
+
+/* "research" in a thin weight (Teresa) */
+@font-face { font-family: 'Aeonik Pro TRIAL'; src: url('fonts/AeonikProTRIAL-Light.otf') format('opentype'); font-weight: 300; font-display: swap; }
+:is([data-variant="c2"], [data-variant="c3"]) .lt-head h1 { font-weight: 300; letter-spacing: -.04em; }
+
+/* A tighter hero: the copy sits centred against the shapes, closer together (Teresa: "spacing seems open") */
+:is([data-variant="c2"], [data-variant="c3"]) .lt-head { padding-top: clamp(124px, 9.5vw, 150px); padding-bottom: clamp(48px, 5vw, 72px); }
+:is([data-variant="c2"], [data-variant="c3"]) .lt-head-grid { align-items: center; }
+:is([data-variant="c2"], [data-variant="c3"]) .lt-lede { margin-top: 16px; }
+:is([data-variant="c2"], [data-variant="c3"]) .gs--block { width: min(100%, 400px); }
+
+/* The shapes in the purple mesh: the canvas paints the tiles, the SVG stays as geometry */
+.gs--mesh svg { visibility: hidden; }
+.gs--mesh .gs-paint { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+
+/* Featured post, text only: the title and its stat (no subhead, no diagram) */
+.lt-feature-link--text { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: end; }
+.lt-feature-link--text .lt-feature-title { max-width: 22ch; font-size: clamp(30px, 3vw, 44px); }
+.lt-feature-link--text .lt-feature-foot { margin-top: 28px; }
+.lt-figure--feature { flex-direction: column; align-items: flex-start; gap: 12px; margin-top: 0; }
+.lt-figure--feature b { font-size: clamp(64px, 6.4vw, 96px); }
+.lt-figure--feature span { max-width: 32ch; }
+
+/* Byline on one line: "Name, Title" */
+.rs-byline--comma span::before { content: none; }
+.rs-byline--comma .rs-who { white-space: nowrap; }
+.rs-byline--comma .rs-title { color: var(--ink-muted); }
+
+/* Each row's figure carries a short line of context */
+.lg--v2 .lg-fig { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.lg-context { max-width: 18ch; font-style: normal; font-size: 13px; line-height: 1.35; color: var(--ink-muted); }
+
+/* Rows past the first page wait for Show more (the row's grid would override [hidden]) */
+.lg--v2 .lg-row[hidden] { display: none; }
+
+/* Show more research: the site's light ghost button, centred under the list */
+.lg-more { display: flex; align-items: center; gap: 10px; width: fit-content; min-height: 48px; margin: 28px auto 0; padding: 0 22px; border: 0; border-radius: 12px; font: inherit; font-size: 15px; font-weight: 500; color: var(--ink); background: rgba(16,16,20,.06); cursor: pointer; transition: border-radius .25s cubic-bezier(.33,1,.4,1), background .2s ease; }
+.lg-more:hover { border-radius: 24px; background: rgba(16,16,20,.1); }
+.lg-more span { display: grid; place-items: center; min-width: 24px; height: 24px; padding: 0 7px; border-radius: 12px; font-size: 13px; color: #fff; background: var(--blue); }
+
+@media (max-width: 900px) {
+  .lt-feature-link--text { grid-template-columns: 1fr; gap: 28px; }
+}

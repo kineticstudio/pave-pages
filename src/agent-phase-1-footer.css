@@ -1,0 +1,123 @@
+/* Homepage footer component; page-scoped tokens, sentence case and preview form. */
+    .footer {
+      position: relative;
+      background: var(--p1-ground);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 64px var(--p1-gutter) 0;
+      overflow: hidden;
+    }
+
+    /* Full-width mailing band (real pave.com copy) */
+    .footer-cta {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 48px;
+      flex-wrap: wrap;
+      padding-bottom: 52px;
+      margin-bottom: 56px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .footer-mail-title {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 28px;
+      letter-spacing: -0.6px;
+      color: var(--white);
+      max-width: 420px;
+      line-height: 1.15;
+    }
+    .footer-mail-side { width: min(460px, 100%); }
+    /* [lo4lw760] Was 11.5px at the faintest token on a near-black ground and
+       genuinely unreadable. Up a step, and onto the muted token with the link
+       underlined so it reads as one. */
+    .footer-consent {
+      margin-top: 10px;
+      font-family: var(--font-body);
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.62);
+    }
+    .footer-consent a { color: rgba(255,255,255,0.86); text-decoration: underline; text-underline-offset: 2px; }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 64px;
+      flex-wrap: wrap;
+      margin-bottom: 56px;
+    }
+    .footer-brand { max-width: 300px; display: flex; flex-direction: column; gap: 18px; }
+    .footer-tag {
+      font-family: var(--font-body);
+      font-size: 14.5px;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+    .footer-cols { display: flex; gap: 56px; flex-wrap: wrap; }
+    .footer-col { display: flex; flex-direction: column; gap: 12px; min-width: 120px; }
+    .footer-col-title {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: normal;
+      text-transform: none;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .footer-link {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s ease, transform 0.15s ease;
+    }
+    .footer-link:hover { color: var(--white); transform: translateX(2px); }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px 24px;
+      flex-wrap: wrap;
+      padding-top: 26px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .footer-legal { display: flex; align-items: center; gap: 8px 20px; flex-wrap: wrap; }
+    .footer-legal .footer-link { font-size: 12.5px; }
+    .footer-legal .footer-link:hover { transform: none; }
+    .footer-copy {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .footer-social { display: flex; gap: 8px; flex-wrap: wrap; }
+    .footer-social a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--light-5);
+      color: var(--text-muted);
+      transition: background 0.15s ease, color 0.15s ease, transform 0.3s var(--btn-ease-spring);
+    }
+    .footer-social a:hover { background: var(--light-10); color: var(--white); transform: scale(1.12); }
+
+    /* Footer puzzle band — full-bleed past the footer padding */
+    .footer-puzzle {
+      margin: 64px calc(-1 * var(--p1-gutter)) 0;
+      cursor: pointer;
+    }
+    .footer-puzzle canvas { display: block; width: 100%; }
+
+
+.footer .email-capture { display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:6px 6px 6px 18px; border-radius:16px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); }
+.footer .ec-input { min-width:0; width:0; flex:1; height:40px; background:transparent; border:0; color:var(--white); font:inherit; font-size:15px; }
+.footer .ec-input::placeholder { color:rgba(255,255,255,.4); }
+.footer .ec-btn { min-height:40px; padding:0 18px; font-size:15px; border-radius:10px; }
+.footer .ec-done { display:none; }
+.footer .ec-msg:not(:empty) { flex-basis:100%; font-size:13px; padding:8px 10px 10px 0; color:var(--yellow); }
+.footer .ec-input:focus-visible { outline:2px solid var(--yellow); outline-offset:2px; }
+@media(max-width:800px) { .footer-cols { gap:32px; } .footer-top { gap:42px; } }
+@media(prefers-reduced-motion:reduce) { .footer * { transition:none !important; } }

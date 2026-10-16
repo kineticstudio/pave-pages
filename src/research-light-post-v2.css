@@ -1,0 +1,8 @@
+/* Split Header V2 (Teresa's October 15 comments; Split Header is unchanged).
+   With no number to feature, the author details lead the right column, their
+   first cap line on the title's (the title's cap sits .18 of its size below
+   its box, the 13px label's 2.9px; measured at 1440). */
+.lp-side > .lp-meta:first-child { margin-top: calc(.18 * clamp(36px, 4.4vw, 62px) - 2.9px); }
+@media (max-width: 900px) {
+  .lp-side > .lp-meta:first-child { margin-top: 0; }
+}

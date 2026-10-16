@@ -1,0 +1,14 @@
+{
+  "name": "pave-pages",
+  "private": true,
+  "description": "Coded reference pages for the Pave Webflow build (navigation and research), by Kinetic Studio.",
+  "type": "module",
+  "scripts": {
+    "serve": "node tools/serve.mjs",
+    "sync": "node tools/sync-from-pave.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.59.1",
+    "prettier": "^3.6.2"
+  }
+}

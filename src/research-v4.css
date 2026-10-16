@@ -1,0 +1,272 @@
+/* Research, light attempts C ("the index"), D ("figures"), E ("evidence") and
+   the light post they share. Loads after research-v3.css, which holds the
+   tokens, the chart, the pipeline, the ledger, the readings strip and the
+   reading layout. Everything here sits on white and is drawn with hairlines,
+   not cards. The brand's gradient shapes are the footer puzzle's circles and
+   rounded squares, filled by the Pave mesh, with hard edges. */
+html { color-scheme: light; }
+body { color: var(--ink); background: #fff; }
+::selection { background: var(--blue-light); }
+.on-light .rs-source { color: var(--ink-faint); }
+
+/* ── Gradient shapes (the footer puzzle's language) ─────────────────────── */
+.gs { position: relative; }
+.gs svg { display: block; width: 100%; height: 100%; }
+
+/* ── Index header ───────────────────────────────────────────────────────── */
+.lt-head { padding-top: clamp(140px, 11vw, 172px); padding-bottom: clamp(64px, 6vw, 96px); }
+.lt-head:not(.lt-head--tint) + .lt-section { padding-top: 0; }
+/* The hero on the site's light band, so it reads apart from the page */
+.lt-head--tint { background: var(--band-light); }
+.lt-head-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--p1-grid-gap); align-items: end; }
+.lt-head h1 { font-size: clamp(56px, 7.4vw, 112px); line-height: .95; letter-spacing: -.035em; font-weight: 500; }
+.lt-lede { max-width: 30ch; margin-top: 28px; font-size: 20px; line-height: 1.4; color: var(--ink-muted); text-wrap: balance; }
+/* C: a block of shapes beside the title */
+.gs--block { justify-self: end; width: min(100%, 440px); aspect-ratio: 6 / 4; }
+/* D and the post: a strip of shapes across the container, two rows */
+.gs--strip { width: 100%; aspect-ratio: 32 / 2; margin-top: 56px; }
+
+.lt-section { padding-block: clamp(72px, 7vw, 112px); }
+.lt-section + .lt-section { padding-top: 0; }
+.lt-rule { border-top: 1px solid var(--ink); }
+
+/* ── C: the open featured post and the index ────────────────────────────── */
+.lt-feature-link { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 80px); padding-top: 28px; border-top: 1px solid var(--ink); text-decoration: none; color: inherit; }
+.lt-kicker { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 14px; color: var(--ink-muted); }
+.lt-kicker b { font-weight: 500; color: var(--blue); }
+.lt-feature-title { margin-top: 22px; font-size: clamp(30px, 2.9vw, 42px); line-height: 1.1; letter-spacing: -.02em; transition: color .2s ease; }
+.lt-feature-link:hover .lt-feature-title { color: var(--blue); }
+.lt-dek { margin-top: 18px; font-size: 17px; line-height: 1.55; color: var(--ink-muted); }
+.lt-figure { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 16px; margin-top: 32px; }
+.lt-figure b { font-size: clamp(56px, 5.6vw, 84px); line-height: .95; letter-spacing: -.03em; font-weight: 500; color: var(--blue); white-space: nowrap; }
+.lt-figure > span { max-width: 26ch; font-size: 15px; line-height: 1.45; color: var(--ink-muted); }
+.lt-feature-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 30px; }
+.lt-read { font-size: 15px; font-weight: 500; color: var(--blue); }
+.lt-read::after { content: ' →'; }
+.lt-feature-art { min-width: 0; padding-top: 4px; }
+.lt-feature-art .rc { --plot-h: 300px; }
+.lt-index .lg { border-top-color: var(--ink); }
+.lt-index .lg-row:hover .lg-fig b { color: var(--blue); }
+.lt-index .lg-fig b { font-size: 48px; transition: color .2s ease; }
+
+/* A ruled hiring row, not a card */
+/* Careers: the Agent page's split section head (eyebrow and title left, copy
+   and the primary button right, starting level with the title). */
+.lt-careers h2 { font-size: clamp(32px, 3.7vw, 52px); line-height: 1.08; letter-spacing: -.015em; font-weight: 500; text-wrap: balance; }
+.lt-careers-copy { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 40px; padding-top: 43px; }
+/* The hero's thinking shapes, small: a five by three block with two gaps */
+.lt-careers-copy > div:first-child { flex: 1 1 260px; min-width: 0; }
+.gs--mark { flex: none; width: clamp(150px, 14vw, 210px); }
+.lt-careers-copy p { max-width: 38ch; font-size: 18px; line-height: 1.5; color: var(--ink-muted); }
+.lt-careers-copy .p1-button { margin-top: 28px; }
+.lt-closing { padding-block: 0 96px; }
+
+/* ── D: the figure matrix, one hairline grid ────────────────────────────── */
+.mx { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.mx > li { position: relative; display: flex; }
+.mx > li:hover, .mx > li:focus-within { z-index: 1; }
+/* Hairlines only between cells: a rule above every cell after the lead, and
+   one to the left of every cell that isn't first in its row. */
+.mx > li + li { border-top: 1px solid var(--hairline); }
+.mx > li:nth-child(3n+3), .mx > li:nth-child(3n+4) { border-left: 1px solid var(--hairline); }
+.mx > li:first-child { grid-column: 1 / -1; }
+.mx { --mx-pad: 32px; margin-inline: calc(-1 * var(--mx-pad)); }
+.mx-cell { position: relative; isolation: isolate; display: flex; flex-direction: column; width: 100%; padding: var(--mx-pad); text-decoration: none; color: inherit; }
+/* Hover: a card rises inside the cell, 8px clear of its rules (rounded, a
+   very light grey, flat), and the other cells step back. */
+.mx-cell::before { content: ''; position: absolute; inset: 8px; z-index: -1; border-radius: 24px; background: var(--card-hover); opacity: 0; transform: scale(.96); transition: opacity .2s ease, transform .5s cubic-bezier(.22,1,.36,1); }
+.mx-cell:hover::before, .mx-cell:focus-visible::before { opacity: 1; transform: none; }
+.mx-cell > * { transition: opacity .3s ease, color .2s ease; }
+.mx:has(.mx-cell:hover) .mx-cell:not(:hover) > * { opacity: .32; }
+.mx-top { align-items: center; }
+.mx-top { padding-right: 56px; }
+.mx-top .lg-arrow { position: absolute; top: calc(var(--mx-pad) - 12px); right: var(--mx-pad); }
+.mx-cell:hover .lg-arrow { background: var(--blue); border-color: var(--blue); color: #fff; }
+.mx-cell:hover .lg-arrow svg { transform: translate(1px, -1px); }
+.mx-top { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--ink-muted); }
+.mx-top b { font-weight: 500; color: var(--ink); }
+.mx-fig { margin-top: 30px; font-size: clamp(64px, 6.4vw, 104px); line-height: .92; letter-spacing: -.035em; font-weight: 500; white-space: nowrap; transition: color .2s ease; }
+.mx-cell:hover .mx-fig, .mx-cell:hover h3 { color: var(--blue); }
+.mx-label { max-width: 30ch; margin-top: 14px; font-size: 15px; line-height: 1.45; color: var(--ink-muted); }
+.mx-art { margin-top: 30px; }
+.mx-foot { margin-top: auto; padding-top: 30px; }
+.mx-foot h3 { font-size: 21px; line-height: 1.25; letter-spacing: -.01em; transition: color .2s ease; }
+.mx-foot .rs-byline { margin-top: 16px; }
+/* The lead cell runs across: copy left, its chart right */
+.mx > li:first-child .mx-cell { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-rows: auto auto auto 1fr; column-gap: clamp(32px, 5vw, 80px); }
+.mx > li:first-child .mx-cell > :not(.mx-art) { grid-column: 1; }
+.mx > li:first-child .mx-art { grid-column: 2; grid-row: 1 / span 4; margin-top: 0; }
+.mx > li:first-child .mx-fig { font-size: clamp(80px, 8vw, 128px); color: var(--blue); }
+.mx > li:first-child .mx-foot h3 { font-size: clamp(26px, 2.4vw, 34px); line-height: 1.12; letter-spacing: -.02em; }
+.mx > li:first-child .rc { --plot-h: 280px; }
+
+/* ── E: the evidence report ─────────────────────────────────────────────── */
+.ev-contents { border-top: 1px solid var(--ink); }
+.ev-contents p { padding: 16px 0 10px; font-size: 13px; color: var(--ink-muted); }
+.ev-contents a { display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; gap: 16px; align-items: baseline; padding: 14px 0; border-top: 1px solid var(--hairline); text-decoration: none; font-size: 16px; line-height: 1.35; transition: color .2s ease; }
+.ev-contents a:hover { color: var(--blue); }
+.ev-contents a span:first-child { display: inline-flex; align-items: center; gap: 10px; font-weight: 500; color: var(--blue); }
+.ev-contents a b { font-weight: 500; white-space: nowrap; }
+.ev-mark { display: inline-block; width: 12px; height: 12px; background: linear-gradient(135deg, #0e1d42, #235cf3 55%, #7aa4fa); border-radius: 3px; flex-shrink: 0; }
+.ev-mark--round { border-radius: 50%; }
+.ev { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 0 clamp(32px, 5vw, 80px); padding: 26px 0 clamp(72px, 7vw, 112px); border-top: 1px solid var(--ink); scroll-margin-top: 100px; }
+.ev-meta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; margin-bottom: 36px; font-size: 14px; color: var(--ink-muted); }
+.ev-meta b { display: inline-flex; align-items: center; gap: 10px; font-weight: 500; color: var(--blue); }
+.ev h2 { font-size: clamp(28px, 2.6vw, 38px); line-height: 1.12; letter-spacing: -.02em; }
+.ev h2 a { text-decoration: none; transition: color .2s ease; }
+.ev h2 a:hover { color: var(--blue); }
+.ev .lt-figure { margin-top: 28px; }
+.ev .lt-dek { font-size: 16px; }
+.ev-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 28px; }
+.ev-foot a { text-decoration: none; }
+.ev-art { min-width: 0; }
+.ev-art .rc { --plot-h: 300px; }
+
+/* ── The light post ─────────────────────────────────────────────────────── */
+.lp-head { padding-top: clamp(132px, 10vw, 164px); }
+.lp-crumbs { display: flex; flex-wrap: wrap; gap: 8px; font-size: 14px; color: var(--ink-muted); }
+.lp-crumbs a { text-decoration: none; }
+.lp-crumbs a:hover { color: var(--blue); }
+.lp-crumbs span[aria-hidden] { opacity: .5; }
+.lp-crumbs span:last-child { color: var(--blue); }
+.lp-head-grid { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: clamp(32px, 5vw, 80px); align-items: start; margin-top: 26px; }
+.lp-head h1 { max-width: 22ch; font-size: clamp(36px, 4.4vw, 62px); line-height: 1.05; letter-spacing: -.03em; font-weight: 500; text-wrap: balance; }
+.lp-dek { max-width: 56ch; margin-top: 24px; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.5; color: var(--ink-muted); }
+/* No rule above the figure: with the grid aligned to the top, its cap line
+   lands on the title's cap line (measured within a pixel at 1440). */
+.lp-stat .hero-stat { margin: 0; font-size: clamp(64px, 6.6vw, 104px); line-height: .92; letter-spacing: -.035em; color: var(--blue); }
+.lp-stat .hero-stat-label { margin-top: 14px; font-size: 15px; color: var(--ink-muted); }
+/* Under the figure: author across, published and reading time side by side,
+   topics across. */
+.lp-meta { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px 24px; margin-top: 44px; }
+.lp-meta > div:first-child, .lp-meta > div:last-child { grid-column: 1 / -1; }
+.lp-meta dt { font-size: 13px; color: var(--ink-muted); }
+.lp-meta dd { display: flex; align-items: center; margin: 8px 0 0; font-size: 15px; }
+.lp-section { padding-top: clamp(64px, 6vw, 96px); }
+.lp-label { display: flex; align-items: center; gap: 10px; margin-bottom: 26px; font-size: 14px; font-weight: 500; color: var(--blue); letter-spacing: 0; }
+.lp-section .rc { --plot-h: 320px; }
+.lp-section .rc-title { font-size: 20px; letter-spacing: -.01em; }
+.lp-section .rc-key, .lp-section .rc-note { font-size: 13px; }
+.lp-read { margin-top: clamp(64px, 6vw, 96px); padding-top: 40px; border-top: 1px solid var(--ink); grid-template-columns: 220px minmax(0, 720px); gap: clamp(32px, 6vw, 96px); }
+.lp-read .toc ol { border-left: 0; position: relative; }
+.lp-read .toc ol::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--hairline); }
+.lp-read .toc-progress { position: absolute; left: 0; top: 0; width: 1px; height: 0; background: var(--blue); }
+.lp-read .toc a { display: block; padding-left: 16px; border-left: 0; }
+.lp-read .prose h2 { padding-top: 22px; border-top: 1px solid var(--hairline); }
+.lp-more .lg { border-top-color: var(--ink); }
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .mx { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mx { --mx-pad: 24px; }
+  .mx > li:nth-child(n) { border-left: 0; }
+  .mx > li:nth-child(2n+3) { border-left: 1px solid var(--hairline); }
+}
+@media (max-width: 900px) {
+  .lt-head-grid, .lt-feature-link, .ev, .lp-head-grid { grid-template-columns: 1fr; }
+  .gs--block { justify-self: start; width: min(100%, 360px); margin-top: 40px; }
+  .ev-art { margin-top: 36px; }
+  .mx > li:first-child .mx-cell { grid-template-columns: 1fr; }
+  .mx > li:first-child .mx-art { grid-column: 1; grid-row: auto; margin-top: 30px; }
+  .lp-read { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  .mx { grid-template-columns: 1fr; }
+  .mx { --mx-pad: 16px; }
+  .mx > li:nth-child(n) { border-left: 0; }
+  .gs--strip { aspect-ratio: 16 / 2; }
+  .ev-contents a { grid-template-columns: 64px minmax(0, 1fr); }
+  .ev-contents a b { display: none; }
+}
+
+/* ── Bands: a very slight tint separates sections, so fewer rules are needed ── */
+:root { --tint: #f5f7fa; }
+.lt-band { background: var(--tint); padding-block: clamp(64px, 6vw, 96px); }
+.lt-band .lp-section:first-child, .lt-band .lt-section:first-child { padding-top: 0; }
+.lt-band .lt-section { padding-bottom: 0; }
+.lt-band + .demo-section, .lt-band + .lt-section { padding-top: clamp(64px, 6vw, 96px); }
+/* Rules removed where a band or spacing already separates */
+.lt-band .rd, .lp-section .rd { gap: 32px 40px; border-top: 0; border-bottom: 0; }
+.lt-band .rd > *, .lt-band .rd > * + *, .lp-section .rd > *, .lp-section .rd > * + * { padding: 0; border: 0; }
+.lt-band .rd-tick, .lp-section .rd-tick { display: none; }
+.lp-head { padding-bottom: clamp(64px, 6vw, 96px); }
+.lp-read { margin-top: 0; padding-top: clamp(64px, 6vw, 96px); padding-bottom: clamp(64px, 6vw, 96px); border-top: 0; }
+.lp-read .prose h2 { padding-top: 0; border-top: 0; }
+.author-card { border-top: 0; padding-top: 0; margin-top: 48px; }
+.lt-band .lg { border-top: 0; }
+.lt-band .lg-row:last-child { border-bottom: 0; }
+.lt-band .lt-feature-link { border-top: 0; padding-top: 0; }
+/* E: each figure on its own band, alternating white and tint, no rules */
+.ev-band:nth-child(odd) { background: var(--tint); }
+.ev-band .ev { border-top: 0; padding-top: clamp(56px, 5vw, 80px); padding-bottom: clamp(56px, 5vw, 80px); }
+
+/* ── Post variations ────────────────────────────────────────────────────── */
+/* Spec sheet (research-light-post-spec.html): the title across the hero, a
+   sticky sheet of the post's facts beside the reading. */
+.ps-head { max-width: 1040px; }
+.lp-head .ps-title { max-width: 18ch; margin-top: 26px; font-size: clamp(40px, 5.4vw, 80px); line-height: 1.02; letter-spacing: -.035em; font-weight: 500; text-wrap: balance; }
+.ps-results { padding-top: clamp(64px, 6vw, 96px); }
+.ps-dek { max-width: 60ch; }
+.ps-body { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(40px, 6vw, 96px); align-items: start; padding-block: clamp(64px, 6vw, 96px); }
+.ps-sheet { position: sticky; top: 96px; }
+.ps-sheet .lp-meta { margin-top: 0; }
+.ps-toc { margin-top: 40px; }
+.ps-toc ol { border-left: 0; position: relative; }
+.ps-toc ol::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--hairline); }
+.ps-toc a { display: block; padding-left: 16px; border-left: 0; }
+.ps-toc .toc-progress { position: absolute; left: 0; top: 0; width: 1px; height: 0; background: var(--blue); }
+.ps-main > section + .prose { margin-top: clamp(56px, 5vw, 80px); }
+.ps-main .prose { max-width: 720px; }
+.ps-main .rc { --plot-h: 300px; }
+.ps-main .author-card { max-width: 720px; border-top: 0; padding-top: 0; }
+/* More research as D's cells, three across */
+.mx-row { --mx-pad: 32px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-inline: calc(-1 * var(--mx-pad)); }
+.mx-row > li { position: relative; display: flex; }
+.mx-row > li + li { border-left: 1px solid var(--hairline); }
+.mx-row:has(.mx-cell:hover) .mx-cell:not(:hover) > * { opacity: .32; }
+
+/* Figure first (research-light-post-figure.html): the figure is the hero. */
+.pf-progress { position: fixed; left: 0; right: 0; top: 0; z-index: 200; height: 2px; background: var(--blue); transform: scaleX(0); transform-origin: left; pointer-events: none; }
+.pf-head-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 80px); align-items: end; margin-top: 26px; }
+.lp-head .pf-title { max-width: none; font-size: clamp(36px, 4.4vw, 64px); line-height: 1.04; letter-spacing: -.03em; font-weight: 500; text-wrap: balance; }
+.pf-head-grid .lp-dek { margin-top: 0; }
+.pf-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 22px; font-size: 14px; color: var(--ink-muted); }
+.pf-figure { margin-top: clamp(48px, 5vw, 72px); padding: clamp(24px, 3vw, 44px); border-radius: 28px; background: #fff; }
+.pf-figure .rc { --plot-h: 340px; }
+.pf-results { margin-top: clamp(48px, 5vw, 72px); }
+.pf-results .rs-source { margin-top: 22px; }
+.pf-read { max-width: 760px; margin-inline: auto; padding-block: clamp(64px, 6vw, 96px); }
+.pf-contents { margin-bottom: clamp(40px, 4vw, 56px); }
+.pf-contents ol { display: block; columns: 2; column-gap: 32px; border-left: 0; }
+.pf-contents li { break-inside: avoid; }
+.pf-contents a { padding-left: 0; border-left: 0; }
+.pf-contents a[aria-current="true"] { border-left: 0; }
+.pf-read .author-card { border-top: 0; padding-top: 0; }
+
+/* Results without rules, wherever the variations show them */
+.ps-results .rd, .pf-results .rd { gap: 32px 40px; border-top: 0; border-bottom: 0; }
+.ps-results .rd > *, .ps-results .rd > * + *, .pf-results .rd > *, .pf-results .rd > * + * { padding: 0; border: 0; }
+.ps-results .rd-tick, .pf-results .rd-tick { display: none; }
+
+@media (max-width: 1100px) {
+  .mx-row { --mx-pad: 24px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mx-row > li + li { border-left: 0; }
+  .mx-row > li:nth-child(2n) { border-left: 1px solid var(--hairline); }
+  .mx-row > li:nth-child(n+3) { border-top: 1px solid var(--hairline); }
+}
+@media (max-width: 960px) {
+  .ps-body { grid-template-columns: minmax(0, 1fr); }
+  .ps-sheet { position: static; }
+  .ps-toc { display: none; }
+  .pf-head-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  .mx-row { --mx-pad: 16px; grid-template-columns: minmax(0, 1fr); }
+  .mx-row > li:nth-child(n) { border-left: 0; }
+  .mx-row > li + li { border-top: 1px solid var(--hairline); }
+  .pf-contents ol { columns: 1; }
+  .pf-figure { padding: 16px; border-radius: 20px; }
+}
+/* The figure-first contents sit in the column, so they stay on phones too. */
+.pf-contents .toc-progress { display: none; }
+@media (max-width: 960px) { .pf-contents { display: block; } }
