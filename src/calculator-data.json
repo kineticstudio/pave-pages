@@ -1,0 +1,189 @@
+{
+  "_about": "Everything Matt's value calculator says and assumes, from docs/calculator-source/pavevaluecalculator_v21_4questions_28.html (supplied by Pave, Sept 14 and Oct 19, 2026), in one file, plus the words of design 05 (\"simple\", Hunter's) for the two dark versions. The calculator versions read it at load, so changing a number or a line here changes every version. {braces} are filled with live values; **double asterisks** are bold; \\n breaks a line.",
+  "links": {
+    "totalRewardsReport": "https://explore.pave.com/total-rewards-report.html",
+    "compBenchmarks": "https://app.pave.com/shares/01M298GAGKATYQ60R40VA1609P",
+    "hrTeamSize": "https://app.pave.com/pave-data-lab/hr-team-size",
+    "bandAdherence": "https://app.pave.com/pave-data-lab/band-width-and-band-adherence",
+    "pulseSurvey": "https://app.pave.com/pave-data-lab/pulse-survey-2026-trends-budgeting",
+    "demo": "https://www.pave.com/request-demo"
+  },
+  "benchmarks": {
+    "compBySize": [
+      { "upTo": 250, "comp": 203239, "label": "1–250 employees" },
+      { "upTo": 1000, "comp": 234060, "label": "250–1,000 employees" },
+      { "upTo": null, "comp": 268239, "label": "1,000+ employees" }
+    ],
+    "hrTeamRatio": [
+      { "upTo": 1000, "employeesPerMember": 38 },
+      { "upTo": null, "employeesPerMember": 32 }
+    ],
+    "analystCost": 170000,
+    "marketMovement": 0.045
+  },
+  "assumptions": {
+    "outOfRangeCost": 13500,
+    "meritPool": 0.03,
+    "meritOverrun": 0.015,
+    "hiringRate": 0.02,
+    "acceptanceLift": 0.04,
+    "understandingRetention": 0.005,
+    "proactiveRetention": 0.01,
+    "replacementCost": 75000,
+    "workflowMinimum": 200
+  },
+  "inputs": {
+    "headcount": { "label": "Number of employees", "short": "Employees", "simple": "Employees", "default": 4500, "min": 1, "max": 250000, "step": 1, "scale": "log", "format": "count" },
+    "avgComp": { "label": "Avg. total comp / employee", "short": "Avg. total comp", "simple": "Average compensation", "default": null, "min": 80000, "max": 400000, "step": 5000, "format": "money",
+      "hint": "Cash + equity/SBC + benefits. Default {benchmarkComp} for {benchmarkLabel}", "source": "totalRewardsReport" },
+    "precision": { "label": "Your estimated, conservative precision gain from having the best real-time compensation benchmarks available", "short": "Precision gain", "simple": "Better pay precision", "default": 0.01, "min": 0, "max": 0.05, "step": 0.005, "format": "pct1",
+      "hint": "Default **1.0%**, deliberately conservative against 4.5% annual market movement", "source": "pulseSurvey" },
+    "team": { "label": "Your HR, Total Rewards, & Comp team headcount", "short": "HR, rewards & comp team", "simple": "HR & rewards team", "default": null, "min": 0.5, "max": 10000, "step": 0.5, "scale": "log", "format": "decimal",
+      "hint": "Default **{teamBenchmark}** from the median HR team ratio", "source": "hrTeamSize" },
+    "productivity": { "label": "Expected productivity gain from Pave on all compensation and workforce activities", "short": "Productivity gain", "simple": "Team productivity gain", "default": 0.4, "min": 0, "max": 1, "step": 0.05, "format": "pct0" },
+    "outOfBand": { "label": "% of employees outside their salary range and/or equity target", "short": "Outside range", "simple": "Employees outside pay range", "default": 0.175, "min": 0, "max": 0.45, "step": 0.005, "format": "pct1",
+      "hint": "Commonly **~15–20%**, 17.5% by default", "source": "bandAdherence" }
+  },
+  "page": {
+    "kicker": "Value calculator",
+    "title": "Use Pave to build confidence in every compensation decision",
+    "intro": "Compensation is most companies' single largest expense, and we built this to estimate what precise market data, an end-to-end comp platform, and an AI compensation agent are worth against that spend.",
+    "totalLabel": "Total value of Pave / yr",
+    "share": "**{share}** of your {spend} annual comp spend",
+    "math": "How it's worked out",
+    "announce": "Total value of Pave {totalFull} a year, {share} of your compensation spend.",
+    "disclaimer": "This is an estimate of the **value** Pave can create, not its price. Pave's cost is a small fraction of this. Speak with a Pave representative for a tailored pricing estimate.",
+    "lead": "The world's best compensation leaders use Pave to stay in control of these key four questions:",
+    "gate": "requires 200+ employees",
+    "gateNote": "Adherence and Understanding need Pave products that start at 200 employees.",
+    "valueLabel": "estimated value of Pave / year",
+    "risk": "The risk without Pave",
+    "cta": {
+      "title": "Want these four answers run against your actual comp data?",
+      "text": "A Pave representative will replace every assumption on this page with your real headcount, bands, and cycle load, then give you a tailored pricing estimate.",
+      "button": "Get a tailored estimate"
+    }
+  },
+  "simple": {
+    "_about": "Design 05's words (Hunter's, calculator.html), for the two dark versions.",
+    "kicker": "The value of Pave",
+    "title": "Small improvements.\nExtraordinary impact.",
+    "company": "Your company",
+    "benchmark": "Use Pave benchmark",
+    "spend": "Annual compensation spend",
+    "opportunity": "Your opportunity",
+    "opportunityNote": "Move a slider. See the impact.",
+    "gate": "Execution and retention unlock at 200+ employees.",
+    "fineTune": "Fine-tune your estimate",
+    "resultTitle": "Your potential annual value",
+    "share": "**{share}** of your compensation spend, unlocked.",
+    "bars": ["Market precision", "Efficient execution", "Clearer understanding"],
+    "breakdown": "See the breakdown",
+    "lines": {
+      "philosophy": "Market precision", "capacity": "Team capacity", "range": "Pay-range adherence", "merit": "Merit budget control",
+      "proactive": "Proactive retention", "clarity": "Rewards understanding", "acceptance": "Offer acceptance", "total": "Total potential annual value"
+    },
+    "cta": "Make it happen",
+    "mobileTotal": "Potential annual value",
+    "mobileLink": "See results",
+    "announce": "Estimated annual value {totalFull}, equivalent to {share} of compensation spend."
+  },
+  "questions": [
+    {
+      "id": "spend",
+      "name": "Spend",
+      "question": "How large is your company's compensation spend?",
+      "summary": "Take control of your company's largest expense.",
+      "valueLabel": "annual total comp spend",
+      "talkTrack": {
+        "title": "The talk track with your CFO",
+        "text": "We spend **{spend}/yr** on our people, our single largest expense by a wide margin. Pave costs a fraction of a percent of that. I cannot run our biggest line item without the best available compensation intelligence and agentic workflows from Pave."
+      },
+      "risk": {
+        "title": "You cannot manage what you cannot see.",
+        "text": "Most companies run their largest expense off a spreadsheet that is refreshed once a year, and discover the problems in it a quarter after they started costing money."
+      }
+    },
+    {
+      "id": "philosophy",
+      "name": "Philosophy",
+      "question": "Do you have the optimal compensation philosophy given your company's goals and constraints?",
+      "products": ["Market Data", "Pave Agent"],
+      "body": "**The cost of imprecision.** Your philosophy and your ranges are set against what the market paid at a point in time from a survey you submitted last year. But the market does not hold still. It is irresponsible to not stay on top of what your selected peers in market are paying in real-time.",
+      "spendLine": "Your annual comp spend",
+      "result": { "label": "Estimated cost of a lagging philosophy", "formula": "{spendFull} × {precision}" },
+      "bonus": {
+        "title": "Workforce intelligence",
+        "tag": "Bonus",
+        "text": "Org charts, layers, span of control, leveling, hot and cold job families, attrition patterns, against a peer set you choose. Pure upside, no defined dollar value here."
+      },
+      "risk": {
+        "title": "Comp and workforce decisions you can't defend.",
+        "text": "Without current market data you are budgeting your largest expense on survey numbers 9 to 18 months stale, negotiating against candidates who have real-time data you don't, and structuring your org, layers and levels with no view of how your peers structure theirs."
+      }
+    },
+    {
+      "id": "adherence",
+      "name": "Adherence",
+      "question": "Are you efficiently adhering your spend to your compensation philosophy?",
+      "products": ["Pave Agent", "Market Pricing", "Comp Planning"],
+      "body": "**A philosophy you do not enforce is a philosophy you do not have.** Stick to your pay for performance guidelines so your top performers are taken care of. Make Pave your comp data warehouse. Then leverage the Pave Agent to structure your job architecture and compensation ranges, run market pricing on autopilot, and carry comp planning end to end, with Pave's AI absorbing the manual analysis, modeling, and Q&A that consumes human analyst time.",
+      "parts": [
+        {
+          "id": "A",
+          "title": "Productivity gains from Pave's agentic capabilities",
+          "lines": [
+            { "value": "capacity", "label": "Estimated productivity gains from Pave's Agentic capabilities", "caption": "{fte} FTE × $170,000 estimated loaded cost", "source": "compBenchmarks" }
+          ]
+        },
+        {
+          "id": "B",
+          "title": "Tightly adhere to your compensation philosophy",
+          "lines": [
+            { "value": "range", "label": "Estimated saving on range adherence inefficiency", "caption": "{outOfRangeEmployees} employees outside range ({outOfBand}) × $13,500 estimated cost each" },
+            { "value": "merit", "label": "Estimated merit-pool overrun savings", "caption": "Merit logic set upfront keeps every planner in line · {spendFull} × ~3% pool × ~1.5% overrun" }
+          ]
+        }
+      ],
+      "totalLabel": "A + B",
+      "risk": {
+        "title": "Your comp data ends up somewhere you don't control.",
+        "text": "Spreadsheets and homegrown, vibe-coded comp tools hold salary data with no access controls, no audit trail, often in plaintext. And with no sanctioned AI tool, comp teams paste salary tables into consumer chatbots. A purpose-built agent keeps all of it inside the security perimeter."
+      }
+    },
+    {
+      "id": "understanding",
+      "name": "Understanding",
+      "question": "Do your managers, employees, and candidates understand their {spend} of aggregate compensation?",
+      "products": ["Pave Agent", "Team View", "Total Rewards Portal", "Visual Offer Letters"],
+      "body": "You can run the most optimal comp program in your market and still get no credit for it. Pave shows every manager, employee, and candidate the full value of compensation. Arm your managers with proactive visibility into their teams. And turn your total rewards into something candidates and employees can dream big about.",
+      "lines": [
+        { "value": "proactive", "who": "Managers", "label": "estimated proactive retention boost", "product": "Team View", "caption": "Flight risks flagged before a top performer resigns · ~1% of headcount × $75,000, illustrative" },
+        { "value": "clarity", "who": "Employees", "label": "estimated comp understanding boost", "product": "Total Rewards", "caption": "What percentage of your employees know how much unvested equity they would leave on the table if they quit tomorrow? ~0.5% of headcount × $75,000, illustrative" },
+        { "value": "acceptance", "who": "Candidates", "label": "estimated offer acceptance lift", "product": "Visual Offer Letters", "caption": "~{hires} hires/yr (2% of headcount) × ~4% lift × $75,000 re-recruiting cost, illustrative" }
+      ],
+      "totalLabel": "Estimated total",
+      "risk": {
+        "title": "Comp you can't communicate is comp you don't get credit for.",
+        "text": "Employees who cannot see their full package undervalue it and leave over perception gaps rather than real ones. Candidates weigh a PDF offer against a competitor's interactive one. Managers find out a top performer was at risk on the day they resign."
+      }
+    }
+  ],
+  "method": {
+    "title": "Sources & assumptions",
+    "sections": [
+      { "title": "Your inputs", "text": "Number of employees · average total comp per employee · your estimated precision gain · percentage of employees outside their salary range or equity target · HR, total rewards and comp team headcount · expected productivity gain from Pave. Every one of these is yours to change. None is a vendor claim." },
+      { "title": "Sourced from Pave data", "text": "Comp per head by company size from the Pave Total Rewards Report. HR, total rewards and compensation team size from the median ratios in the Pave Data Lab HR team size study (one team member per 38 employees under 1,000 employees, per 32 at 1,000 and above). Band adherence from the Pave Data Lab band-width and band-adherence analysis, which reports the median share of employees in range at each common band width: 20 percent width, 58 percent in range · 30 percent width, 80 percent · 40 percent width, 86 percent · 50 percent width, 91 percent · 60 percent or wider, 88 percent. Weighting the resulting out-of-range shares by how many companies run each width gives 17.5 percent, this model's default. Loaded comp-team cost of $170,000/yr from Pave Compensation Benchmarks. Annual market movement of 4.5 percent, shown in question 2 as context for the precision-gain slider, from the Pave Data Lab 2026 trends and budgeting pulse survey." },
+      { "title": "Fixed illustrative assumptions, not Pave data", "text": "A 1.0 percent precision gain on total comp spend, editable in question 2 · a blended $13,500 per year for each employee sitting outside range · merit pool ~3 percent of total comp with ~1.5 percent avoidable overspend absent guardrails · ~2 percent of headcount hired annually with a ~4 percent offer-acceptance lift · ~0.5 percent of headcount retained through clearer comp understanding · ~1 percent of headcount retained through earlier manager intervention · $75,000 to replace a departing employee." },
+      { "title": "No double-counting", "text": "Question 2 counts roles priced against a range that has drifted from the market. Question 3 counts reclaimed capacity, merit-pool control, and the cost of employees already sitting outside range. Question 4 counts offer acceptance and the two retention mechanisms that come from communication rather than pay level. The mechanisms are distinct and do not overlap. Question 1 carries no value of its own; it sizes the spend the other three are measured against." },
+      { "title": "Availability", "text": "Questions 3 and 4 depend on Pave products available to companies with 200+ employees, so they carry no value below that headcount. Excluded from the total: the risks shown under each question are real exposures presented qualitatively and carry no dollar value. This calculator estimates potential value, not price, and is not a quote, a forecast, or a guarantee of results." }
+    ],
+    "sources": [
+      { "label": "Pave Total Rewards Report", "link": "totalRewardsReport" },
+      { "label": "Pave Data Lab: HR team size", "link": "hrTeamSize" },
+      { "label": "Pave Data Lab: band width and band adherence", "link": "bandAdherence" },
+      { "label": "Pave Compensation Benchmarks", "link": "compBenchmarks" },
+      { "label": "Pave Data Lab: 2026 trends and budgeting pulse survey", "link": "pulseSurvey" }
+    ]
+  }
+}

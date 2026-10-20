@@ -1,5 +1,15 @@
 # Changelog
 
+## October 20, 2026: the value calculator
+
+- **New:** the value calculator, Four Questions V2, approved by Pave
+  (Teresa and Tim) on October 20: `calculator/index.html`, run by
+  `src/calculator-ui.js` and `src/calculator-v21.js` from
+  `src/calculator-data.json`. See README.md, "The value calculator".
+- V2 has Teresa's three comments: the header's columns align at the top, the
+  sliders use Pave's purples (#A46FEF, #461F7A, #1C0042), and the running
+  total bar leaves at the end of the calculator.
+
 ## October 20, 2026: Pave's changes to the research pages
 
 Toqir's build (pave-v2.webflow.io/research) is in; these are Pave's changes

@@ -17,6 +17,7 @@ Webflow, so these get built in Webflow now. They'd like to review next week.
 | Research index | [Research Index Ruled V4](https://pave.kineticstudio.com/designs/pave/site-src/research-c4.html) | Built; October 20 changes to make | New static page, listing a new Research posts CMS collection. `research/index.html` |
 | Research post | [Research Post Split Header V3](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html) | Built; October 20 changes to make | The collection's template page. `research/<slug>.html`, one per post |
 | Research post, no number or image | [Text Only](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html?without=figure,image) | | The same template for a post with neither. `research/text-only.html` |
+| Value calculator | [Four Questions V2](https://pave.kineticstudio.com/designs/pave/site-src/calculator-questions-v2.html) | Not started | Matt's value calculator, approved October 20 (Teresa and Tim). `calculator/index.html` |
 
 The design links open each page on its own. On the review site the research
 pages still show the older nav they were reviewed with; here they carry the
@@ -67,6 +68,7 @@ pages fall back to system fonts.
 | AI maturity roadmap | `research/ai-maturity-total-rewards-roadmap.html` | [Split Header V3](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html?post=ai-maturity-total-rewards-roadmap) |
 | Equity benchmarks | `research/pave-transforms-equity-compensation-benchmarks-using-machine-learning.html` | [Split Header V3](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html?post=pave-transforms-equity-compensation-benchmarks-using-machine-learning) |
 | No number or image | `research/text-only.html` | [Text Only](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html?without=figure,image) |
+| Value calculator | `calculator/index.html` | [Four Questions V2](https://pave.kineticstudio.com/designs/pave/site-src/calculator-questions-v2.html) |
 
 The four posts are Pave's existing articles, there so the template can be
 seen with real content of different shapes: two have no date, one has a
@@ -102,6 +104,44 @@ coded diagram instead of a chart.
 
 `src/` mirrors the prototype's files, so names match the design links. Only
 files these pages load are included, plus the three above.
+
+## The value calculator
+
+Pave approved Four Questions V2 on October 20 (Teresa, with Tim). It is Matt's
+v21 value calculator (his formulas, his copy, his default of $38,182,739 at
+4,500 employees) on the research pages' light style. Unlike the other pages
+it stays live: the markup is written in as it first renders, and three files
+run it.
+
+- **`src/calculator-data.json`:** every number and every line of copy: the
+  benchmarks and assumptions, each input's label, range, default and hint,
+  the four questions, the CFO talk track, the risks, the disclaimer, the call
+  to action and the sources. About twenty fixed numbers, from Pave's reports
+  and Matt's assumptions; nothing comes from Pave's database.
+- **`src/calculator-v21.js`:** the math, exactly Matt's (about 60 lines, no
+  dependencies). `PaveCalculatorV21.create(data)` gives `calculate(state)` and
+  `set(state, key, value)`.
+- **`src/calculator-ui.js`:** fills the page from the data and keeps it live,
+  through attributes in the markup:
+  - `data-copy="path"` a line of copy (`{tokens}` are live values,
+    `**bold**` is bold), `data-link="name"` a link from `links`
+  - `data-input="key"` a field: label, number, hint with its source, slider
+  - `data-out="key"` a live number (`data-format`, `data-animate` counts it)
+  - `data-when="eligible|ineligible"` either side of the 200-employee line
+  - `data-products`, `data-method`, `data-sources` lists from the data
+  - `data-copy-button` copies the talk track
+  - `data-sticky-total` the running total bar: it appears once the header's
+    total scrolls away and leaves at `data-sticky-end` (the call to action)
+- **Styles:** `src/calculator-v21.css` (Four Questions V2 is `.calc--q2`: the
+  header aligned at the top, the sliders in Pave's purples).
+
+**In Webflow,** the suggestion: build the layout and copy as native elements
+so Pave edits the words in the Editor, keep the attributes above on the
+elements that carry live values, and add the two scripts as custom code. The
+numbers can live in a CMS item (Pave edits them in the Editor) passed to the
+script as the same JSON shape, or in a JSON embed on the page. Below 200
+employees Adherence and Understanding carry no value; Matt's rules for that,
+and for resets when the headcount changes, are in `calculator-v21.js`.
 
 ## The navigation
 

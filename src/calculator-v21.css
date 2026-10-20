@@ -1,0 +1,345 @@
+/* Pave value calculator, the versions after design 05: Matt's v21 content
+   and numbers, from Hunter's hyper-simple dark design 05 to Matt's whole
+   page on the research pages' light system (tokens from research-v3.css,
+   bands and rows from research-v4.css). Teresa's brief: simple and clean,
+   like the research page, white with lighter colors. Six steps, simplest
+   first: Dark Snapshot (.calc--snapshot) and Dark Summary
+   (.calc--dark-summary) on 05's own stage and card (calculator-experience.css),
+   Light Summary (.calc--summary) with 05's card on the light band, then
+   Quick Estimate (.calc--quick), Four Questions (.calc--questions) and
+   Business Case (.calc--case). Shared parts first, then each version. */
+
+/* Copy arrives from calculator-data.json; nothing shows half-filled. */
+.calc [data-calculator]:not(.is-ready) { visibility: hidden; }
+.calc [hidden] { display: none !important; }
+
+/* ── A field: label, number, hint with its source, slider ───────────────── */
+.cf { display: grid; gap: 10px; }
+.cf + .cf { margin-top: 30px; }
+.cf-top { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.cf-label { max-width: 38ch; font-size: 15px; line-height: 1.4; }
+.cf-num { flex: none; width: 132px; height: 44px; padding: 0 14px; border: 1px solid var(--hairline); border-radius: 10px; background: #fff; color: var(--ink); text-align: right; font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.cf-num:hover { border-color: rgba(16,16,20,.24); }
+.cf-num:focus { outline: 2px solid var(--blue); outline-offset: -1px; border-color: transparent; }
+.cf-hint { max-width: 60ch; font-size: 13px; line-height: 1.5; color: var(--ink-muted); }
+.cf-hint strong { font-weight: 500; color: var(--ink); }
+.cf-hint a, .cl-caption a { color: var(--blue); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; white-space: nowrap; }
+
+/* The slider: a thin track filled in Pave's blue-to-purple up to the value. */
+.cf-range { --p: 50%; -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 26px; margin: 0; background: transparent; cursor: pointer; }
+.cf-range::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--blue), var(--purple)) 0 0 / var(--p) 100% no-repeat, var(--band-light); }
+.cf-range::-moz-range-track { height: 6px; border-radius: 3px; background: var(--band-light); }
+.cf-range::-moz-range-progress { height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--blue), var(--purple)); }
+.cf-range::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-top: -8px; border: 1.5px solid var(--blue); border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(16,16,20,.16); transition: transform .15s ease; }
+.cf-range::-moz-range-thumb { width: 22px; height: 22px; border: 1.5px solid var(--blue); border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(16,16,20,.16); }
+.cf-range:hover::-webkit-slider-thumb { transform: scale(1.08); }
+.cf-range:focus-visible { outline: none; }
+.cf-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 5px var(--blue-light), 0 1px 3px rgba(16,16,20,.16); }
+.cf-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 5px var(--blue-light); }
+
+/* A bare number inside a sentence or a list. */
+.cf-inline { display: inline-block; }
+.cf-inline .cf-num { field-sizing: content; min-width: 4ch; width: auto; height: auto; padding: 0 .12em; border: 0; border-bottom: 2px solid var(--blue); border-radius: 0; background: transparent; color: var(--blue); font: inherit; font-weight: 500; text-align: center; }
+.cf-inline .cf-num:focus { outline: none; background: var(--blue-ultra-light); }
+
+/* ── Product chips, as Pave names them ──────────────────────────────────── */
+.cchips { display: flex; flex-wrap: wrap; gap: 6px; }
+.cchips li { padding: 5px 9px; border-radius: 6px; background: var(--blue-ultra-light); color: var(--blue); font-size: 13px; line-height: 1.2; font-weight: 500; white-space: nowrap; }
+
+/* ── Line items: what it is and how it's worked out, then the amount ────── */
+.cl { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 28px; padding: 18px 0; border-top: 1px solid var(--hairline); }
+.cl-label { font-size: 15px; line-height: 1.4; }
+.cl-label b { font-weight: 500; }
+.cl-caption { font-size: 13px; line-height: 1.5; color: var(--ink-muted); }
+.cl-value { grid-row: 1 / span 2; grid-column: 2; align-self: start; font-size: 18px; line-height: 1.3; font-weight: 500; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.cl-value small { margin-left: 4px; font-size: 13px; font-weight: 400; color: var(--ink-muted); }
+.cl-tag { display: inline-block; margin-left: 8px; padding: 2px 7px; border-radius: 5px; background: var(--blue-ultra-light); color: var(--blue); font-size: 12px; font-weight: 500; vertical-align: 2px; white-space: nowrap; }
+.cl--total { border-top-color: var(--ink); }
+.cl--total .cl-label { font-weight: 500; }
+.cl--total .cl-value { color: var(--blue); font-size: 22px; }
+.cl--bonus .cl-value { color: var(--ink-muted); font-size: 15px; }
+.cl-part { margin-top: 36px; font-size: 13px; font-weight: 500; letter-spacing: .01em; color: var(--ink-muted); }
+.cl-part + .cf, .cl-part + .cl { margin-top: 14px; }
+
+/* ── The risk without Pave: a quiet note that opens ─────────────────────── */
+.cr { margin-top: 28px; border-radius: 14px; background: var(--card-hover); }
+.cr > summary { list-style: none; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 16px; padding: 18px 20px; cursor: pointer; }
+.cr > summary::-webkit-details-marker { display: none; }
+.cr-kicker { font-size: 13px; color: var(--ink-muted); }
+.cr-title { grid-column: 1; font-size: 15px; line-height: 1.45; font-weight: 500; }
+.cr-more { grid-row: 1 / span 2; grid-column: 2; align-self: center; font-size: 14px; color: var(--blue); }
+.cr-more::after { content: 'More'; }
+.cr[open] .cr-more::after { content: 'Less'; }
+.cr-text { padding: 0 20px 20px; max-width: 70ch; font-size: 15px; line-height: 1.6; color: var(--ink-muted); }
+
+/* ── The talk track with your CFO ───────────────────────────────────────── */
+.ct { padding: clamp(24px, 3vw, 36px); border-radius: 18px; background: var(--blue-ultra-light); }
+.ct-kicker { font-size: 14px; font-weight: 500; color: var(--blue); }
+.ct-quote { margin-top: 14px; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.45; letter-spacing: -.01em; text-wrap: pretty; }
+.ct-quote strong { font-weight: 500; color: var(--blue); }
+.ct-copy { margin-top: 20px; min-height: 40px; padding: 0 16px; border: 0; border-radius: 10px; background: rgba(35,92,243,.1); color: var(--blue); font-size: 14px; font-weight: 500; transition: border-radius 0s; }
+.ct-copy:hover { border-radius: 20px; transition: border-radius .25s cubic-bezier(.33,1,.4,1); }
+
+/* ── Sources & assumptions ──────────────────────────────────────────────── */
+.cm-title { font-size: clamp(28px, 2.6vw, 36px); line-height: 1.1; letter-spacing: -.02em; }
+.cm { margin-top: 32px; border-bottom: 1px solid var(--hairline); }
+.cm-row { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 12px var(--p1-grid-gap); padding: 22px 0; border-top: 1px solid var(--hairline); }
+.cm-head { font-size: 15px; line-height: 1.4; font-weight: 500; }
+.cm-text { max-width: 76ch; font-size: 14px; line-height: 1.65; color: var(--ink-muted); }
+.csources { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 24px; font-size: 14px; }
+.csources a { color: var(--blue); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+/* ── Get a tailored estimate (the research pages' careers band) ─────────── */
+.cc .p1-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--p1-grid-gap); align-items: end; }
+.cc h2 { max-width: 20ch; font-size: clamp(32px, 3.7vw, 52px); line-height: 1.08; letter-spacing: -.015em; text-wrap: balance; }
+.cc p { max-width: 46ch; font-size: 18px; line-height: 1.5; color: var(--ink-muted); }
+.cc .p1-button { margin-top: 28px; }
+
+/* ── The running total, once the hero's total scrolls away ──────────────── */
+.cbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; background: rgba(255,255,255,.96); border-top: 1px solid var(--hairline); transform: translateY(101%); transition: transform .35s cubic-bezier(.33,1,.4,1); }
+.cbar.is-on { transform: none; }
+.cbar-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 76px; }
+.cbar-label { font-size: 14px; color: var(--ink-muted); }
+.cbar-total { font-size: 24px; font-weight: 500; letter-spacing: -.01em; color: var(--blue); font-variant-numeric: tabular-nums; }
+.cbar-sum { display: flex; flex-wrap: wrap; gap: 4px 20px; font-size: 14px; color: var(--ink-muted); }
+.cbar-sum b { font-weight: 500; color: var(--ink); }
+.cbar .p1-button { min-height: 46px; font-size: 15px; }
+
+/* Below 200 employees, questions 3 and 4 carry no value. */
+.cgate { display: inline-block; padding: 4px 9px; border-radius: 6px; background: var(--card-hover); font-size: 13px; color: var(--ink-muted); }
+
+/* ══ Four Questions: Matt's structure, top to bottom ═════════════════════ */
+.cq-head { padding-top: clamp(132px, 10vw, 164px); padding-bottom: clamp(56px, 5vw, 88px); }
+.cq-head-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 80px); align-items: end; }
+.cq-head h1 { max-width: 17ch; font-size: clamp(38px, 4vw, 60px); line-height: 1.04; letter-spacing: -.03em; text-wrap: balance; }
+.cq-head .lt-lede { max-width: 46ch; }
+.cq-total-label { font-size: 15px; color: var(--ink-muted); }
+.cq-total-fig { margin-top: 10px; font-size: clamp(64px, 7.2vw, 116px); line-height: .92; letter-spacing: -.04em; font-weight: 500; color: var(--blue); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cq-sum { margin-top: 28px; border-bottom: 1px solid var(--hairline); }
+.cq-sum div { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-top: 1px solid var(--hairline); font-size: 15px; }
+.cq-sum dt { color: var(--ink-muted); }
+.cq-sum dd { margin: 0; font-weight: 500; font-variant-numeric: tabular-nums; }
+.cq-sum .cq-sum-total { border-top-color: var(--ink); }
+.cq-sum .cq-sum-total dt { color: var(--ink); font-weight: 500; }
+.cq-note { margin-top: 16px; max-width: 52ch; font-size: 13px; line-height: 1.5; color: var(--ink-muted); }
+.cq-note strong { font-weight: 500; color: var(--ink); }
+.cq-lead { padding-block: clamp(56px, 5vw, 80px) 0; font-size: clamp(22px, 2vw, 28px); line-height: 1.3; letter-spacing: -.012em; max-width: 34ch; }
+.cq-q { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 96px); padding-block: clamp(48px, 5vw, 72px); }
+.cq-list .cq-q { border-top: 1px solid var(--ink); }
+.cq-list { padding-bottom: clamp(56px, 5vw, 88px); }
+.cq-list .cq-q:first-child { margin-top: clamp(32px, 3vw, 48px); }
+.cq-side { position: relative; }
+.cq-side-inner { position: sticky; top: 110px; }
+.cq-q h2 { max-width: 20ch; font-size: clamp(26px, 2.3vw, 34px); line-height: 1.12; letter-spacing: -.02em; text-wrap: balance; }
+.cq-value { margin-top: 26px; font-size: clamp(44px, 4.2vw, 64px); line-height: .95; letter-spacing: -.035em; font-weight: 500; color: var(--blue); font-variant-numeric: tabular-nums; }
+.cq-value-label { margin-top: 10px; font-size: 14px; color: var(--ink-muted); }
+.cq-q .cchips { margin-top: 22px; }
+.cq-body { font-size: 17px; line-height: 1.6; color: var(--ink-muted); max-width: 60ch; }
+.cq-body strong { color: var(--ink); font-weight: 500; }
+.cq-main > .cf:first-child, .cq-body + .cf, .cq-body + .cl-part { margin-top: 36px; }
+.cq-main .cl:first-of-type { margin-top: 28px; }
+.cq-spend { background: var(--band-light); }
+.cq-spend .cq-q { padding-block: clamp(56px, 5vw, 80px); }
+.cq-spend .cq-fields { padding: clamp(24px, 2.6vw, 36px); border-radius: 18px; background: #fff; }
+.cq-spend .ct { margin-top: 36px; background: #fff; }
+.cq-spend .cr { background: rgba(255,255,255,.6); }
+.cq-summary { margin-top: 18px; font-size: 17px; color: var(--ink-muted); }
+
+/* ══ Quick Estimate: two numbers up front, the rest in rows that open ════ */
+.ck-head { padding-top: clamp(132px, 10vw, 164px); padding-bottom: clamp(56px, 5vw, 80px); }
+.ck-head-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 80px); align-items: end; }
+.ck-head h1 { max-width: 16ch; font-size: clamp(36px, 4vw, 60px); line-height: 1.04; letter-spacing: -.03em; text-wrap: balance; }
+.ck-formula { margin-top: 36px; max-width: 28ch; font-size: clamp(26px, 2.6vw, 38px); line-height: 1.32; letter-spacing: -.02em; }
+.ck-formula .ck-op { color: var(--ink-faint); }
+.ck-formula .ck-eq { display: block; }
+.ck-formula strong { font-weight: 500; }
+.ck-formula small { display: block; margin-top: 6px; font-size: 15px; letter-spacing: 0; color: var(--ink-muted); }
+.ck-result { padding: clamp(24px, 3vw, 36px); border-radius: 20px; background: #fff; }
+.ck-result-label { font-size: 15px; color: var(--ink-muted); }
+.ck-fig { margin-top: 10px; font-size: clamp(60px, 6.4vw, 104px); line-height: .92; letter-spacing: -.04em; font-weight: 500; color: var(--blue); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ck-split { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--hairline); }
+.ck-split span { display: block; font-size: 13px; color: var(--ink-muted); }
+.ck-split b { display: block; margin-top: 4px; font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.ck-result .cq-note { margin-top: 18px; }
+.ck-result .p1-button { margin-top: 22px; }
+.ck-head .cr { margin-top: 32px; max-width: 62ch; background: rgba(255,255,255,.66); }
+.ck-list { padding-block: clamp(64px, 6vw, 96px); }
+.ck-lead { max-width: 34ch; font-size: clamp(22px, 2vw, 28px); line-height: 1.3; letter-spacing: -.012em; }
+.ck-rows { margin-top: clamp(28px, 3vw, 44px); border-bottom: 1px solid var(--ink); }
+.ck-row { border-top: 1px solid var(--ink); }
+.ck-row + .ck-row { border-top-color: var(--hairline); }
+.ck-row > summary { list-style: none; position: relative; display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 6fr) minmax(0, 3fr) 28px; gap: 16px var(--p1-grid-gap); align-items: start; padding: 28px 0; cursor: pointer; }
+.ck-row > summary::-webkit-details-marker { display: none; }
+/* Hover: a light card inside the row, the other rows quieter. */
+.ck-row > summary::before { content: ''; position: absolute; inset: 8px -24px; z-index: -1; border-radius: 22px; background: var(--card-hover); opacity: 0; }
+.ck-row > summary:hover::before { opacity: 1; }
+.ck-rows:has(.ck-row > summary:hover) .ck-row:not(:has(> summary:hover)) > summary > * { opacity: .32; }
+.ck-row > summary > * { transition: opacity .2s ease; }
+.ck-fig-sm b { display: block; font-size: clamp(32px, 2.8vw, 44px); line-height: 1; letter-spacing: -.03em; font-weight: 500; color: var(--blue); font-variant-numeric: tabular-nums; }
+.ck-fig-sm em { display: block; margin-top: 8px; font-style: normal; font-size: 13px; color: var(--ink-muted); }
+.ck-q { font-size: clamp(19px, 1.6vw, 23px); line-height: 1.3; letter-spacing: -.01em; font-weight: 500; text-wrap: balance; }
+.ck-row .cchips { justify-content: flex-start; }
+.ck-plus { position: relative; width: 28px; height: 28px; border-radius: 50%; background: var(--card-hover); }
+.ck-plus::before, .ck-plus::after { content: ''; position: absolute; left: 8px; right: 8px; top: 13px; height: 2px; border-radius: 1px; background: var(--ink); transition: transform .25s ease; }
+.ck-plus::after { transform: rotate(90deg); }
+.ck-row[open] .ck-plus::after { transform: rotate(0deg); }
+.ck-panel { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: var(--p1-grid-gap); padding: 0 0 44px; }
+.ck-panel-main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 clamp(28px, 4vw, 64px); }
+.ck-panel-main > .cq-body { grid-column: 1 / -1; margin-bottom: 32px; }
+.ck-panel-main > .cr { grid-column: 1 / -1; }
+.ck-panel .cl:first-child { border-top-color: var(--ink); }
+.ck-talk { padding-bottom: clamp(64px, 6vw, 96px); }
+.ck-talk .ct { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 16px var(--p1-grid-gap); }
+.ck-talk .ct-quote { margin-top: 0; font-size: clamp(20px, 1.9vw, 26px); }
+.ck-sources > summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 28px 0; border-top: 1px solid var(--ink); cursor: pointer; }
+.ck-sources > summary::-webkit-details-marker { display: none; }
+.ck-sources[open] .ck-plus::after { transform: rotate(0deg); }
+
+/* ══ Business Case: the research post, read like a memo ═════════════════ */
+.cbc .lp-head h1 { max-width: 18ch; }
+.cbc .lp-meta dd .cf-inline { font-size: 15px; }
+.cbc .lp-meta dd .cf-inline .cf-num { border-bottom-width: 1.5px; }
+.cbc-total-note { margin-top: 12px; max-width: 34ch; font-size: 13px; line-height: 1.5; color: var(--ink-muted); }
+.cbc-total-note strong { font-weight: 500; color: var(--ink); }
+.cbc .prose > .ct { margin-bottom: 48px; }
+.cbc-sec + .cbc-sec { margin-top: 64px; }
+.cbc-sec h2 { scroll-margin-top: 110px; }
+.cbc-kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-bottom: 14px; font-size: 14px; color: var(--ink-muted); }
+.cbc-kicker b { font-weight: 500; color: var(--blue); }
+.cbc-sec .cbc-value { display: flex; align-items: baseline; gap: 12px; margin: 18px 0 6px; }
+.cbc-sec .cbc-value b { font-size: clamp(36px, 3.2vw, 48px); line-height: 1; letter-spacing: -.03em; font-weight: 500; color: var(--blue); font-variant-numeric: tabular-nums; }
+.cbc-sec .cbc-value span { font-size: 14px; color: var(--ink-muted); }
+.cbc-sec .cchips { margin: 16px 0 6px; }
+.cbc-controls { margin: 32px 0 8px; padding: 26px; border-radius: 18px; background: var(--band-light); }
+.cbc .prose .cl { margin: 0; }
+.cbc .prose .cl-label, .cbc .prose .cl-value { color: var(--ink); }
+.cbc .prose p.cl-caption { margin: 0; }
+.cbc-math { margin-top: 28px; }
+.cbc .cm-row { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+/* Inside the post's prose column: the parts keep their own spacing. */
+.cbc .prose .cbc-sec > * + * { margin-top: 1.05em; }
+.cbc .prose .cbc-sec > h2 { margin-top: 0; }
+.cbc .prose .cbc-sec > .cbc-value { margin-top: 18px; }
+.cbc .prose .cchips { padding-left: 0; list-style: none; }
+.cbc .prose .cchips li + li { margin-top: 0; }
+.cbc .prose .cbc-controls { margin-top: 32px; }
+.cbc .prose .cbc-math { margin-top: 28px; }
+.cbc .prose .cr { margin-top: 28px; }
+.cbc .prose .cl-part { margin-top: 32px; }
+.cbc .prose > .ct + p { margin-top: 0; font-size: 20px; line-height: 1.45; color: var(--ink); }
+.cbc .cbc-meta { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.cbc .cbc-meta > div { grid-column: auto; }
+.cbc .cbc-meta dd { font-size: 17px; }
+
+/* ══ Design 05's card, shared by the Dark Snapshot, Dark Summary and ═════
+   Light Summary: calculator-experience.css draws it; these are the parts
+   05 never needed (hints, labels from the data, the pill only when on). */
+.vc-hint { margin: -1px 0 8px; max-width: 46ch; font-size: 12px; line-height: 1.45; color: var(--vc-muted); }
+.vc-hint strong { font-weight: 500; color: #021340; }
+.vc-hint a { color: #235cf3; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; white-space: nowrap; }
+.vc-advanced summary b, .vc-result-detail summary b { font-weight: 400; }
+.vc-result-detail dt b { font-weight: 500; }
+.vc-mobile-total:not(.is-on) { display: none !important; }
+.calc--dark .cchips li { background: rgba(227,239,255,.1); color: #e3efff; }
+
+/* ══ Dark Summary: 05 in Matt's words ════════════════════════════════════ */
+.calc--dark-summary .vc-intro h1 { max-width: 24ch; text-wrap: balance; }
+.calc--dark-summary .vc-breakdown { gap: 32px; }
+.dq-text { margin-top: 12px; max-width: 52ch; font-size: 14px; line-height: 1.45; color: rgba(255,255,255,.7); text-wrap: pretty; }
+.dq .cchips { margin-top: 10px; }
+.dq-gate { display: inline-block; margin-left: 10px; padding: 3px 8px; border-radius: 6px; background: rgba(255,255,255,.1); font-style: normal; font-size: 12px; line-height: 1.3; color: #e3efff; vertical-align: 1px; }
+.dq-note { margin-top: 18px; max-width: 48ch; font-size: 13px; line-height: 1.5; color: rgba(255,255,255,.62); }
+.dq-note strong { font-weight: 500; color: #fff; }
+/* The talk track: the stage's ground carried on under it, no rule between */
+.dq-talk { padding: 0 0 clamp(88px, 8vw, 128px); background: #021340; color: #fff; }
+.dq-talk-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 24px clamp(32px, 5vw, 80px); align-items: start; }
+.dq-talk-kicker { font-size: 15px; line-height: 1.4; font-weight: 400; letter-spacing: 0; color: #e3efff; }
+.dq-copy { margin-top: 20px; min-height: 40px; padding: 0 16px; border: 0; border-radius: 10px; background: rgba(255,255,255,.1); color: #fff; font-size: 14px; font-weight: 500; transition: border-radius 0s; }
+.dq-copy:hover { border-radius: 20px; background: rgba(255,255,255,.16); transition: border-radius .25s cubic-bezier(.33,1,.4,1); }
+.dq-quote { max-width: 34ch; font-size: clamp(24px, 2.4vw, 36px); line-height: 1.3; letter-spacing: -.015em; text-wrap: pretty; }
+.dq-quote strong { font-weight: 500; color: #f0ff81; }
+
+/* ══ Light Summary: 05's card and bars on the research pages' light band ══ */
+body.calc--summary { background: #fff; }
+.cs-stage { padding-block: clamp(132px, 10vw, 164px) clamp(64px, 6vw, 96px); }
+.cs-intro h1 { margin-top: 22px; max-width: 22ch; font-size: clamp(38px, 4vw, 60px); line-height: 1.04; letter-spacing: -.03em; text-wrap: balance; }
+.cs-lede { margin-top: 22px; max-width: 54ch; font-size: 18px; line-height: 1.5; color: var(--ink-muted); }
+.cs-layout { display: grid; grid-template-columns: minmax(360px, .86fr) minmax(0, 1.14fr); gap: clamp(52px, 7.5vw, 112px); align-items: start; margin-top: clamp(40px, 4vw, 56px); }
+.calc--summary .vc-editor { border: 0; box-shadow: none; padding-bottom: 8px; }
+.cs-results { position: sticky; top: 110px; min-width: 0; }
+.cs-total-label { font-size: 15px; color: var(--ink-muted); }
+.cs-total { margin-top: 12px; font-size: clamp(72px, 8.4vw, 132px); line-height: .92; letter-spacing: -.04em; font-weight: 500; color: var(--blue); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.cs-share { margin-top: 16px; font-size: 16px; line-height: 1.5; color: var(--ink-muted); }
+.cs-share strong { font-weight: 500; color: var(--ink); }
+.cs-qs { display: grid; gap: 32px; margin-top: 44px; }
+.cs-q { transition: opacity .2s ease; }
+.cs-q.is-gated { opacity: .55; }
+.cs-q-top { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.cs-q-name { font-size: 16px; font-weight: 500; }
+.cs-q-name .cgate { margin-left: 10px; background: #fff; font-style: normal; font-weight: 400; vertical-align: 1px; }
+.cs-q-top b { font-size: 28px; line-height: 1; font-weight: 500; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.cs-track { height: 12px; border-radius: 6px; background: #fff; overflow: hidden; }
+.cs-track span { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--blue); transition: width .55s cubic-bezier(.22,1,.36,1); }
+.cs-q:nth-child(2) .cs-track span { background: var(--purple); }
+.cs-q:nth-child(3) .cs-track span { background: var(--blue-medium); }
+.cs-q-text { margin-top: 14px; max-width: 54ch; font-size: 15px; line-height: 1.45; color: var(--ink-muted); text-wrap: pretty; }
+.cs-q .cchips { margin-top: 12px; }
+.cs-q .cchips li { background: #fff; }
+.cs-math { margin-top: 10px; }
+.cs-math > summary { list-style: none; display: inline-flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 14px; font-weight: 500; color: var(--blue); cursor: pointer; }
+.cs-math > summary::-webkit-details-marker { display: none; }
+.cs-math .ck-plus { width: 22px; height: 22px; background: #fff; }
+.cs-math .ck-plus::before, .cs-math .ck-plus::after { left: 6px; right: 6px; top: 10px; background: var(--blue); }
+.cs-math[open] .ck-plus::after { transform: rotate(0deg); }
+.cs-math .cl:first-of-type { margin-top: 10px; }
+.calc--summary .cq-note { margin-top: 32px; }
+.cs-cta { margin-top: 22px; }
+.cs-talk { padding-top: clamp(64px, 6vw, 96px); }
+@media (min-width: 901px) { .calc--summary .cbar { display: none; } }
+
+/* ── Phones and tablets ─────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .ck-row > summary { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr) 28px; }
+  .ck-row > summary .cchips { grid-column: 2; grid-row: 2; }
+  .cs-layout { grid-template-columns: minmax(340px, .95fr) minmax(0, 1fr); gap: 48px; }
+  .calc--summary .vc-editor { padding: 25px 24px 6px; }
+  .cs-total { font-size: 10.5vw; }
+}
+@media (max-width: 900px) {
+  .cq-head-grid, .ck-head-grid, .cq-q, .ck-panel, .ck-panel-main, .ck-talk .ct, .cc .p1-split, .cm-row { grid-template-columns: minmax(0, 1fr); }
+  .cq-side-inner { position: static; }
+  .cq-total-fig, .ck-fig { font-size: clamp(56px, 15vw, 88px); }
+  .ck-panel-main > .cq-body { margin-bottom: 8px; }
+  .cbar-sum { display: none; }
+  .dq-talk-grid, .cs-layout { grid-template-columns: minmax(0, 1fr); }
+  .cs-results { position: static; }
+  .cs-total { font-size: clamp(64px, 17vw, 104px); }
+}
+@media (max-width: 640px) {
+  .cf-top { flex-wrap: wrap; }
+  .cf-num { width: 100%; text-align: left; }
+  .cf-inline .cf-num { width: auto; }
+  .cl { grid-template-columns: minmax(0, 1fr); }
+  .cl-value { grid-row: auto; grid-column: 1; }
+  .ck-row > summary { grid-template-columns: minmax(0, 1fr) 28px; }
+  .ck-row > summary .ck-q { grid-column: 1; grid-row: 2; }
+  .ck-row > summary .cchips { grid-column: 1; grid-row: 3; }
+  .ck-plus { grid-column: 2; grid-row: 1; }
+  .ck-split { grid-template-columns: minmax(0, 1fr); }
+  .cbar-inner { min-height: 68px; }
+  .cbar .p1-button { padding: 0 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cbar, .ck-plus::before, .ck-plus::after, .ck-row > summary > * { transition: none; }
+}
+
+/* ══ Four Questions V2 (.calc--q2): Teresa's October 20 comments ══════════ */
+/* The header's two columns align at the top */
+.calc--q2 .cq-head-grid { align-items: start; }
+/* The sliders in Pave's purples, not blue into purple */
+.calc--q2 .cf-range::-webkit-slider-runnable-track { background: linear-gradient(90deg, #1c0042, #461f7a 45%, #a46fef) 0 0 / var(--p) 100% no-repeat, var(--band-light); }
+.calc--q2 .cf-range::-moz-range-progress { background: linear-gradient(90deg, #1c0042, #461f7a 45%, #a46fef); }
+.calc--q2 .cf-range::-webkit-slider-thumb { border-color: #461f7a; }
+.calc--q2 .cf-range::-moz-range-thumb { border-color: #461f7a; }
+.calc--q2 .cf-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 5px var(--purple-light), 0 1px 3px rgba(16,16,20,.16); }
+.calc--q2 .cf-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 5px var(--purple-light); }
