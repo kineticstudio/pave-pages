@@ -5,13 +5,13 @@
 
 /* "research" in a thin weight (Teresa) */
 @font-face { font-family: 'Aeonik Pro TRIAL'; src: url('fonts/AeonikProTRIAL-Light.otf') format('opentype'); font-weight: 300; font-display: swap; }
-:is([data-variant="c2"], [data-variant="c3"]) .lt-head h1 { font-weight: 300; letter-spacing: -.04em; }
+:is([data-variant="c2"], [data-variant="c3"], [data-variant="c4"]) .lt-head h1 { font-weight: 300; letter-spacing: -.04em; }
 
 /* A tighter hero: the copy sits centred against the shapes, closer together (Teresa: "spacing seems open") */
-:is([data-variant="c2"], [data-variant="c3"]) .lt-head { padding-top: clamp(124px, 9.5vw, 150px); padding-bottom: clamp(48px, 5vw, 72px); }
-:is([data-variant="c2"], [data-variant="c3"]) .lt-head-grid { align-items: center; }
-:is([data-variant="c2"], [data-variant="c3"]) .lt-lede { margin-top: 16px; }
-:is([data-variant="c2"], [data-variant="c3"]) .gs--block { width: min(100%, 400px); }
+:is([data-variant="c2"], [data-variant="c3"], [data-variant="c4"]) .lt-head { padding-top: clamp(124px, 9.5vw, 150px); padding-bottom: clamp(48px, 5vw, 72px); }
+:is([data-variant="c2"], [data-variant="c3"], [data-variant="c4"]) .lt-head-grid { align-items: center; }
+:is([data-variant="c2"], [data-variant="c3"], [data-variant="c4"]) .lt-lede { margin-top: 16px; }
+:is([data-variant="c2"], [data-variant="c3"], [data-variant="c4"]) .gs--block { width: min(100%, 400px); }
 
 /* The shapes in the purple mesh: the canvas paints the tiles, the SVG stays as geometry */
 .gs--mesh svg { visibility: hidden; }

@@ -11,12 +11,14 @@
   // data-from) and links on to posts in its own layout, so each post
   // variation keeps you in it.
   var from = new URLSearchParams(location.search).get('from');
-  var light = /^(c3|c2|c|d|e|light)$/.test(variant);
-  var tag = variant === 'light' ? (/^(c3|c2|c|d|e)$/.test(from) ? from : (body.getAttribute('data-from') || 'd')) : variant;
+  var light = /^(c4|c3|c2|c|d|e|light)$/.test(variant);
+  var tag = variant === 'light' ? (/^(c4|c3|c2|c|d|e)$/.test(from) ? from : (body.getAttribute('data-from') || 'd')) : variant;
   var self = location.pathname.split('/').pop() || 'research-light-post.html';
   var pages = { a: ['research-a.html', 'research-a-post.html'], b: ['research-b.html', 'research-b-post.html'],
-    c: ['research-c.html', 'research-light-post.html'], c2: ['research-c2.html', 'research-light-post.html'], c3: ['research-c3.html', 'research-light-post-v2.html'], d: ['research-d.html', 'research-light-post.html'], e: ['research-e.html', 'research-light-post.html'],
+    c: ['research-c.html', 'research-light-post.html'], c2: ['research-c2.html', 'research-light-post.html'], c3: ['research-c3.html', 'research-light-post-v2.html'], c4: ['research-c4.html', 'research-light-post-v3.html'], d: ['research-d.html', 'research-light-post.html'], e: ['research-e.html', 'research-light-post.html'],
     light: ['research-' + tag + '.html', page === 'article' ? self : 'research-light-post.html'] }[variant];
+  // Ruled V4 and Split Header V3 (Pave, October 20): no author name or date anywhere.
+  var anon = variant === 'c4' || body.getAttribute('data-post') === 'v3';
   var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); };
   var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   var fmt = function (iso) { var p = iso.split('-'); return months[+p[1] - 1] + ' ' + (+p[2]) + ', ' + p[0]; };
@@ -87,13 +89,13 @@
 
   /* The ledger: a ruled results table. */
   function ledger(list, head) {
-    return '<div class="lg">' + (head ? '<div class="lg-head" aria-hidden="true"><span>Result</span><span>Post</span><span>Topic</span><span>Author</span><span></span></div>' : '') +
+    return '<div class="lg' + (anon ? ' lg--anon' : '') + '">' + (head ? '<div class="lg-head" aria-hidden="true"><span>Result</span><span>Post</span><span>Topic</span>' + (anon ? '' : '<span>Author</span>') + '<span></span></div>' : '') +
       list.map(function (p) {
         return '<a class="lg-row" href="' + href(p) + '" data-reveal>' +
           '<span class="lg-fig">' + count(p.figure.value) + '</span>' +
           '<span class="lg-main"><strong>' + esc(p.title) + '</strong><span>' + esc(p.figure.label) + '</span></span>' +
           '<span class="lg-topic">' + esc(p.topics[0]) + '</span>' +
-          '<span class="lg-who">' + byline(p) + when(p) + '</span>' +
+          (anon ? '' : '<span class="lg-who">' + byline(p) + when(p) + '</span>') +
           '<span class="lg-arrow">' + ARROW + '</span></a>';
       }).join('') + '</div>';
   }
@@ -201,11 +203,11 @@
         '<span class="lg-fig">' + count(p.figure.value) + '<em class="lg-context">' + esc(p.figure.context || p.figure.label) + '</em></span>' +
         '<span class="lg-main"><strong>' + esc(p.title) + '</strong></span>' +
         '<span class="lg-topic">' + esc(p.topics[0]) + '</span>' +
-        '<span class="lg-who">' + byline(p) + when(p) + '</span>' +
+        (anon ? '' : '<span class="lg-who">' + byline(p) + when(p) + '</span>') +
         '<span class="lg-arrow">' + ARROW + '</span></a>';
     }).join('');
     var rest = Math.max(0, list.length - PAGE);
-    return '<div class="lg lg--v2"><div class="lg-head" aria-hidden="true"><span>Result</span><span>Post</span><span>Topic</span><span>Author</span><span></span></div>' + rows + '</div>' +
+    return '<div class="lg lg--v2' + (anon ? ' lg--anon' : '') + '"><div class="lg-head" aria-hidden="true"><span>Result</span><span>Post</span><span>Topic</span>' + (anon ? '' : '<span>Author</span>') + '<span></span></div>' + rows + '</div>' +
       (rest ? '<button class="lg-more" type="button" data-page="' + PAGE + '">Show more research <span data-more-count>' + rest + '</span></button>' : '');
   }
   function indexC2() {
@@ -215,6 +217,20 @@
       '<h2 class="lt-feature-title">' + esc(f.title) + '</h2>' +
       '<div class="lt-feature-foot">' + bylineComma(f) + '<span class="lt-read">Read the post</span></div></div>' +
       '<p class="lt-figure lt-figure--feature">' + count(f.figure.value) + '<span>' + esc(f.figure.label) + '</span></p></a>');
+    set('[data-rows]', ledgerV2(posts));
+    set('[data-count-posts]', posts.length + ' posts');
+  }
+
+  /* Ruled V4 (Pave's October 20 sheet): Ruled V3 with the featured post's
+     stat anchored in a white card the height of the post, "Read the post" as
+     a button under the title, and no author name or date anywhere. */
+  function indexC4() {
+    var f = posts[0];
+    set('[data-featured]', '<a class="lt-feature-link lt-feature-link--text lt-feature-link--v4" href="' + href(f) + '">' +
+      '<div class="lt-feature-copy"><p class="lt-kicker"><b>Latest</b><span>' + esc(f.topics[0]) + '</span></p>' +
+      '<h2 class="lt-feature-title">' + esc(f.title) + '</h2>' +
+      '<span class="p1-button lt-feature-button">Read the post</span></div>' +
+      '<p class="lt-figure lt-figure--feature lt-figure--card">' + count(f.figure.value) + '<span>' + esc(f.figure.label) + '</span></p></a>');
     set('[data-rows]', ledgerV2(posts));
     set('[data-count-posts]', posts.length + ' posts');
   }
@@ -260,7 +276,7 @@
        unchanged): the headline number and the figure image are optional, and
        Results only shows when the header has no number. ?without=figure,image
        previews a post that has neither. */
-    var v2 = body.getAttribute('data-post') === 'v2';
+    var v2 = /^v[23]$/.test(body.getAttribute('data-post') || '');
     var without = v2 ? (new URLSearchParams(location.search).get('without') || '').split(',') : [];
     var figure = without.indexOf('figure') < 0 ? post.figure : null, image = without.indexOf('image') < 0 ? post.chart : null;
     document.title = post.title + ' | Pave';
@@ -268,7 +284,7 @@
     set('[data-title]', esc(post.title));
     set('[data-dek]', esc(post.summary));
     set('[data-meta]', byline(post) + (post.date ? '<span class="hero-dot" aria-hidden="true"></span>' + when(post) : '') + '<span class="hero-dot" aria-hidden="true"></span><span>' + post.read + ' min read</span>');
-    set('[data-meta-dl]', '<div><dt>Author</dt><dd>' + byline(post) + '</dd></div>' + (post.date ? '<div><dt>Published</dt><dd>' + when(post) + '</dd></div>' : '') +
+    set('[data-meta-dl]', (anon ? '' : '<div><dt>Author</dt><dd>' + byline(post) + '</dd></div>' + (post.date ? '<div><dt>Published</dt><dd>' + when(post) + '</dd></div>' : '')) +
       '<div><dt>Reading time</dt><dd>' + post.read + ' min</dd></div><div><dt>Topics</dt><dd>' + esc(post.topics.join(' / ')) + '</dd></div>');
     // No number to feature: the stat leaves and the author details move up.
     if (figure) set('[data-hero-stat]', '<p class="hero-stat" data-count="' + esc(figure.value) + '">' + esc(figure.value) + '</p><p class="hero-stat-label">' + esc(figure.label) + '</p>');
@@ -301,7 +317,8 @@
     set('[data-body]', blocks.join(''));
     set('[data-toc]', '<i class="toc-progress" aria-hidden="true"></i>' + toc.join(''));
     var tocEl = document.querySelector('.toc'); if (tocEl) tocEl.hidden = toc.length < 2;
-    set('[data-author]', '<img src="' + esc(post.author.photo) + '" alt="" width="64" height="64" loading="lazy"><div><small>Written by</small><span class="author-name">' + esc(post.author.name) + '</span>' +
+    if (anon) { var card = document.querySelector('[data-author]'); if (card) card.remove(); }
+    else set('[data-author]', '<img src="' + esc(post.author.photo) + '" alt="" width="64" height="64" loading="lazy"><div><small>Written by</small><span class="author-name">' + esc(post.author.name) + '</span>' +
       (post.author.title ? '<small>' + esc(post.author.title) + '</small>' : '') + (post.author.linkedin ? '<small><a href="' + esc(post.author.linkedin) + '">LinkedIn</a></small>' : '') + '</div>');
     var others = posts.filter(function (p) { return p !== post; });
     set('[data-more]', ledger(others, false));
@@ -309,7 +326,7 @@
   }
 
   shapes();
-  if (page === 'index') ({ a: indexA, b: indexB, c: indexC, c2: indexC2, c3: indexC2, d: indexD, e: indexE }[variant] || indexA)();
+  if (page === 'index') ({ a: indexA, b: indexB, c: indexC, c2: indexC2, c3: indexC2, c4: indexC4, d: indexD, e: indexE }[variant] || indexA)();
   if (page === 'article') article();
   window.PaveResearchChart = chart;
 })();

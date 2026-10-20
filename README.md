@@ -6,17 +6,17 @@ pave.kineticstudio.com are the source of truth.
 
 ## Where we're at
 
-Updated October 16, 2026. Pave approved all of this on October 15 (Teresa,
+Updated October 20, 2026. Pave approved all of this on October 15 (Teresa,
 in #ext-kinetic-pave): the Agent Panel navigation, and the research index and
 post page as we iterated them. Pave is still deciding about moving off
 Webflow, so these get built in Webflow now. They'd like to review next week.
 
 | Page | Design | Webflow | What it is |
 | --- | --- | --- | --- |
-| Navigation | [Agent Panel](https://pave.kineticstudio.com/designs/pave/site-src/nav-v2.html?product=panel) | Not started | Replaces the site-wide navbar. `nav/index.html` |
-| Research index | [Research Index Ruled V3](https://pave.kineticstudio.com/designs/pave/site-src/research-c3.html) | Not started | New static page, listing a new Research posts CMS collection. `research/index.html` |
-| Research post | [Research Post Split Header V2](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v2.html) | Not started | The collection's template page. `research/<slug>.html`, one per post |
-| Research post, no number or image | [Text Only](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v2.html?without=figure,image) | | The same template for a post with neither. `research/text-only.html` |
+| Navigation | [Agent Panel](https://pave.kineticstudio.com/designs/pave/site-src/nav-v2.html?product=panel) | Built on the research pages; rest of the site after Pave approves | Replaces the site-wide navbar. `nav/index.html` |
+| Research index | [Research Index Ruled V4](https://pave.kineticstudio.com/designs/pave/site-src/research-c4.html) | Built; October 20 changes to make | New static page, listing a new Research posts CMS collection. `research/index.html` |
+| Research post | [Research Post Split Header V3](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html) | Built; October 20 changes to make | The collection's template page. `research/<slug>.html`, one per post |
+| Research post, no number or image | [Text Only](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html?without=figure,image) | | The same template for a post with neither. `research/text-only.html` |
 
 The design links open each page on its own. On the review site the research
 pages still show the older nav they were reviewed with; here they carry the
@@ -61,12 +61,12 @@ pages fall back to system fonts.
 | Page | File | Design |
 | --- | --- | --- |
 | Navigation | `nav/index.html` | [Agent Panel](https://pave.kineticstudio.com/designs/pave/site-src/nav-v2.html?product=panel) |
-| Research | `research/index.html` | [Ruled V3](https://pave.kineticstudio.com/designs/pave/site-src/research-c3.html) |
-| AI-Powered Job Matching Works | `research/ai-powered-job-matching-works.html` | [Split Header V2](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v2.html?post=ai-powered-job-matching-works) |
-| Calculated Benchmarks | `research/calculated-benchmarks-toughest-compensation-challenges.html` | [Split Header V2](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v2.html?post=calculated-benchmarks-toughest-compensation-challenges) |
-| AI maturity roadmap | `research/ai-maturity-total-rewards-roadmap.html` | [Split Header V2](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v2.html?post=ai-maturity-total-rewards-roadmap) |
-| Equity benchmarks | `research/pave-transforms-equity-compensation-benchmarks-using-machine-learning.html` | [Split Header V2](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v2.html?post=pave-transforms-equity-compensation-benchmarks-using-machine-learning) |
-| No number or image | `research/text-only.html` | [Text Only](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v2.html?without=figure,image) |
+| Research | `research/index.html` | [Ruled V4](https://pave.kineticstudio.com/designs/pave/site-src/research-c4.html) |
+| AI-Powered Job Matching Works | `research/ai-powered-job-matching-works.html` | [Split Header V3](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html?post=ai-powered-job-matching-works) |
+| Calculated Benchmarks | `research/calculated-benchmarks-toughest-compensation-challenges.html` | [Split Header V3](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html?post=calculated-benchmarks-toughest-compensation-challenges) |
+| AI maturity roadmap | `research/ai-maturity-total-rewards-roadmap.html` | [Split Header V3](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html?post=ai-maturity-total-rewards-roadmap) |
+| Equity benchmarks | `research/pave-transforms-equity-compensation-benchmarks-using-machine-learning.html` | [Split Header V3](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html?post=pave-transforms-equity-compensation-benchmarks-using-machine-learning) |
+| No number or image | `research/text-only.html` | [Text Only](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html?without=figure,image) |
 
 The four posts are Pave's existing articles, there so the template can be
 seen with real content of different shapes: two have no date, one has a
@@ -88,7 +88,9 @@ coded diagram instead of a chart.
   - `src/nav-v2.css`: the new nav, including the Agent Panel (`.pm-panel`,
     `.pp-` classes).
   - `src/research-v3.css` and `src/research-v4.css`: the research pages.
-  - `src/research-c2.css`: the index's own changes (Ruled V2 and V3 share it).
+  - `src/research-c2.css`: the index's own changes (Ruled V2, V3 and V4 share it).
+  - `src/research-c4.css`: Pave's October 20 changes (Ruled V4 and Split
+    Header V3): the light blue bands, the featured stat card, no Author column.
   - `src/research-light-post-v2.css`: the post's own change (the author
     details moving up when there's no number).
   - `src/agent-phase-1-footer.css`: the footer, as on the Pave Agent page.

@@ -1,0 +1,21 @@
+/* Ruled V4 (research-c4.html): Pave's October 20 sheet on Ruled V3, which
+   stays as approved. Scoped to this page. */
+
+/* Pave's light blue for the bands; the grey tint read as grey (Teresa) */
+[data-variant="c4"] .lt-band { background: var(--blue-ultra-light); }
+
+/* The featured post: the stat in a white card the height of the post, so it
+   is anchored rather than floating, and "Read the post" a real button under
+   the byline, left aligned with the copy */
+.lt-feature-link--v4 { align-items: stretch; }
+.lt-feature-link--v4 .lt-feature-copy { display: flex; flex-direction: column; align-items: flex-start; }
+.lt-feature-link--v4 .lt-feature-foot { margin-top: 24px; }
+.lt-feature-link--v4 .lt-feature-button { margin-top: 28px; }
+.lt-figure--card { justify-content: flex-end; height: 100%; padding: clamp(24px, 2.6vw, 36px); border-radius: 20px; background: #fff; }
+.lt-figure--card b { font-size: clamp(72px, 7vw, 112px); }
+.lt-feature-link--v4:hover .lt-feature-button { border-radius: 26px; transition: border-radius .25s cubic-bezier(.33,1,.4,1); }
+
+/* No author name or date (Pave, October 20): the rows lose the Author column */
+.lg--anon { --lg-cols: 190px minmax(0, 1fr) 200px 40px; }
+/* Split Header V3, opened from Ruled V4: the same light blue for its head and bands */
+[data-post="v3"] .lt-head--tint, [data-post="v3"] .lt-band { background: var(--blue-ultra-light); }

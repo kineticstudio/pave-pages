@@ -46,9 +46,9 @@ const POSTS = sandbox.window.PaveResearch;
 // element that shows it has rendered.
 const PAGES = [
   {src: 'nav-v2.html', query: '?product=panel', out: 'nav/index.html', name: 'Navigation', ready: '.nav-card.pm-panel'},
-  {src: 'research-c3.html', query: '', out: 'research/index.html', name: 'Research', ready: '[data-rows] .lg-row'},
-  ...POSTS.map(p => ({src: 'research-light-post-v2.html', query: `?post=${p.slug}&from=c3`, out: `research/${p.slug}.html`, name: p.title, ready: '[data-title]:not(:empty)'})),
-  {src: 'research-light-post-v2.html', query: `?post=${POSTS[0].slug}&from=c3&without=figure,image`, out: 'research/text-only.html', name: 'A post with no number or image', ready: '[data-title]:not(:empty)'},
+  {src: 'research-c4.html', query: '', out: 'research/index.html', name: 'Research', ready: '[data-rows] .lg-row'},
+  ...POSTS.map(p => ({src: 'research-light-post-v3.html', query: `?post=${p.slug}&from=c4`, out: `research/${p.slug}.html`, name: p.title, ready: '[data-title]:not(:empty)'})),
+  {src: 'research-light-post-v3.html', query: `?post=${POSTS[0].slug}&from=c4&without=figure,image`, out: 'research/text-only.html', name: 'A post with no number or image', ready: '[data-title]:not(:empty)'},
 ];
 // Scripts whose only job is writing markup that is now written in.
 const RENDERERS = ['nav-v1.js', 'nav-v2.js', 'research-footer.js', 'research-posts.js', 'research-v3.js', 'agent-result.js'];
@@ -62,8 +62,10 @@ const SKIP = ['agent-result.js', 'agent-result.css'];
 // Prototype pages, as this repo's pages or pave.com's.
 const ELSEWHERE = {
   'research-c3.html': '/research/',
+  'research-c4.html': '/research/',
   'research-d.html': '/research/',
   'research-light-post-v2.html': `/research/${POSTS[0].slug}.html`,
+  'research-light-post-v3.html': `/research/${POSTS[0].slug}.html`,
   'index.html': `${SITE}/`,
   'agent-phase-1.html': `${SITE}/products/pave-agent`,
   'customers.html': `${SITE}/customers`,
@@ -126,7 +128,7 @@ function relink(value) {
   const [rest, hash = ''] = value.split('#');
   const [file, query = ''] = rest.replace(STAMP, '').split('?');
   const params = new URLSearchParams(query.replace(/&amp;/g, '&'));
-  if (file === 'research-light-post-v2.html' && params.get('post')) return `/research/${params.get('post')}.html${hash ? '#' + hash : ''}`;
+  if (/^research-light-post-v[23]\.html$/.test(file) && params.get('post')) return `/research/${params.get('post')}.html${hash ? '#' + hash : ''}`;
   if (ELSEWHERE[file]) return ELSEWHERE[file] + (hash ? '#' + hash : '');
   if (/\.[a-z0-9]+$/i.test(file)) return `/src/${file}`;
   return value;

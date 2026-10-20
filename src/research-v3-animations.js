@@ -21,6 +21,23 @@
     closing: function () { var c = PaveMesh.defaultConfig(); Object.assign(c.params, { speed: .9, darkness: .34, brightness: 1.58, mouseStrength: 1.7, mouseRadius: .5 }); return c; },
     band: function () { var c = PaveMesh.defaultConfig(); Object.assign(c.params, { darkness: .42, brightness: 1.32, blur: .85, spread: 1.3 }); return c; },
     card: function () { var c = PaveMesh.defaultConfig(); Object.assign(c.params, { darkness: .46, brightness: 1.3 }); return c; },
+    // Design 05's calculator stage, as Hunter tuned it (calculator.html heroTune)
+    calculator: function () {
+      var c = PaveMesh.defaultConfig();
+      Object.assign(c.params, { darkness: .2, brightness: 1.35, saturation: 1.35, hue: 0, blur: .88, spread: 1.18, speed: .65 });
+      c.colors = [[2, 19, 64], [2, 19, 64], [9, 34, 100], [35, 92, 243], [35, 92, 243], [35, 92, 243], [164, 111, 239],
+        [9, 34, 100], [35, 92, 243], [2, 19, 64], [164, 111, 239]].map(function (rgb) { return rgb.map(function (v) { return v / 255; }); });
+      return c;
+    },
+    // Ruled V4's shapes: the purple colourway with less pink (Teresa, Oct 20:
+    // "there can be a little but it's not officially a brand color")
+    violet: function () {
+      var c = configs.purple();
+      Object.assign(c.params, { hue: .06, saturation: 2.7 });
+      c.colors[10] = [.6, .6, .96];
+      c.colors[5] = [.62, .58, .95];
+      return c;
+    },
     // The Customers page's purple colourway, as Hunter dialled it (customers.html, Aug 27)
     purple: function () {
       var c = PaveMesh.defaultConfig();
@@ -517,7 +534,7 @@
   // the tiles on, added after research-v3.js has drawn the SVG tiles.
   document.querySelectorAll('.gs--mesh').forEach(function (gs) {
     var src = document.createElement('canvas');
-    src.setAttribute('data-mesh', 'purple'); src.setAttribute('aria-hidden', 'true'); src.style.display = 'none';
+    src.setAttribute('data-mesh', gs.getAttribute('data-mesh-tone') || 'purple'); src.setAttribute('aria-hidden', 'true'); src.style.display = 'none';
     var paint = document.createElement('canvas');
     paint.className = 'gs-paint'; paint.setAttribute('aria-hidden', 'true');
     gs.appendChild(src); gs.appendChild(paint);
