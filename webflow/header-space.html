@@ -1,0 +1,26 @@
+<!-- Header space (Kinetic, Oct 28). The nav and announcement bar are fixed, so they no longer push the page down.
+     Pages built for the old nav get that space back as top padding; pages built to sit under the nav are listed in OVER. -->
+<style>
+  :root { --pave-header-h: 112px; }
+  @media (max-width: 767px) { :root { --pave-header-h: 120px; } }
+  html:not([data-nav-over]) .main-wrapper { padding-top: var(--pave-header-h); }
+  /* Sticky page menus (Hot Jobs Index) stick just under the header, at every width */
+  .header145_tab-menu { top: calc(var(--pave-header-h) + 16px); }
+</style>
+<script>
+  (function () {
+    var OVER = /^\/(customers|pricing|pave-agent|value-calculator|research(\/.*)?)?$/;
+    var path = location.pathname.replace(/\/+$/, '') || '/';
+    if (OVER.test(path)) document.documentElement.setAttribute('data-nav-over', '');
+    function fit() {
+      // The bottom of whichever ends lower, the nav or the bar (offsetTop ignores the nav sliding away on scroll).
+      var h = 0;
+      ['.nav', '.announcement-bar_wrap'].forEach(function (sel) {
+        var el = document.querySelector(sel); if (el) h = Math.max(h, el.offsetTop + el.offsetHeight);
+      });
+      if (h) document.documentElement.style.setProperty('--pave-header-h', h + 'px');
+    }
+    document.addEventListener('DOMContentLoaded', fit);
+    window.addEventListener('resize', fit);
+  })();
+</script>

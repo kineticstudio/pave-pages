@@ -1,5 +1,12 @@
 # Changelog
 
+## October 28, 2026: page spacing under the fixed nav
+
+- **New:** `webflow/header-space.html`, site-wide head code that gives pages
+  built for the old nav their space back under the fixed nav and bar, and
+  fixes the Hot Jobs Index tab menu sitting on its title. See README.md, "The
+  fixed nav and page spacing".
+
 ## October 28, 2026: link previews
 
 - **New:** `og/`, a 1200x630 preview still for research, the calculator, use

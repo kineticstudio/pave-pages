@@ -152,6 +152,30 @@ the video plays only where a site supports `og:video` files (Facebook and
 Discord, for example). The still is the preview everywhere else, so it's
 made to work alone.
 
+## The fixed nav and page spacing (Webflow, site-wide)
+
+The live nav and announcement bar are fixed, so they float over the page
+instead of pushing it down. Most of pave.com was built for the old nav, which
+did push it down, so since the fixed nav went site-wide those pages start
+under it: the hero on landing pages (Insights, Company, Products, Partners,
+Request a demo, Careers, industry and region pages and others), the
+breadcrumbs on every blog post, case study, author page and Hot Jobs detail
+page, and the Hot Jobs Index tab menu over its title.
+
+`webflow/header-space.html` fixes it once for the whole site. Paste it into
+Site settings > Custom code > Head code. It:
+
+- gives every page the header's height as top padding on `.main-wrapper`,
+  measured from the nav and bar (112px on desktop, 120px on phones today), so
+  pages sit where they did before;
+- skips the pages built to sit under the nav: the homepage, Customers,
+  Pricing, Pave Agent, the value calculator and Research (with its posts). A
+  new page like those goes in the `OVER` list;
+- sticks the Hot Jobs tab menu just under the header at every width.
+
+Tested on the live pages with the snippet added, at 1440px and 390px: nothing
+sits under the nav on any page type, and the six pages above don't move.
+
 ## The value calculator
 
 Pave approved Four Questions V2 on October 20 (Teresa, with Tim). It is Matt's
