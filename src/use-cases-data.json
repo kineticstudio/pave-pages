@@ -1,0 +1,872 @@
+{
+ "_about": "Pave Agent use cases, from Pave's product team mockup (Pave Agent Use Cases, October 20, 2026). One record per use case: the index pages, filters, detail page and related links all build from these. To add one, copy a record and fill every field. Outputs are sample data. [Brackets] in a prompt mark what the reader fills in.",
+ "links": {
+  "demo": "https://www.pave.com/request-demo"
+ },
+ "page": {
+  "kicker": "Pave Agent use cases",
+  "title": "Ask the comp question.",
+  "titleAccent": "Get the answer on your data.",
+  "lede": "Real prompts comp teams run in Pave Agent, the data each one draws on, and what comes back. Copy any prompt and run it in your own instance.",
+  "search": "Search use cases, like \"offer\" or \"merit\"",
+  "all": "All",
+  "anyRole": "Any role",
+  "anyProduct": "Any product",
+  "empty": "No use cases match. Try a broader search.",
+  "indexTitle": "All use cases",
+  "featured": "Start here",
+  "open": "See the use case"
+ },
+ "detail": {
+  "crumb": "Use cases",
+  "for": "For",
+  "uses": "Uses",
+  "category": "Category",
+  "problem": "The problem",
+  "oldWay": "The old way",
+  "prompt": "The prompt",
+  "ask": "Ask Pave Agent",
+  "copy": "Copy prompt",
+  "copied": "Copied",
+  "followUps": "Then try",
+  "output": "What you get back",
+  "agent": "Pave Agent",
+  "sample": "Sample output with illustrative data",
+  "sources": "Sources",
+  "why": "Why it works in Pave",
+  "data": "Data it uses",
+  "yours": "Your data",
+  "pave": "Pave intelligence",
+  "need": "What you need",
+  "related": "Related use cases"
+ },
+ "cta": {
+  "title": "See it on your data",
+  "text": "We'll run this prompt in your Pave instance before we ever meet.",
+  "button": "Book a demo"
+ },
+ "useCases": [
+  {
+   "id": "pay-complaint",
+   "title": "Answer a pay complaint with evidence",
+   "outcome": "Go from \"I think I'm underpaid\" to a fact-based answer before the next 1:1.",
+   "category": "Pay decisions",
+   "roles": [
+    "Comp team",
+    "HRBP"
+   ],
+   "products": [
+    "Market Pricing",
+    "Market Data Pro"
+   ],
+   "problem": "An employee says they're paid below market. You need to check their pay against the market, their band and their peers, then give their manager something to say.",
+   "oldWay": [
+    "Export the employee and their peers from the HRIS",
+    "Look up the job in a benchmark survey and guess the match",
+    "Build a one-off spreadsheet, then write talking points from scratch"
+   ],
+   "prompt": "[Employee name] says they're paid below market. Compare their base and total cash to the market for their job, level and location, and to peers in the same role. Tell me whether the concern holds up, and draft talking points for their manager.",
+   "followUps": [
+    "What would it cost to move them to our target percentile?",
+    "Is anyone else in this role in the same position?"
+   ],
+   "data": {
+    "yours": [
+     {
+      "name": "Employee record",
+      "detail": "Job, level, location, tenure and pay from your HRIS"
+     },
+     {
+      "name": "Pay bands",
+      "detail": "Your ranges for the role"
+     },
+     {
+      "name": "Performance",
+      "detail": "Latest rating, if connected"
+     }
+    ],
+    "pave": [
+     {
+      "name": "Market Pricing",
+      "detail": "Your priced job, matched to market"
+     },
+     {
+      "name": "Market Data benchmarks",
+      "detail": "Base and total cash by level and location"
+     },
+     {
+      "name": "Peer cohort",
+      "detail": "Companies like yours by size and industry"
+     }
+    ]
+   },
+   "output": {
+    "summary": "The concern partly holds up. Base sits at the 38th percentile for a Senior Software Engineer in Denver, below your 50th percentile target. Total cash is at the 47th because of bonus. Two of five peers in the role are in the same position.",
+    "table": {
+     "cols": [
+      "Metric",
+      "Employee",
+      "Market P50",
+      "Position"
+     ],
+     "rows": [
+      [
+       "Base salary",
+       "$158,000",
+       "$171,500",
+       "38th"
+      ],
+      [
+       "Total cash",
+       "$181,000",
+       "$184,000",
+       "47th"
+      ],
+      [
+       "Compa-ratio",
+       "0.92",
+       "",
+       "In band"
+      ]
+     ]
+    },
+    "sources": [
+     "HRIS",
+     "Pay bands",
+     "Market Pricing",
+     "Market Data"
+    ]
+   },
+   "why": [
+    {
+     "h": "Your data and the market, together",
+     "p": "Employee pay and live benchmarks sit in the same place. No exports, no lookups."
+    },
+    {
+     "h": "Jobs already matched",
+     "p": "The comparison uses the job match your team already approved, so it's apples to apples."
+    },
+    {
+     "h": "Knows your philosophy",
+     "p": "If you target the 60th percentile for engineering, it measures against that, not a generic median."
+    }
+   ]
+  },
+  {
+   "id": "price-new-role",
+   "title": "Price a role you've never hired",
+   "outcome": "Get a defensible range for a brand-new job by tomorrow, not next week.",
+   "category": "Market pricing",
+   "roles": [
+    "Comp team",
+    "Recruiting"
+   ],
+   "products": [
+    "Market Pricing",
+    "Market Data Pro"
+   ],
+   "problem": "The business wants to open a role that isn't in your job architecture yet. The title is fuzzy, the hiring manager wants a number, and you need one you can defend.",
+   "oldWay": [
+    "Search surveys for something close to the title",
+    "Argue about which level it maps to",
+    "Hand-build a range and hope it holds up in offers"
+   ],
+   "prompt": "We're opening a Staff Machine Learning Engineer role in Austin and remote US. Find the closest market matches, recommend a level in our architecture, and give me base, bonus and equity ranges at our target percentile.",
+   "followUps": [
+    "How does this compare to our current IC5 engineering band?",
+    "What changes if we only hire in Austin?"
+   ],
+   "data": {
+    "yours": [
+     {
+      "name": "Job architecture",
+      "detail": "Your levels and job families"
+     },
+     {
+      "name": "Comp philosophy",
+      "detail": "Target percentiles by function"
+     },
+     {
+      "name": "Adjacent bands",
+      "detail": "Ranges for similar roles you already have"
+     }
+    ],
+    "pave": [
+     {
+      "name": "Market Data benchmarks",
+      "detail": "Matched jobs by level"
+     },
+     {
+      "name": "Geographic differentials",
+      "detail": "Location adjustments"
+     },
+     {
+      "name": "Equity benchmarks",
+      "detail": "Annual grant value by company stage"
+     }
+    ]
+   },
+   "output": {
+    "summary": "Closest market match is Machine Learning Engineer at the Staff level. Recommended mapping is your IC5. Ranges below target your 60th percentile for Austin.",
+    "table": {
+     "cols": [
+      "Component",
+      "Min",
+      "Mid",
+      "Max"
+     ],
+     "rows": [
+      [
+       "Base salary",
+       "$212,000",
+       "$236,000",
+       "$260,000"
+      ],
+      [
+       "Target bonus",
+       "15%",
+       "15%",
+       "15%"
+      ],
+      [
+       "Annual equity value",
+       "$120,000",
+       "$150,000",
+       "$180,000"
+      ]
+     ]
+    },
+    "sources": [
+     "Job architecture",
+     "Comp philosophy",
+     "Market Data"
+    ]
+   },
+   "why": [
+    {
+     "h": "Matches fuzzy titles",
+     "p": "It reads the job description, not just the title, and shows you the match it picked."
+    },
+    {
+     "h": "Maps to your levels",
+     "p": "The range lands in your architecture, so it fits next to the bands you already have."
+    },
+    {
+     "h": "Location built in",
+     "p": "Geo differentials come with the benchmark, not from a separate table."
+    }
+   ]
+  },
+  {
+   "id": "merit-budget",
+   "title": "Set a merit budget finance will sign",
+   "outcome": "Show what each budget buys in market position, by department.",
+   "category": "Comp planning",
+   "roles": [
+    "Comp team",
+    "HR leader",
+    "Finance"
+   ],
+   "products": [
+    "Compensation Planning",
+    "Market Data Pro"
+   ],
+   "problem": "Before the cycle, finance asks what budget you need. You need to show how far each team is from market and what different budgets get you.",
+   "oldWay": [
+    "Pull current salaries and last cycle's increases",
+    "Age survey data forward by hand",
+    "Model three scenarios in a spreadsheet that breaks when anyone touches it"
+   ],
+   "prompt": "Model merit budgets of 3, 3.5 and 4 percent. For each, show the total cost and how many employees end up below the 25th percentile of market, by department. Recommend one.",
+   "followUps": [
+    "What if engineering gets its own budget?",
+    "Show me the cost of a separate market adjustment pool instead."
+   ],
+   "data": {
+    "yours": [
+     {
+      "name": "Current salaries",
+      "detail": "By employee and department"
+     },
+     {
+      "name": "Last cycle",
+      "detail": "Increases and budget used"
+     },
+     {
+      "name": "Performance distribution",
+      "detail": "Ratings by department"
+     }
+    ],
+    "pave": [
+     {
+      "name": "Market movement",
+      "detail": "How pay is trending for your jobs"
+     },
+     {
+      "name": "Market Data benchmarks",
+      "detail": "By job and level"
+     }
+    ]
+   },
+   "output": {
+    "summary": "3.5 percent keeps most employees at or above the 25th percentile at a cost of $4.2M. Engineering is the outlier and needs about 4.2 percent to hold its position.",
+    "table": {
+     "cols": [
+      "Budget",
+      "Total cost",
+      "Below P25",
+      "Hardest hit"
+     ],
+     "rows": [
+      [
+       "3.0%",
+       "$3.6M",
+       "61",
+       "Engineering"
+      ],
+      [
+       "3.5%",
+       "$4.2M",
+       "38",
+       "Engineering"
+      ],
+      [
+       "4.0%",
+       "$4.8M",
+       "22",
+       "Sales leadership"
+      ]
+     ]
+    },
+    "sources": [
+     "Compensation Planning",
+     "HRIS",
+     "Market Data"
+    ]
+   },
+   "why": [
+    {
+     "h": "Cycle and market in one model",
+     "p": "Budget scenarios run on your real roster against current benchmarks."
+    },
+    {
+     "h": "Your org structure",
+     "p": "Results roll up by your departments and managers, not generic job families."
+    },
+    {
+     "h": "Every number traceable",
+     "p": "Each figure links back to the employee and benchmark behind it."
+    }
+   ]
+  },
+  {
+   "id": "retention-risk",
+   "title": "Find top performers paid below market",
+   "outcome": "A ranked list of who to fix first and what it costs.",
+   "category": "Retention",
+   "roles": [
+    "Comp team",
+    "HRBP",
+    "People leader"
+   ],
+   "products": [
+    "Market Pricing",
+    "Team View"
+   ],
+   "problem": "Your best people get recruited first. You want to find high performers below market before a competing offer does.",
+   "oldWay": [
+    "Join a performance export with a pay export",
+    "Benchmark each role one by one",
+    "Send managers a spreadsheet they won't open"
+   ],
+   "prompt": "List employees rated \"exceeds\" or higher whose base is below the 40th percentile of market. Rank them by the cost to bring them to the 50th, and group by manager.",
+   "followUps": [
+    "Which of these people were also passed over for a raise last cycle?",
+    "Draft a note to each manager with their list."
+   ],
+   "data": {
+    "yours": [
+     {
+      "name": "Performance ratings",
+      "detail": "Latest cycle"
+     },
+     {
+      "name": "Current pay and job",
+      "detail": "From your HRIS"
+     },
+     {
+      "name": "Manager hierarchy",
+      "detail": "Who reports to whom"
+     }
+    ],
+    "pave": [
+     {
+      "name": "Market Pricing",
+      "detail": "Priced jobs across your org"
+     },
+     {
+      "name": "Market Data benchmarks",
+      "detail": "Percentile position per employee"
+     }
+    ]
+   },
+   "output": {
+    "summary": "14 employees fit. Bringing all 14 to the 50th percentile costs $312,000. Six of them report to two managers in Product Engineering.",
+    "table": {
+     "cols": [
+      "Employee",
+      "Role",
+      "Market position",
+      "Cost to P50"
+     ],
+     "rows": [
+      [
+       "E-1042",
+       "Senior Product Designer",
+       "34th",
+       "$14,200"
+      ],
+      [
+       "E-2210",
+       "Staff Software Engineer",
+       "36th",
+       "$22,800"
+      ],
+      [
+       "E-0877",
+       "Senior Data Scientist",
+       "39th",
+       "$9,600"
+      ]
+     ]
+    },
+    "sources": [
+     "Performance",
+     "HRIS",
+     "Team View",
+     "Market Pricing"
+    ]
+   },
+   "why": [
+    {
+     "h": "Performance meets pay",
+     "p": "Ratings and market position are joined for you, across the whole company."
+    },
+    {
+     "h": "Ready to act on",
+     "p": "Ranked by cost and grouped by manager, so the next step is obvious."
+    },
+    {
+     "h": "Manager-ready views",
+     "p": "Each list can go straight into Team View for the manager to see."
+    }
+   ]
+  },
+  {
+   "id": "offer-check",
+   "title": "Pressure-test an offer before it goes out",
+   "outcome": "Know if an offer will win and whether it breaks internal equity.",
+   "category": "Offers",
+   "roles": [
+    "Recruiting",
+    "Comp team"
+   ],
+   "products": [
+    "Market Data Pro",
+    "Visual Offer Letters"
+   ],
+   "problem": "A candidate has a competing offer. Recruiting wants to match. You need to know where the offer lands against market and against the people already in the role.",
+   "oldWay": [
+    "Ask comp for a market check and wait",
+    "Look up current team pay separately",
+    "Decide under time pressure with half the picture"
+   ],
+   "prompt": "Our draft offer for a Senior Account Executive in New York is $140k base and $280k OTE. The candidate has a competing offer at $150k base. Where does our offer land against the market and our current team? What should we do?",
+   "followUps": [
+    "What sign-on bonus closes the gap without changing base?",
+    "Update the offer letter with that structure."
+   ],
+   "data": {
+    "yours": [
+     {
+      "name": "Draft offer",
+      "detail": "Base, variable and equity"
+     },
+     {
+      "name": "Current team pay",
+      "detail": "People in the same role and location"
+     },
+     {
+      "name": "Pay bands",
+      "detail": "Range for the level"
+     }
+    ],
+    "pave": [
+     {
+      "name": "Market Data benchmarks",
+      "detail": "Base and OTE for sales roles"
+     },
+     {
+      "name": "Peer cohort",
+      "detail": "Companies you compete with for talent"
+     }
+    ]
+   },
+   "output": {
+    "summary": "Your draft is at the 55th percentile on base and the 62nd on OTE. Matching $150k base puts this hire above 4 of your 6 current Senior AEs in New York. Recommendation: hold base and add a $15k sign-on bonus.",
+    "table": {
+     "cols": [
+      "Option",
+      "Base",
+      "OTE",
+      "Internal equity"
+     ],
+     "rows": [
+      [
+       "Current draft",
+       "$140,000",
+       "$280,000",
+       "In line"
+      ],
+      [
+       "Match base",
+       "$150,000",
+       "$290,000",
+       "Above 4 of 6"
+      ],
+      [
+       "Sign-on instead",
+       "$140,000",
+       "$280,000 + $15k",
+       "In line"
+      ]
+     ]
+    },
+    "sources": [
+     "Draft offer",
+     "HRIS",
+     "Market Data"
+    ]
+   },
+   "why": [
+    {
+     "h": "Market and team in one answer",
+     "p": "You see the competitive position and the equity risk side by side."
+    },
+    {
+     "h": "Sales comp, done right",
+     "p": "OTE and pay mix benchmarks, not just base."
+    },
+    {
+     "h": "Straight to the letter",
+     "p": "The chosen structure flows into a Visual Offer Letter."
+    }
+   ]
+  },
+  {
+   "id": "equity-refresh",
+   "title": "Spot equity refresh gaps",
+   "outcome": "See who's about to hit a vesting cliff and what a refresh would cost.",
+   "category": "Equity",
+   "roles": [
+    "Comp team",
+    "Finance"
+   ],
+   "products": [
+    "Market Data Pro",
+    "Total Rewards"
+   ],
+   "problem": "Initial grants are running out for your longest-tenured people. Their pay drops when vesting ends, and that's when they start taking recruiter calls.",
+   "oldWay": [
+    "Pull vesting schedules from the cap table tool",
+    "Compare to refresh benchmarks by hand",
+    "Estimate share cost in a separate model"
+   ],
+   "prompt": "Which employees have less than 25 percent of their unvested equity value left over the next 12 months? Compare their ongoing equity to market refresh benchmarks and estimate the cost of bringing them to the 50th percentile.",
+   "followUps": [
+    "Break that down by department.",
+    "What if we only refresh people rated \"meets\" or higher?"
+   ],
+   "data": {
+    "yours": [
+     {
+      "name": "Equity grants",
+      "detail": "Grants and vesting schedules"
+     },
+     {
+      "name": "Share value",
+      "detail": "Current price or 409A"
+     },
+     {
+      "name": "Employee job and level",
+      "detail": "From your HRIS"
+     }
+    ],
+    "pave": [
+     {
+      "name": "Equity refresh benchmarks",
+      "detail": "Ongoing grant value by level"
+     },
+     {
+      "name": "Market Data benchmarks",
+      "detail": "New-hire equity by company stage"
+     }
+    ]
+   },
+   "output": {
+    "summary": "38 employees hit a vesting cliff in the next year. Their ongoing equity sits at the 22nd percentile of market refresh grants. Bringing them to the 50th costs about 0.4 percent of fully diluted shares.",
+    "table": {
+     "cols": [
+      "Department",
+      "Employees",
+      "Ongoing equity position",
+      "Refresh cost"
+     ],
+     "rows": [
+      [
+       "Engineering",
+       "19",
+       "24th",
+       "$2.1M"
+      ],
+      [
+       "Product",
+       "8",
+       "18th",
+       "$0.9M"
+      ],
+      [
+       "Go-to-market",
+       "11",
+       "26th",
+       "$0.7M"
+      ]
+     ]
+    },
+    "sources": [
+     "Equity grants",
+     "HRIS",
+     "Market Data"
+    ]
+   },
+   "why": [
+    {
+     "h": "Reads vesting, not just grants",
+     "p": "It looks at what's left to vest, which is what actually drives retention."
+    },
+    {
+     "h": "Refresh benchmarks",
+     "p": "Compares ongoing grants to ongoing grants, not to new-hire packages."
+    },
+    {
+     "h": "Ties to Total Rewards",
+     "p": "The same numbers show up in the employee's total rewards view."
+    }
+   ]
+  },
+  {
+   "id": "comp-committee",
+   "title": "Prep the comp committee summary",
+   "outcome": "A one-page market position readout for the board, written in plain English.",
+   "category": "Reporting",
+   "roles": [
+    "HR leader",
+    "Comp team"
+   ],
+   "products": [
+    "Market Data Pro",
+    "Market Pricing"
+   ],
+   "problem": "The comp committee meets next week. They want to know where you stand against market, where the gaps are, and what you plan to do about them.",
+   "oldWay": [
+    "Rebuild last quarter's deck with new data",
+    "Hunt for the story in a dozen pivot tables",
+    "Rewrite it twice for tone"
+   ],
+   "prompt": "Summarize where we stand against the market by department and level for our comp committee. Highlight the three biggest gaps, what's driving them, and what we recommend. Keep it to one page.",
+   "followUps": [
+    "Add how this changed since last quarter.",
+    "Turn this into three slides."
+   ],
+   "data": {
+    "yours": [
+     {
+      "name": "Full roster",
+      "detail": "Pay, job, level and department"
+     },
+     {
+      "name": "Comp philosophy",
+      "detail": "Target percentiles"
+     },
+     {
+      "name": "Prior readouts",
+      "detail": "Last quarter's summary, if saved"
+     }
+    ],
+    "pave": [
+     {
+      "name": "Market Data benchmarks",
+      "detail": "By job, level and location"
+     },
+     {
+      "name": "Market Pricing",
+      "detail": "Your priced jobs"
+     }
+    ]
+   },
+   "output": {
+    "summary": "Overall median position is the 52nd percentile against a 50th target. The three biggest gaps are Sales leadership, Data Science at mid levels, and Customer Success managers. All three trace to fast market movement since the last band refresh.",
+    "table": {
+     "cols": [
+      "Area",
+      "Market position",
+      "Target",
+      "Gap"
+     ],
+     "rows": [
+      [
+       "Sales leadership",
+       "31st",
+       "50th",
+       "-19"
+      ],
+      [
+       "Data Science IC3-IC4",
+       "38th",
+       "55th",
+       "-17"
+      ],
+      [
+       "Customer Success managers",
+       "41st",
+       "50th",
+       "-9"
+      ]
+     ]
+    },
+    "sources": [
+     "HRIS",
+     "Comp philosophy",
+     "Market Data",
+     "Market Pricing"
+    ]
+   },
+   "why": [
+    {
+     "h": "Board-ready writing",
+     "p": "Plain language, ordered by what the committee cares about."
+    },
+    {
+     "h": "Same cohort every time",
+     "p": "Your approved peer set is used every quarter, so trends are real."
+    },
+    {
+     "h": "Sources on every number",
+     "p": "Anyone can ask where a figure came from and get an answer."
+    }
+   ]
+  },
+  {
+   "id": "new-location",
+   "title": "Set pay for a new office location",
+   "outcome": "Draft ranges for a city you've never hired in, in local currency.",
+   "category": "Market pricing",
+   "roles": [
+    "Comp team",
+    "HR leader",
+    "Finance"
+   ],
+   "products": [
+    "Market Pricing",
+    "Market Data Pro"
+   ],
+   "problem": "Leadership is opening an office in a new city. You need ranges for your most common jobs before recruiting starts posting roles.",
+   "oldWay": [
+    "Buy or borrow a survey for that country",
+    "Map every job again",
+    "Convert currencies and sanity-check by hand"
+   ],
+   "prompt": "We're opening an office in Toronto. For our 12 most common jobs, show the market differential against our San Francisco ranges and draft Toronto ranges in CAD.",
+   "followUps": [
+    "Which of these jobs have thin market data in Toronto?",
+    "Compare Toronto to Vancouver."
+   ],
+   "data": {
+    "yours": [
+     {
+      "name": "Current ranges",
+      "detail": "Your San Francisco bands"
+     },
+     {
+      "name": "Headcount by job",
+      "detail": "To find your most common roles"
+     },
+     {
+      "name": "Comp philosophy",
+      "detail": "Target percentiles"
+     }
+    ],
+    "pave": [
+     {
+      "name": "Market Data benchmarks",
+      "detail": "Canada, by job and level"
+     },
+     {
+      "name": "Geographic differentials",
+      "detail": "City-level adjustments"
+     }
+    ]
+   },
+   "output": {
+    "summary": "Toronto runs well below San Francisco for engineering and somewhat closer for go-to-market roles. Draft ranges below are in CAD at your 50th percentile target.",
+    "table": {
+     "cols": [
+      "Job",
+      "SF mid (USD)",
+      "Toronto mid (CAD)",
+      "Differential"
+     ],
+     "rows": [
+      [
+       "Software Engineer IC3",
+       "$185,000",
+       "$158,000",
+       "-37%"
+      ],
+      [
+       "Account Executive",
+       "$120,000",
+       "$112,000",
+       "-31%"
+      ],
+      [
+       "Product Manager IC4",
+       "$205,000",
+       "$176,000",
+       "-37%"
+      ]
+     ]
+    },
+    "sources": [
+     "Pay bands",
+     "HRIS",
+     "Market Data"
+    ]
+   },
+   "why": [
+    {
+     "h": "Global benchmarks built in",
+     "p": "No extra survey to buy for a new country."
+    },
+    {
+     "h": "Starts from your bands",
+     "p": "Ranges are drafted relative to what you already pay, so they fit your structure."
+    },
+    {
+     "h": "Flags thin data",
+     "p": "It tells you when a job has too little market data to trust."
+    }
+   ]
+  }
+ ]
+}

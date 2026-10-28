@@ -1,5 +1,12 @@
 # Changelog
 
+## October 28, 2026: Pave Agent use cases
+
+- **New:** `use-cases/index.html` (Grid V2) and `use-cases/<id>.html` (Detail
+  V2, one per use case), approved October 28. They run live from
+  `src/use-cases-data.json` with `src/use-cases.js` and `src/use-cases.css`.
+  See README.md, "The use cases".
+
 ## October 28, 2026: page spacing under the fixed nav
 
 - **New:** `webflow/header-space.html`, site-wide head code that gives pages

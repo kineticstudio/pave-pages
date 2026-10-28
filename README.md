@@ -18,6 +18,8 @@ Webflow, so these get built in Webflow now. They'd like to review next week.
 | Research post | [Research Post Split Header V3](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html) | Built; October 20 changes to make | The collection's template page. `research/<slug>.html`, one per post |
 | Research post, no number or image | [Text Only](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html?without=figure,image) | | The same template for a post with neither. `research/text-only.html` |
 | Value calculator | [Four Questions V2](https://pave.kineticstudio.com/designs/pave/site-src/calculator-questions-v2.html) | Not started | Matt's value calculator, approved October 20 (Teresa and Tim). `calculator/index.html` |
+| Use cases | [Grid V2](https://pave.kineticstudio.com/designs/pave/site-src/use-cases-grid-v2.html) | Not started | The Pave Agent use cases index, approved October 28 (Teresa, with Tim). `use-cases/index.html` |
+| Use case | [Detail V2](https://pave.kineticstudio.com/designs/pave/site-src/use-case-v2.html?case=pay-complaint) | Not started | One use case, the collection's template page. `use-cases/<id>.html`, one per use case |
 
 The design links open each page on its own. On the review site the research
 pages still show the older nav they were reviewed with; here they carry the
@@ -69,6 +71,8 @@ pages fall back to system fonts.
 | Equity benchmarks | `research/pave-transforms-equity-compensation-benchmarks-using-machine-learning.html` | [Split Header V3](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html?post=pave-transforms-equity-compensation-benchmarks-using-machine-learning) |
 | No number or image | `research/text-only.html` | [Text Only](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html?without=figure,image) |
 | Value calculator | `calculator/index.html` | [Four Questions V2](https://pave.kineticstudio.com/designs/pave/site-src/calculator-questions-v2.html) |
+| Use cases | `use-cases/index.html` | [Grid V2](https://pave.kineticstudio.com/designs/pave/site-src/use-cases-grid-v2.html) |
+| Answer a pay complaint (and the seven others) | `use-cases/<id>.html` | [Detail V2](https://pave.kineticstudio.com/designs/pave/site-src/use-case-v2.html?case=pay-complaint) |
 
 The four posts are Pave's existing articles, there so the template can be
 seen with real content of different shapes: two have no date, one has a
@@ -213,6 +217,40 @@ numbers can live in a CMS item (Pave edits them in the Editor) passed to the
 script as the same JSON shape, or in a JSON embed on the page. Below 200
 employees Adherence and Understanding carry no value; Matt's rules for that,
 and for resets when the headcount changes, are in `calculator-v21.js`.
+
+## The use cases
+
+Pave approved Grid V2 and Detail V2 on October 28 (Teresa, with Tim), with
+one caveat from their side: Pave confirms the final content of each use case
+and reviews it before it's published. Like the calculator, the pages stay
+live: the markup is written in as it first renders, and `src/use-cases.js`
+runs on top.
+
+- **`src/use-cases-data.json`:** the eight use cases from Pave's product
+  team, plus the page copy (`page`, `detail`, `cta`). Each record: `id`,
+  `title`, `outcome`, `category`, `roles` and `products` (lists), `problem`,
+  `oldWay` (list), `prompt` (`[brackets]` mark what the reader fills in),
+  `followUps` (list), `data.yours` and `data.pave` (name and detail),
+  `output` (`summary`, a `table` of `cols` and `rows`, `sources`) and `why`
+  (heading and text). Outputs are sample data.
+- **`src/use-cases.js`:** fills both pages from the data. On the index:
+  search, the category chips with counts, the role and product filters, and
+  the cards. On a use case: everything from the record, the Copy prompt
+  button (copies plain text), and three related use cases (same category
+  first, then shared products). Attributes on `<body>`: `data-uc="grid"` or
+  `"detail"`, `data-uc-case` the use case, `data-uc-href` and
+  `data-uc-index` the addresses it links to.
+- **Styles:** `src/use-cases.css` on top of the research styles (V2 is
+  `.uc--v2`: text-only cards, and the hover lifts the card and turns it
+  light blue with a blue headline).
+
+**In Webflow,** the suggestion: a Use cases CMS collection with the fields
+above (lists as multi-reference or plain text, the output table as rich
+text or an embed), the template page at `/use-cases/<id>`, and the index at
+`/use-cases` as a collection list. Search and the filters can stay this
+script, reading the collection from a JSON embed, or use Webflow's own
+filtering if that's simpler for you. The Use cases link in the nav
+(Customers) goes to `/use-cases` once it's live.
 
 ## The navigation
 
