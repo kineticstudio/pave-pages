@@ -1,5 +1,13 @@
 # Changelog
 
+## October 28, 2026: link previews
+
+- **New:** `og/`, a 1200x630 preview still for research, the calculator, use
+  cases and Insights, and a short MP4 loop of the hero's motion for research
+  (the shapes) and the calculator (the total counting). The tags are in
+  `research/index.html` and `calculator/index.html`. See README.md, "Open
+  Graph (link previews)".
+
 ## October 20, 2026: the value calculator
 
 - **New:** the value calculator, Four Questions V2, approved by Pave

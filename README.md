@@ -105,6 +105,53 @@ coded diagram instead of a chart.
 `src/` mirrors the prototype's files, so names match the design links. Only
 files these pages load are included, plus the three above.
 
+## Open Graph (link previews)
+
+`og/` has a link preview for each page: a 1200x630 still (`*-og.jpg`, about
+60 to 110 KB) and, where the hero moves, a short loop of that motion
+(`*-og.mp4`: H.264, 1200x630, 30fps, no sound, under 200 KB). The still is
+the video's first frame.
+
+| Page | Still | Video | What the video shows |
+| --- | --- | --- | --- |
+| Research | `research-og.jpg` | `research-og.mp4` (12s) | The gradient shapes sliding, forward then back, so it loops clean |
+| Value calculator | `calculator-og.jpg` | `calculator-og.mp4` (6.4s) | The total counting from $38.2M (4,500 employees) to $169.5M (20,000) and back |
+| Use cases | `use-cases-og.jpg` | | For when the page is approved; its hero doesn't move |
+| Insights | `insights-og.jpg` | | For the Insights main pages once approved; the Glow hero holds still |
+
+`research/index.html` and `calculator/index.html` carry the tags in their
+`<head>`, pointing at the files here through jsDelivr (pinned to the
+`og-2026-10-28` tag, so they never change under you):
+
+```html
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/kineticstudio/pave-pages@og-2026-10-28/og/research-og.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Pave research: the purple gradient shapes beside the title.">
+<meta property="og:video" content="https://cdn.jsdelivr.net/gh/kineticstudio/pave-pages@og-2026-10-28/og/research-og.mp4">
+<meta property="og:video:secure_url" content="https://cdn.jsdelivr.net/gh/kineticstudio/pave-pages@og-2026-10-28/og/research-og.mp4">
+<meta property="og:video:type" content="video/mp4">
+<meta property="og:video:width" content="1200">
+<meta property="og:video:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/kineticstudio/pave-pages@og-2026-10-28/og/research-og.jpg">
+```
+
+The calculator's are the same with `calculator-og` and its own alt text.
+
+**In Webflow:** upload the still as the page's Open Graph image in Page
+settings (that writes `og:image` itself), and paste the `og:video` lines and
+the two `twitter:` lines into the page's custom code, Inside `<head>`. The
+video can stay on jsDelivr, or move to anywhere Pave serves files over
+https; then swap the URL. For research posts, bind the Open Graph image to
+the post's image field in the template's settings; they have no video.
+
+Where it plays: most places (Slack, LinkedIn, X, iMessage) show the still;
+the video plays only where a site supports `og:video` files (Facebook and
+Discord, for example). The still is the preview everywhere else, so it's
+made to work alone.
+
 ## The value calculator
 
 Pave approved Four Questions V2 on October 20 (Teresa, with Tim). It is Matt's
