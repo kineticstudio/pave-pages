@@ -1,9 +1,10 @@
 <!-- Header space (Kinetic, Oct 28). The nav and announcement bar are fixed, so they no longer push the page down.
-     Pages built for the old nav get that space back as top padding; pages built to sit under the nav are listed in OVER. -->
+     Pages built for the old nav get that space back as top padding; pages built to sit under the nav are listed in OVER.
+     Pages with no nav or bar at all (the paid /p/ landing pages) get no padding (Oct 29). -->
 <style>
   :root { --pave-header-h: 112px; }
   @media (max-width: 767px) { :root { --pave-header-h: 120px; } }
-  html:not([data-nav-over]) .main-wrapper { padding-top: var(--pave-header-h); }
+  html:not([data-nav-over]):has(.nav, .announcement-bar_wrap) .main-wrapper { padding-top: var(--pave-header-h); }
   /* Sticky page menus (Hot Jobs Index) stick just under the header, at every width */
   .header145_tab-menu { top: calc(var(--pave-header-h) + 16px); }
 </style>
