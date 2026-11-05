@@ -247,6 +247,13 @@ runs on top.
   In Webflow, make Category a Multi-reference to a Use case categories
   collection plus a "Main category" Reference for the card, and filter on
   all of an item's categories.
+- **Line breaks and an optional table (Sasha, Nov 5):** a prompt keeps the
+  line breaks it was written with (a blank line starts a new paragraph), and
+  so does the output summary, each paragraph its own `<p>`. The output table
+  and the sources are optional: with no table the summary stands alone. In
+  Webflow, make Prompt and Output summary multi-line plain text (or rich
+  text) and give the prompt `white-space: pre-line`; put the table and the
+  sources line under conditional visibility ("Output table is set").
 - **Styles:** `src/use-cases.css` on top of the research styles (V2 is
   `.uc--v2`: text-only cards, and the hover lifts the card and turns it
   light blue with a blue headline).

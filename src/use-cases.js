@@ -26,6 +26,9 @@
   var href = function (u) { return HREF ? HREF.replace('{id}', encodeURIComponent(u.id)) : (v2 ? 'use-case-v2.html' : 'use-case.html') + '?case=' + encodeURIComponent(u.id) + '&from=' + from; };
   // [Placeholders] in a prompt are what the reader fills in.
   var prompt = function (p) { return esc(p).replace(/\[([^\]]+)\]/g, '<mark>[$1]</mark>'); };
+  // Line breaks the writer typed stay; a blank line starts a new paragraph (Sasha, Nov 5).
+  var lines = function (h) { return h.replace(/\r/g, '').trim().replace(/\n{2,}/g, '<br><br>').replace(/\n/g, '<br>'); };
+  var paras = function (t) { return String(t || '').replace(/\r/g, '').trim().split(/\n\s*\n/).filter(Boolean).map(function (x) { return '<p class="uc-output-summary">' + esc(x.trim()).replace(/\n/g, '<br>') + '</p>'; }).join(''); };
   var set = function (sel, html) { root.querySelectorAll(sel).forEach(function (el) { el.innerHTML = html; }); };
 
   fetch(root.getAttribute('data-uc-root')).then(function (r) { return r.json(); }).then(function (data) {
@@ -152,14 +155,15 @@
     set('[data-outcome]', esc(u.outcome));
     set('[data-meta]', '<div><dt>' + esc(D.for) + '</dt><dd>' + u.roles.map(esc).join(', ') + '</dd></div>' +
       '<div><dt>' + esc(D.uses) + '</dt><dd>' + u.products.map(esc).join(', ') + '</dd></div>');
-    set('[data-prompt]', prompt(u.prompt));
+    set('[data-prompt]', lines(prompt(u.prompt)));
     set('[data-follow]', u.followUps.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join(''));
     var t = u.output.table;
     set('[data-output]', '<div class="uc-output-head"><p class="uc-agent"><i></i>' + esc(D.agent) + '</p><span>' + esc(D.sample) + '</span></div>' +
-      '<p class="uc-output-summary">' + esc(u.output.summary) + '</p>' +
-      '<div class="uc-table"><table><thead><tr>' + t.cols.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead><tbody>' +
-      t.rows.map(function (r) { return '<tr>' + r.map(function (c) { return '<td>' + esc(c) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>' +
-      '<p class="uc-sources"><span>' + esc(D.sources) + '</span>' + u.output.sources.map(function (s) { return '<b>' + esc(s) + '</b>'; }).join('') + '</p>');
+      paras(u.output.summary) +
+      // The table is optional: with none, the summary stands alone (Sasha, Nov 5).
+      (t && t.cols && t.cols.length ? '<div class="uc-table"><table><thead><tr>' + t.cols.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+      (t.rows || []).map(function (r) { return '<tr>' + r.map(function (c) { return '<td>' + esc(c) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>' : '') +
+      (u.output.sources && u.output.sources.length ? '<p class="uc-sources"><span>' + esc(D.sources) + '</span>' + u.output.sources.map(function (s) { return '<b>' + esc(s) + '</b>'; }).join('') + '</p>' : ''));
     set('[data-problem]', esc(u.problem));
     set('[data-old]', u.oldWay.map(function (o) { return '<li>' + esc(o) + '</li>'; }).join(''));
     set('[data-why]', u.why.map(function (w) { return '<div><h3>' + esc(w.h) + '</h3><p>' + esc(w.p) + '</p></div>'; }).join(''));

@@ -222,3 +222,6 @@
   .uc--v2 .uc-grid-head h1 > * { white-space: normal; text-wrap: balance; }
 }
 
+
+/* Several summary paragraphs sit closer than the first one does to the head */
+.uc-output-summary + .uc-output-summary { margin-top: 12px; }
