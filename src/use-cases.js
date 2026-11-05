@@ -30,6 +30,12 @@
 
   fetch(root.getAttribute('data-uc-root')).then(function (r) { return r.json(); }).then(function (data) {
     var all = data.useCases, P = data.page;
+    // A use case can sit in several categories (Sasha, Nov 4): `categories` is
+    // the list, and the first one is its main category, shown on the card.
+    all.forEach(function (u) {
+      u.categories = u.categories && u.categories.length ? u.categories : [u.category];
+      u.category = u.categories[0];
+    });
     root.querySelectorAll('[data-copy]').forEach(function (el) {
       var v = el.getAttribute('data-copy').split('.').reduce(function (o, k) { return o == null ? o : o[k]; }, data);
       if (typeof v === 'string') el.textContent = v;
@@ -43,7 +49,7 @@
   /* ── The three indexes ──────────────────────────────────────────────── */
   function index(data) {
     var all = data.useCases, P = data.page;
-    var CATS = uniq(all.map(function (u) { return u.category; }));
+    var CATS = uniq([].concat.apply([], all.map(function (u) { return u.categories; })));
     var ROLES = uniq([].concat.apply([], all.map(function (u) { return u.roles; }))).sort();
     var PRODUCTS = uniq([].concat.apply([], all.map(function (u) { return u.products; }))).sort();
     var state = { q: '', cat: P.all, role: '', product: '' };
@@ -56,7 +62,7 @@
       '<select data-role aria-label="Filter by role">' + opts(ROLES, P.anyRole) + '</select>' +
       '<select data-product aria-label="Filter by product">' + opts(PRODUCTS, P.anyProduct) + '</select></div>' +
       '<div class="uc-cats" role="group" aria-label="Category">' + [P.all].concat(CATS).map(function (c) {
-        var n = c === P.all ? all.length : all.filter(function (u) { return u.category === c; }).length;
+        var n = c === P.all ? all.length : all.filter(function (u) { return u.categories.indexOf(c) >= 0; }).length;
         return '<button class="uc-cat" type="button" data-cat="' + esc(c) + '" aria-pressed="' + (c === P.all) + '">' + esc(c) + '<span>' + n + '</span></button>';
       }).join('') + '</div>');
     root.querySelectorAll('[data-q]').forEach(function (el) { el.addEventListener('input', function () { state.q = el.value; root.querySelectorAll('[data-q]').forEach(function (o) { if (o !== el) o.value = el.value; }); draw(); }); });
@@ -74,11 +80,11 @@
       draw();
     }
     function match(u) {
-      if (state.cat !== P.all && u.category !== state.cat) return false;
+      if (state.cat !== P.all && u.categories.indexOf(state.cat) < 0) return false;
       if (state.role && u.roles.indexOf(state.role) < 0) return false;
       if (state.product && u.products.indexOf(state.product) < 0) return false;
       var q = state.q.trim().toLowerCase();
-      return !q || [u.title, u.outcome, u.problem, u.prompt, u.category].concat(u.roles, u.products).join(' ').toLowerCase().indexOf(q) >= 0;
+      return !q || [u.title, u.outcome, u.problem, u.prompt].concat(u.categories, u.roles, u.products).join(' ').toLowerCase().indexOf(q) >= 0;
     }
 
     if (kind === 'hub') set('[data-featured]', featured(all[0], data));
@@ -90,7 +96,8 @@
       else if (kind === 'ledger') html = rows(list);
       else if (kind === 'grid') html = '<div class="uc-grid">' + list.map(tile).join('') + '</div>';
       else html = '<div class="uc-hub-sections">' + CATS.map(function (c) {
-        var inCat = list.filter(function (u) { return u.category === c; });
+        // Each use case once, under its main category; a picked category lists all of its own.
+        var inCat = list.filter(function (u) { return state.cat === P.all ? u.category === c : c === state.cat && u.categories.indexOf(c) >= 0; });
         if (!inCat.length) return '';
         return '<section class="uc-cat-sec"><div class="uc-cat-head"><h2>' + esc(c) + '</h2><span>' + inCat.length + '</span></div>' +
           '<div class="uc-cards">' + inCat.map(card).join('') + '</div></section>';
@@ -162,7 +169,7 @@
     set('[data-need]', u.products.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join(''));
     // Related: same category first, then shared products (Pave's rule).
     var related = all.filter(function (x) { return x !== u; }).map(function (x) {
-      return { x: x, s: (x.category === u.category ? 2 : 0) + x.products.filter(function (p) { return u.products.indexOf(p) >= 0; }).length };
+      return { x: x, s: 2 * x.categories.filter(function (c) { return u.categories.indexOf(c) >= 0; }).length + x.products.filter(function (p) { return u.products.indexOf(p) >= 0; }).length };
     }).sort(function (a, b) { return b.s - a.s; }).slice(0, 3).map(function (r) { return r.x; });
     set('[data-related]', v2 ? '<div class="uc-grid">' + related.map(tile).join('') + '</div>' : rows(related));
     // Copy the prompt as plain text.

@@ -228,7 +228,7 @@ runs on top.
 
 - **`src/use-cases-data.json`:** the eight use cases from Pave's product
   team, plus the page copy (`page`, `detail`, `cta`). Each record: `id`,
-  `title`, `outcome`, `category`, `roles` and `products` (lists), `problem`,
+  `title`, `outcome`, `category` or `categories`, `roles` and `products` (lists), `problem`,
   `oldWay` (list), `prompt` (`[brackets]` mark what the reader fills in),
   `followUps` (list), `data.yours` and `data.pave` (name and detail),
   `output` (`summary`, a `table` of `cols` and `rows`, `sources`) and `why`
@@ -236,10 +236,17 @@ runs on top.
 - **`src/use-cases.js`:** fills both pages from the data. On the index:
   search, the category chips with counts, the role and product filters, and
   the cards. On a use case: everything from the record, the Copy prompt
-  button (copies plain text), and three related use cases (same category
-  first, then shared products). Attributes on `<body>`: `data-uc="grid"` or
+  button (copies plain text), and three related use cases (shared
+  categories first, then shared products). Attributes on `<body>`: `data-uc="grid"` or
   `"detail"`, `data-uc-case` the use case, `data-uc-href` and
   `data-uc-index` the addresses it links to.
+- **Several categories (Sasha, Nov 4):** a use case can sit in more than one
+  category. In the data, `categories` is a list and its first item is the
+  main category, shown on the card and in the breadcrumb (a plain `category`
+  still works). A category chip counts and lists every use case that has it.
+  In Webflow, make Category a Multi-reference to a Use case categories
+  collection plus a "Main category" Reference for the card, and filter on
+  all of an item's categories.
 - **Styles:** `src/use-cases.css` on top of the research styles (V2 is
   `.uc--v2`: text-only cards, and the hover lifts the card and turns it
   light blue with a blue headline).
