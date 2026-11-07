@@ -1,5 +1,16 @@
 # Changelog
 
+## November 6, 2026: Hire Pave Agent
+
+- **New:** `hire-pave-agent/index.html`, approved by Tim on November 6 (V6,
+  with Teresa's notes as V7), with `src/hire-pave-agent.css`, the homepage
+  hero's `src/home-hero.js` and `.css`, and `src/hire-agent.js`,
+  `src/hire-agent-v3.js` and `src/hire-agent-v7.js`. Link previews in
+  `og/hire-pave-agent-og.jpg` and `.mp4`. See README.md, "Hire Pave Agent".
+  Build it on a Webflow branch and don't publish until Hunter gives the go.
+- **Sync:** the prototype's dials and unused Pave Agent scripts stay out of
+  the pages.
+
 ## October 28, 2026: Pave Agent use cases
 
 - **New:** `use-cases/index.html` (Grid V2) and `use-cases/<id>.html` (Detail

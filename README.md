@@ -20,6 +20,7 @@ Webflow, so these get built in Webflow now. They'd like to review next week.
 | Value calculator | [Four Questions V2](https://pave.kineticstudio.com/designs/pave/site-src/calculator-questions-v2.html) | Not started | Matt's value calculator, approved October 20 (Teresa and Tim). `calculator/index.html` |
 | Use cases | [Grid V2](https://pave.kineticstudio.com/designs/pave/site-src/use-cases-grid-v2.html) | Not started | The Pave Agent use cases index, approved October 28 (Teresa, with Tim). `use-cases/index.html` |
 | Use case | [Detail V2](https://pave.kineticstudio.com/designs/pave/site-src/use-case-v2.html?case=pay-complaint) | Not started | One use case, the collection's template page. `use-cases/<id>.html`, one per use case |
+| Hire Pave Agent | [V7](https://pave.kineticstudio.com/?project=pave&view=designs&design=hire-pave-agent%2F07-Pave-Hire-Pave-Agent-V7.html) | Not started | Tim approved it November 6 (V6, with Teresa's notes, which are V7). `hire-pave-agent/index.html`. See "Hire Pave Agent" |
 
 The design links open each page on its own. On the review site the research
 pages still show the older nav they were reviewed with; here they carry the
@@ -73,6 +74,7 @@ pages fall back to system fonts.
 | Value calculator | `calculator/index.html` | [Four Questions V2](https://pave.kineticstudio.com/designs/pave/site-src/calculator-questions-v2.html) |
 | Use cases | `use-cases/index.html` | [Grid V2](https://pave.kineticstudio.com/designs/pave/site-src/use-cases-grid-v2.html) |
 | Answer a pay complaint (and the seven others) | `use-cases/<id>.html` | [Detail V2](https://pave.kineticstudio.com/designs/pave/site-src/use-case-v2.html?case=pay-complaint) |
+| Hire Pave Agent | `hire-pave-agent/index.html` | [V7](https://pave.kineticstudio.com/?project=pave&view=designs&design=hire-pave-agent%2F07-Pave-Hire-Pave-Agent-V7.html) |
 
 The four posts are Pave's existing articles, there so the template can be
 seen with real content of different shapes: two have no date, one has a
@@ -121,6 +123,7 @@ the video's first frame.
 | Research | `research-og.jpg` | `research-og.mp4` (12s) | The gradient shapes sliding, forward then back, so it loops clean |
 | Value calculator | `calculator-og.jpg` | `calculator-og.mp4` (6.4s) | The total counting from $38.2M (4,500 employees) to $169.5M (20,000) and back |
 | Use cases | `use-cases-og.jpg` | | For when the page is approved; its hero doesn't move |
+| Hire Pave Agent | `hire-pave-agent-og.jpg` | `hire-pave-agent-og.mp4` (8s) | The gradient drifting under the headline as market data flows in (pinned to the `og-2026-11-06` tag) |
 | Insights | `insights-og.jpg` | | For the Insights main pages once approved; the Glow hero holds still |
 
 `research/index.html` and `calculator/index.html` carry the tags in their
@@ -265,6 +268,99 @@ text or an embed), the template page at `/use-cases/<id>`, and the index at
 script, reading the collection from a JSON embed, or use Webflow's own
 filtering if that's simpler for you. The Use cases link in the nav
 (Customers) goes to `/use-cases` once it's live.
+
+## Hire Pave Agent
+
+Tim approved the page on November 6: V6 "with those changes", meaning
+Teresa's last four notes, which are V7 (dark blue hero text, the hero
+centered, no white band under the nav at the top, and "Pave Agent handles all
+your survey data."). V7 is what to build. `hire-pave-agent/index.html` is it
+with the markup written in, and it matches the design at 1440 and 390 in
+Chrome and Safari.
+
+**Build it on a Webflow branch, or keep the page in draft behind a password,
+and don't publish until Hunter gives the go.** (On November 6 the value
+calculator went live on pave.com by accident with another publish; this is
+how we keep that from happening again.) The address isn't confirmed yet; the
+suggestion is `/hire-pave-agent`, and the Hire Pave Agent button in the
+Product menu links there once it's live.
+
+What's on the page, top to bottom:
+
+- **Hero:** pave.com's own homepage hero, the same classes (`section_hero`,
+  `hero_marquee`, `hero_content`, `hero_canvas`) and the same code
+  (`src/home-hero.js` and `src/home-hero.css` are the homepage's inline
+  script and styles, copied as they are). So the quickest route is to
+  duplicate the homepage hero section, then:
+  - put `hero_content` before `hero_marquee` (the text first, the motion
+    below);
+  - center the text, and set the headline, subhead and ghost button text to
+    Pave's dark blue `#021340`;
+  - turn the gradient over: `.hero_canvas { transform: scaleY(-1); }`, so
+    the light side sits behind the text and the dark side behind the motion;
+  - the copy: "Build a Frontier Compensation Team", "Why the world's top
+    compensation teams hire Pave Agent", Book a demo and See Pave Agent in
+    action (to the Pave Agent page).
+- **Five sections** (`section.ha-chapter`), each opening with a header
+  (`header.ha-section-head`): the title as an H2 on the left, Book a demo on
+  the right, a hairline under it. Sections alternate the page's two dark
+  backgrounds.
+- **17 reasons** (`article.ha-reason`, every other one flipped with
+  `.is-flip`): the number (`.ha-num`, "01" to "17"), Matt's lead sentence as
+  an H3, the rest as a paragraph, an optional text link (`.ha-textlink`) and
+  a visual on the other side. A Webflow component with those slots works
+  well, so Pave can add, remove and reorder reasons; the numbers are plain
+  text, so renumber when the list changes. The visuals:
+
+  | # | Reason | Visual | Moves | Link |
+  | --- | --- | --- | --- | --- |
+  | 01 | Real-time market intelligence | `.ha-feed`, a market data table | A cell ticks up every couple of seconds | |
+  | 02 | 10,000+ clients | `.ha-logos`, the logo wall | One logo at a time crossfades to another (`src/hire-agent-v3.js` has the pool) | Customers |
+  | 03 | Pave Data Lab | `.ha-graph`, the node graph | Nodes light in turn | Data Lab |
+  | 04 | Public datasets | `.ha-badges` | Settles in | |
+  | 05 | Comp data warehouse | `.ha-tiers`, the four-layer stack | Settles in | |
+  | 06 | Syncs with Pave's tools | `.ha-sync` | Settles in | Compensation planning |
+  | 07 | 50+ integrations | `.ha-fifty` | Settles in | Integrations |
+  | 08 | All your survey data | `.ha-surveys`, ranges for Pave, WTW and Levels.fyi | Settles in | |
+  | 09 | Every other AI tool (MCP) | `.ha-sync.ha-mcp` | Settles in | |
+  | 10 | Scales past your hours | `.ha-always` | Settles in | |
+  | 11 | You make the final calls | `.ha-split` | Settles in | |
+  | 12 | Built-in skills | `.ha-cloud` | Settles in | |
+  | 13 | Gets smarter | `.ha-chart` | The line draws | |
+  | 14 | OpenAI chose Pave | `.ha-chosen`, the white OpenAI logo and chips | Settles in | Customers |
+  | 15 | Building your own costs more | `.ha-chart` | The lines draw | |
+  | 16 | Privacy risk | `.ha-vault` | Settles in | |
+  | 17 | Trust and safety | `.ha-certs` | Settles in | Security and privacy |
+
+  The visuals are HTML and CSS, so each can be a Webflow embed with its
+  markup from the page, or built natively from the same classes.
+- **Closing panel and footer:** use the site's own closing CTA and footer.
+  The closing line is "Bring Pave Agent your most complex questions." with
+  Book a demo and Talk to sales.
+
+Code:
+
+- **Styles:** `src/hire-pave-agent.css`, everything the page adds, in one
+  file (it was built in rounds, so later rules refine earlier ones; the
+  `<body>` classes `ha-v2` to `ha-v7` switch them on). Put it in the page's
+  head code, or carry the rules into Webflow classes.
+- **Scripts,** in the page's custom code before `</body>`:
+  - `src/home-hero.js`: the hero (already on the homepage);
+  - `src/hire-agent.js`: each visual settles in once as it reaches the
+    screen, the feed ticks, the graph lights, the charts draw;
+  - `src/hire-agent-v3.js`: the logo wall's swaps;
+  - `src/hire-agent-v7.js`: no frosted band under the nav at the very top of
+    the page; the band comes back once the page scrolls. It targets
+    `.nav-v2.nav-light::before` here, so point it at the live nav's classes.
+  All of them show the finished state with reduced motion.
+- **Calls to action:** a Book a demo in each section header and the text links
+  on reasons 02, 03, 06, 07, 14 and 17. Pave asked for them to be optional,
+  so any of them can simply be left out.
+- **Copy to keep as is:** reason 02 says "Fortune 500 enterprises" without
+  naming one (McDonald's can't be named). Matt's copy doc is the source for
+  the rest.
+- **Link previews:** `og/hire-pave-agent-og.jpg` and `.mp4`; the tags are in
+  the page's head. See "Open Graph" above.
 
 ## The navigation
 

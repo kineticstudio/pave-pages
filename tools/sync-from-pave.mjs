@@ -58,12 +58,22 @@ const PAGES = [
   // The use cases stay live too: src/use-cases.js runs the filters and the
   // copy button from src/use-cases-data.json; the markup is written in.
   {src: 'use-cases-grid-v2.html', query: '', out: 'use-cases/index.html', name: 'Use cases', ready: '[data-uc-root].is-ready .uc-tile'},
+  // Hire Pave Agent, approved by Tim on November 6 (V6, with Teresa's V7
+  // notes). The hero is pave.com's own homepage hero code; the reasons' visuals
+  // and the logo wall move on top of the written-in markup.
+  {src: 'hire-agent-v7.html', query: '', out: 'hire-pave-agent/index.html', name: 'Hire Pave Agent', ready: '.ha-reason'},
   ...CASES.map(u => ({src: 'use-case-v2.html', query: `?case=${u.id}&from=grid`, out: `use-cases/${u.id}.html`, name: u.title, ready: '[data-uc-root].is-ready [data-title]:not(:empty)'})),
 ];
 // Scripts whose only job is writing markup that is now written in.
 const RENDERERS = ['nav-v1.js', 'nav-v2.js', 'research-footer.js', 'research-posts.js', 'research-v3.js', 'agent-result.js'];
 // Held back while the markup is captured: the menus and the motion.
-const BEHAVIOUR = ['nav.js', 'research-v3-animations.js'];
+const BEHAVIOUR = ['nav.js', 'research-v3-animations.js', 'home-hero.js', 'hire-agent.js', 'hire-agent-v3.js', 'hire-agent-v7.js', 'params-dials.js'];
+// Prototype-only tools: the settings dials and their scripts.
+const DIALS = ['params-dials.js', 'hire-agent-v4.js', 'hire-agent-v5.js'];
+// Hire Pave Agent's stylesheets were layered one round at a time; here they're one file, in the same order.
+// Loaded by the Hire Pave Agent prototype but unused there.
+const HIRE_UNUSED = ['vendor/gsap/gsap.min.js', 'vendor/gsap/ScrollTrigger.min.js', 'vendor/lenis/lenis.min.js', 'mesh.js', 'orb.js', 'agent-orb-living.js', 'agent-orb-presets.js', 'agent-orb-state.js', 'agent-materials.js', 'agent-phase-1-results.js', 'animations.js'];
+const HIRE_CSS = ['hire-agent.css', 'hire-agent-v2.css', 'hire-agent-v3.css', 'hire-agent-v4.css', 'hire-agent-v5.css', 'hire-agent-v6.css', 'hire-agent-v7.css'];
 // Not loaded by these pages, but copied for reading: the content and the
 // templates the markup was written from.
 const REFERENCE = ['research-posts.js', 'research-v3.js', 'nav-v2.js'];
@@ -153,18 +163,32 @@ const OG_BASE = 'https://cdn.jsdelivr.net/gh/kineticstudio/pave-pages@og-2026-10
 const OG = {
   'research/index.html': {name: 'research', video: true, alt: 'Pave research: the purple gradient shapes beside the title.'},
   'calculator/index.html': {name: 'calculator', video: true, alt: 'Pave value calculator: $38.2M total value per year for 4,500 employees.'},
+  'hire-pave-agent/index.html': {name: 'hire-pave-agent', video: true, base: 'https://cdn.jsdelivr.net/gh/kineticstudio/pave-pages@og-2026-11-06/og', alt: 'Build a Frontier Compensation Team: Pave\'s gradient, with market data flowing in below.'},
 };
 function ogTags(og) {
+  const base = og.base || OG_BASE;
   const tags = [
-    ['og:image', `${OG_BASE}/${og.name}-og.jpg`], ['og:image:type', 'image/jpeg'], ['og:image:width', '1200'], ['og:image:height', '630'], ['og:image:alt', og.alt],
-    ...(og.video ? [['og:video', `${OG_BASE}/${og.name}-og.mp4`], ['og:video:secure_url', `${OG_BASE}/${og.name}-og.mp4`], ['og:video:type', 'video/mp4'], ['og:video:width', '1200'], ['og:video:height', '630']] : []),
+    ['og:image', `${base}/${og.name}-og.jpg`], ['og:image:type', 'image/jpeg'], ['og:image:width', '1200'], ['og:image:height', '630'], ['og:image:alt', og.alt],
+    ...(og.video ? [['og:video', `${base}/${og.name}-og.mp4`], ['og:video:secure_url', `${base}/${og.name}-og.mp4`], ['og:video:type', 'video/mp4'], ['og:video:width', '1200'], ['og:video:height', '630']] : []),
   ].map(([k, v]) => `<meta property="${k}" content="${v}">`);
-  return [...tags, '<meta name="twitter:card" content="summary_large_image">', `<meta name="twitter:image" content="${OG_BASE}/${og.name}-og.jpg">`].join('\n');
+  return [...tags, '<meta name="twitter:card" content="summary_large_image">', `<meta name="twitter:image" content="${base}/${og.name}-og.jpg">`].join('\n');
 }
 function finish(html, page) {
   html = html.replace(/<script src="([^"?]+)(?:\?v=[0-9a-f]+)?"[^>]*><\/script>/g, (tag, src) => (RENDERERS.includes(src) ? '' : tag));
   html = html.replace(/<link rel="stylesheet" href="([^"?]+)(?:\?v=[0-9a-f]+)?">/g, (tag, href) => (SKIP.includes(href) ? '' : tag));
   html = html.replace(/<!-- The Agent page result chart, for the Bento's Pave Agent card -->/, '');
+  // No dials outside the prototype.
+  html = html.replace(/<script src="([^"?]+)(?:\?v=[0-9a-f]+)?"[^>]*><\/script>/g, (tag, src) => (DIALS.includes(src) ? '' : tag));
+  html = html.replace(/<script type="module">[\s\S]*?defineParams[\s\S]*?<\/script>/g, '');
+  html = html.replace(/<div class="px-dials[\s\S]*?<\/div>\s*(?=<\/body>)/, '');
+  if (page.out.startsWith('hire-pave-agent/')) {
+    // One stylesheet where the last round's sat, so it still comes after home-hero.css.
+    const links = html.match(/<link rel="stylesheet" href="hire-agent(?:-v\d)?\.css(?:\?v=[0-9a-f]+)?">/g) || [];
+    links.forEach((tag, i) => { html = html.replace(tag, i === links.length - 1 ? '<link rel="stylesheet" href="hire-pave-agent.css">' : ''); });
+    // The Pave Agent page's scripts that this page loads but never uses (its motion exits without the Agent demo).
+    html = html.replace(/<script src="([^"?]+)(?:\?v=[0-9a-f]+)?"[^>]*><\/script>/g, (tag, src) => (HIRE_UNUSED.includes(src) ? '' : tag));
+    html = html.replace(/<body ([^>]*)data-over-hero=""/, '<body $1').replace(/ data-section-ctas="on"| data-reason-ctas="on"/g, '');
+  }
   // The nav page opens Product on arrival, as in Pave's approved screenshot.
   html = html.replace(/if \(\/\[\?&\]product=\/\.test\(location\.search\) && /, 'if (');
   html = html.replace(/\b(href|src)="([^"]*)"/g, (all, attr, value) => `${attr}="${relink(value)}"`);
@@ -179,17 +203,17 @@ function finish(html, page) {
   }
   if (page.out === 'nav/index.html') html = html.replace(/<title>[^<]*<\/title>/, '<title>Pave navigation</title>');
   if (OG[page.out]) html = html.replace(/(<meta name="description"[^>]*>)/, `$1\n${ogTags(OG[page.out])}`);
-  const runs = page.src.startsWith('nav') ? 'nothing else runs' : page.src.startsWith('calculator') ? 'src/calculator-ui.js runs the calculator from src/calculator-data.json (with src/calculator-v21.js, the math), and src/research-v3-animations.js the motion' : page.src.startsWith('use-case') ? 'src/use-cases.js runs the filters and the copy button from src/use-cases-data.json, and src/research-v3-animations.js the motion' : 'src/research-v3-animations.js the motion';
+  const runs = page.src.startsWith('hire-agent') ? 'src/home-hero.js runs the hero (pave.com\'s own), and src/hire-agent.js, src/hire-agent-v3.js and src/hire-agent-v7.js the reveals, the logo wall and the nav at the top' : page.src.startsWith('nav') ? 'nothing else runs' : page.src.startsWith('calculator') ? 'src/calculator-ui.js runs the calculator from src/calculator-data.json (with src/calculator-v21.js, the math), and src/research-v3-animations.js the motion' : page.src.startsWith('use-case') ? 'src/use-cases.js runs the filters and the copy button from src/use-cases-data.json, and src/research-v3-animations.js the motion' : 'src/research-v3-animations.js the motion';
   const note = `<!-- Generated by tools/sync-from-pave.mjs from pave-v2's ${page.src}${page.query}. The markup is written in; src/nav.js mounts the menus and ${runs}. -->`;
   return html.replace(/^<!DOCTYPE html>/i, `<!doctype html>\n${note}`);
 }
 
 async function write(files, markup) {
   await fs.rm(path.join(ROOT, 'src'), {recursive: true, force: true});
-  for (const dir of ['nav', 'research', 'calculator', 'use-cases']) await fs.rm(path.join(ROOT, dir), {recursive: true, force: true});
+  for (const dir of ['nav', 'research', 'calculator', 'use-cases', 'hire-pave-agent']) await fs.rm(path.join(ROOT, dir), {recursive: true, force: true});
   const copied = [];
   for (const file of [...new Set([...files, ...REFERENCE])].sort()) {
-    if (file.endsWith('.html') || SKIP.includes(file) || (RENDERERS.includes(file) && !REFERENCE.includes(file)) || !file) continue;
+    if (file.endsWith('.html') || SKIP.includes(file) || DIALS.includes(file) || HIRE_CSS.includes(file) || file.startsWith('shared/') || (HIRE_UNUSED.includes(file) && !['vendor/gsap/gsap.min.js', 'vendor/gsap/ScrollTrigger.min.js', 'vendor/lenis/lenis.min.js', 'mesh.js'].includes(file)) || (RENDERERS.includes(file) && !REFERENCE.includes(file)) || !file) continue;
     const source = path.join(PAVE, file), target = path.join(ROOT, 'src', file);
     try { await fs.access(source); } catch { continue; }
     await fs.mkdir(path.dirname(target), {recursive: true});
@@ -197,6 +221,11 @@ async function write(files, markup) {
     else await fs.copyFile(source, target);
     copied.push(file);
   }
+  // Hire Pave Agent's stylesheet: its rounds' files joined in order.
+  const hire = [];
+  for (const file of HIRE_CSS) hire.push(`/* ── ${file} ── */\n` + (await fs.readFile(path.join(PAVE, file), 'utf8')).replace(STAMP, ''));
+  await fs.writeFile(path.join(ROOT, 'src', 'hire-pave-agent.css'), `/* Hire Pave Agent, from pave-v2's hire-agent.css and its six rounds (V2 to V7), in order.\n   The page's <body> carries ha-v2 to ha-v7, so every round's rules apply. Generated by tools/sync-from-pave.mjs. */\n\n` + hire.join('\n\n'));
+  copied.push('hire-pave-agent.css');
   for (const page of PAGES) {
     const target = path.join(ROOT, page.out);
     await fs.mkdir(path.dirname(target), {recursive: true});
@@ -259,6 +288,8 @@ async function verify(browser) {
         more: !!document.querySelector('.lg-more'),
         h1: document.querySelectorAll('h1').length,
         tiles: document.querySelectorAll('[data-list] .uc-tile').length,
+        reasons: document.querySelectorAll('.ha-reason').length,
+        dials: !!document.querySelector('.px-dials, [data-px-dials]') || !!window.__pxDials,
         wide: document.documentElement.scrollWidth > innerWidth + 1,
       }));
       if (state.navs !== 1) say(`expected one nav, found ${state.navs}`);
@@ -267,6 +298,12 @@ async function verify(browser) {
       if (page.out.startsWith('research/')) {
         if (state.footers !== 1) say(`expected one footer, found ${state.footers}`);
         if (state.h1 !== 1) say(`expected one h1, found ${state.h1}`);
+      }
+      if (page.out.startsWith('hire-pave-agent/')) {
+        if (state.footers !== 1) say(`expected one footer, found ${state.footers}`);
+        if (state.h1 !== 1) say(`expected one h1, found ${state.h1}`);
+        if (state.reasons !== 17) say(`expected 17 reasons, found ${state.reasons}`);
+        if (state.dials) say('the prototype dials are still on the page');
       }
       if (page.out.startsWith('use-cases/') && state.footers !== 1) say(`expected one footer, found ${state.footers}`);
       if (page.out === 'use-cases/index.html' && state.tiles !== CASES.length) say(`expected ${CASES.length} use cases, found ${state.tiles}`);
