@@ -21,6 +21,8 @@ Webflow, so these get built in Webflow now. They'd like to review next week.
 | Use cases | [Grid V2](https://pave.kineticstudio.com/designs/pave/site-src/use-cases-grid-v2.html) | Not started | The Pave Agent use cases index, approved October 28 (Teresa, with Tim). `use-cases/index.html` |
 | Use case | [Detail V2](https://pave.kineticstudio.com/designs/pave/site-src/use-case-v2.html?case=pay-complaint) | Not started | One use case, the collection's template page. `use-cases/<id>.html`, one per use case |
 | Hire Pave Agent | [V7](https://pave.kineticstudio.com/?project=pave&view=designs&design=hire-pave-agent%2F07-Pave-Hire-Pave-Agent-V7.html) | Not started | Tim approved it November 6 (V6, with Teresa's notes, which are V7). `hire-pave-agent/index.html`. See "Hire Pave Agent" |
+| Insights (four main pages) | [Glow V2](https://pave.kineticstudio.com/?project=pave&view=designs&design=insights%2Fround-5%2F01-Pave-Insights-Hub-Glow-V2.html) | Not started | Restyle of the existing Insights, Articles, Guides & Reports and Events & Webinars pages, approved November 4 (Teresa, for the team). `insights/`. See "Insights" |
+| Insights article, customer story | [Article V2](https://pave.kineticstudio.com/?project=pave&view=designs&design=insights%2Fround-2%2F05-Pave-Insights-Article-V2.html), [Customer Story V2](https://pave.kineticstudio.com/?project=pave&view=designs&design=insights%2Fround-2%2F08-Pave-Insights-Customer-Story-V2.html) | Not started | Restyle of the Blog Posts and Case Studies templates. `insights/articles/<slug>.html`, `insights/customer-stories/<slug>.html` |
 
 The design links open each page on its own. On the review site the research
 pages still show the older nav they were reviewed with; here they carry the
@@ -75,6 +77,12 @@ pages fall back to system fonts.
 | Use cases | `use-cases/index.html` | [Grid V2](https://pave.kineticstudio.com/designs/pave/site-src/use-cases-grid-v2.html) |
 | Answer a pay complaint (and the seven others) | `use-cases/<id>.html` | [Detail V2](https://pave.kineticstudio.com/designs/pave/site-src/use-case-v2.html?case=pay-complaint) |
 | Hire Pave Agent | `hire-pave-agent/index.html` | [V7](https://pave.kineticstudio.com/?project=pave&view=designs&design=hire-pave-agent%2F07-Pave-Hire-Pave-Agent-V7.html) |
+| Insights | `insights/index.html` | [Hub, Glow V2](https://pave.kineticstudio.com/?project=pave&view=designs&design=insights%2Fround-5%2F01-Pave-Insights-Hub-Glow-V2.html) |
+| Articles | `insights/articles/index.html` | [Articles, Glow V2](https://pave.kineticstudio.com/?project=pave&view=designs&design=insights%2Fround-5%2F02-Pave-Insights-Articles-Glow-V2.html) |
+| Guides & reports | `insights/guides-and-reports/index.html` | [Guides and Reports, Glow V2](https://pave.kineticstudio.com/?project=pave&view=designs&design=insights%2Fround-5%2F03-Pave-Insights-Guides-and-Reports-Glow-V2.html) |
+| Events & webinars | `insights/events-and-webinars/index.html` | [Events and Webinars, Glow V2](https://pave.kineticstudio.com/?project=pave&view=designs&design=insights%2Fround-5%2F04-Pave-Insights-Events-and-Webinars-Glow-V2.html) |
+| Every article (32) | `insights/articles/<slug>.html` | [Article V2](https://pave.kineticstudio.com/?project=pave&view=designs&design=insights%2Fround-2%2F05-Pave-Insights-Article-V2.html), with the [mid CTA and pull quote](https://pave.kineticstudio.com/?project=pave&view=designs&design=insights%2Fround-2%2F06-Pave-Insights-Article-Mid-CTA-and-Pull-Quote-V2.html) and [FAQ](https://pave.kineticstudio.com/?project=pave&view=designs&design=insights%2Fround-2%2F07-Pave-Insights-Article-FAQ-V2.html) |
+| Every customer story (one per company) | `insights/customer-stories/<slug>.html` | [Customer Story V2](https://pave.kineticstudio.com/?project=pave&view=designs&design=insights%2Fround-2%2F08-Pave-Insights-Customer-Story-V2.html), and [Video](https://pave.kineticstudio.com/?project=pave&view=designs&design=insights%2Fround-2%2F09-Pave-Insights-Customer-Story-Video-V2.html) for stories with a video |
 
 The four posts are Pave's existing articles, there so the template can be
 seen with real content of different shapes: two have no date, one has a
@@ -124,7 +132,7 @@ the video's first frame.
 | Value calculator | `calculator-og.jpg` | `calculator-og.mp4` (6.4s) | The total counting from $38.2M (4,500 employees) to $169.5M (20,000) and back |
 | Use cases | `use-cases-og.jpg` | | For when the page is approved; its hero doesn't move |
 | Hire Pave Agent | `hire-pave-agent-og.jpg` | `hire-pave-agent-og.mp4` (8s) | The gradient drifting under the headline as market data flows in (pinned to the `og-2026-11-06` tag) |
-| Insights | `insights-og.jpg` | | For the Insights main pages once approved; the Glow hero holds still |
+| Insights | `insights-og.jpg` | | On the four Insights main pages; the Glow hero holds still, so no video |
 
 `research/index.html` and `calculator/index.html` carry the tags in their
 `<head>`, pointing at the files here through jsDelivr (pinned to the
@@ -268,6 +276,88 @@ text or an embed), the template page at `/use-cases/<id>`, and the index at
 script, reading the collection from a JSON embed, or use Webflow's own
 filtering if that's simpler for you. The Use cases link in the nav
 (Customers) goes to `/use-cases` once it's live.
+
+## Insights
+
+Pave approved the Insights refresh on November 4 (Teresa, for the team, in
+the Insights thread in #ext-kinetic-pave): Glow V2 (Round 5) on the four main
+pages, and the article and customer story templates from Round 2 with
+Sasha's comments built in. It's a restyle of pages Pave already has, so the
+CMS collections and addresses stay; nothing here needs a new collection.
+
+| Here | Pave's Webflow page | Address |
+| --- | --- | --- |
+| `insights/index.html` | Insights | `/insights` |
+| `insights/articles/index.html` | Articles | `/insights/articles` |
+| `insights/guides-and-reports/index.html` | Guides & Reports | `/insights/guides-and-reports` |
+| `insights/events-and-webinars/index.html` | Events & Webinars | `/insights/events-and-webinars` |
+| `insights/articles/<slug>.html` | Blog Posts Template | `/blog-posts/<slug>` |
+| `insights/customer-stories/<slug>.html` | Case Studies Template | `/case-studies/<slug>` |
+
+Out of scope: the Customer stories listing (`/insights/case-studies`) and the
+Customers page, which Pave already redid. "See all" on the hub's customer
+stories goes to `/customers`.
+
+Like the use cases, the pages stay live: the markup is written in as it
+first renders, and `src/insights.js` runs on top from
+`src/insights-data.json` (pave.com's own content, from a September 24
+snapshot of the CMS). In Webflow the collection lists replace the script.
+
+- **The hero (Glow V2):** a still light blue gradient, pale under the nav,
+  with Pave blue (#235CF3) low on the right. On the hub, Articles and Guides
+  & Reports it runs on down behind the featured item, so the hero and the
+  feature read as one block (`.in-through`, and `throughFeature()` in
+  `src/insights.js` sets the art's height to the hero plus the featured
+  band). Events & Webinars has no featured item, so it's the hero only. The
+  gradient is the `inGlow2` mesh in `src/research-v3-animations.js`, drawn by
+  `src/mesh.js`, and it doesn't move: a still image of it (export one from the
+  page at 1440 and at phone width) works just as well in Webflow if that's
+  simpler. Detail pages keep their own heroes.
+- **The listings (Sasha's comments):** Compensation 101 stays off the
+  listings (it's the SEO set). No counts, and the button just says "Show
+  more". The featured article is the one with Pave's existing "Feature on
+  Insights" switch on, otherwise the newest (the pick here is an example).
+  Guides and reports are separate sections, "Get the guide" or "Read the
+  report", from a new Kind option field (Guide, Report) on Guides; our first
+  sort is in the data as `kind`, for Pave to check. One 16:9 cover per item.
+- **Events & webinars:** an Upcoming section first (soonest first), then the
+  past ones. Each row has a type tag from a new Format option field
+  (Webinar, Conference, In person, Virtual event; Pave can add to it), who
+  runs it from a Host field ("Hosted by Pave", or "Pave attending, run by
+  Consero"), and a date range from a new Date (To) field for multi-day
+  events. The action reads Register, Meet us there, Watch on demand or See
+  the recap. There are no future events in the CMS yet, so these pages
+  pretend today is September 25 (`data-today` on `<body>`) to show the
+  Upcoming section; in Webflow it's the real date.
+- **The article (Blog Posts Template):** the Updated date next to Published
+  when it's set (the one here is an example), the mid CTA (heading, subtext,
+  button) wherever the body has the `{{mid-cta}}` placeholder, FAQs that open
+  and close (from the SEO FAQ rich text), styles for H3 to H5 and pull
+  quotes, a table of contents from the H2s, and More in the same category at
+  the end. `what-is-compa-ratio` shows the FAQ and
+  `competing-for-talent-consider-offer-letters-reward-letters` the mid CTA
+  and a pull quote.
+- **The customer story (Case Studies Template):** Featured Products (the
+  Products reference) in place of Format, the story's own embedded video
+  kept in the body at 16:9, a table of contents when it has sections, stat
+  callouts from the Stat Block fields (the two on The Krazy Coupon Lady are
+  an example), bigger pull quotes, and the full description. A story with a
+  video uses the video template: the video plays in the page at the top (not
+  a modal), and the cards mark it with a play button and "Video".
+- **Attributes on `<body>`:** `data-insights` says which page it is
+  (`hub`, `articles`, `guides`, `events`, `article`, `case`),
+  `data-hero="glow2"`, and on these copies `data-in-article`, `data-in-case`,
+  `data-in-hub` and `data-in-articles` are the addresses it links to, and
+  `data-in-post`, `data-in-case-slug` and `data-in-layout` the item it shows.
+- **Styles:** `src/insights.css` and `src/insights-v2.css` on top of the
+  research styles (`.in--v2`).
+
+New CMS fields, all optional: Kind (Guides), Format, Host and Date (To)
+(Webinars), Updated date (Blog Posts, if it isn't there yet). Everything
+else uses fields Pave already has.
+
+**In Webflow:** restyle the existing pages and templates on a branch, not
+the live ones. Don't publish until Hunter gives the go.
 
 ## Hire Pave Agent
 

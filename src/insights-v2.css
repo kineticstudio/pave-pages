@@ -1,0 +1,134 @@
+/* Insights V2 (Teresa's Oct 27 loom, Sasha's and Teresa's Studio comments).
+   The violet shapes stay Research's own: every Insights listing page opens on
+   the same centred hero instead, with one of three gradient treatments from
+   Pave's mesh (research-v3-animations.js inGlow / inTop / inCorners):
+     ?hero=glow     a pale blue wash behind the title
+     ?hero=top      the gradient peeks in from the top, on a wave
+     ?hero=corners  the gradient peeks in from two corners
+   Detail pages keep their heroes. Below the hero: reports apart from guides,
+   events typed and dated, no counts, a centred play button, and the article
+   elements Sasha asked to see (H3 to H5, pull quotes, mid CTA, FAQ). */
+
+/* ── Hero ─────────────────────────────────────────────────────────────── */
+.in-hero { position: relative; isolation: isolate; overflow: hidden; padding: clamp(150px, 12vw, 196px) 0 clamp(80px, 8vw, 124px); text-align: center; }
+.in-hero-art { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.in-hero-art canvas { display: block; width: 100%; height: 100%; }
+.in-hero .lp-crumbs { justify-content: center; margin-bottom: 18px; }
+.in-hero h1 { font-size: clamp(64px, 8.4vw, 128px); line-height: .95; letter-spacing: -.045em; font-weight: 300; text-wrap: balance; }
+.in-hero .lt-lede { max-width: 36ch; margin: 22px auto 0; }
+.in-jump { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 36px; }
+.in-jump a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 12px; background: #fff; font-size: 15px; font-weight: 500; text-decoration: none; box-shadow: 0 1px 2px rgba(16,16,20,.06); transition: border-radius .25s cubic-bezier(.33,1,.4,1), color .2s ease; }
+.in-jump a:hover { border-radius: 22px; color: var(--blue); }
+
+/* Top: the band sits under the nav and ends on a slow wave; the title is on white. */
+[data-hero="top"] .in-hero { padding-top: clamp(220px, 18vw, 290px); }
+[data-hero="top"] .in-hero-art { bottom: auto; height: clamp(170px, 15vw, 230px);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0V72C100 80.4 200 88 300 88S500 80.4 600 72 800 56 900 56 1100 63.6 1200 72V0Z'/%3E%3C/svg%3E") 0 0 / 1200px 100% repeat-x;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0V72C100 80.4 200 88 300 88S500 80.4 600 72 800 56 900 56 1100 63.6 1200 72V0Z'/%3E%3C/svg%3E") 0 0 / 1200px 100% repeat-x;
+  animation: in-wave 48s linear infinite; }
+@keyframes in-wave { to { -webkit-mask-position: 1200px 0; mask-position: 1200px 0; } }
+
+/* Corners: one mesh, seen through two circles that come in from the left and the lower right. */
+[data-hero="corners"] .in-hero-art { --r1: clamp(140px, 15vw, 230px); --r2: clamp(190px, 24vw, 380px);
+  -webkit-mask: radial-gradient(circle at -3% 74%, #000 var(--r1), transparent calc(var(--r1) + 1px)), radial-gradient(circle at 103% 112%, #000 var(--r2), transparent calc(var(--r2) + 1px));
+          mask: radial-gradient(circle at -3% 74%, #000 var(--r1), transparent calc(var(--r1) + 1px)), radial-gradient(circle at 103% 112%, #000 var(--r2), transparent calc(var(--r2) + 1px)); }
+
+/* ── Cards ────────────────────────────────────────────────────────────── */
+/* One cover size everywhere (Sasha: the same image works featured and in the grid). */
+.in--v2 .in-card--guide .in-card-img { aspect-ratio: 16 / 9; }
+/* A centred play button (Teresa) */
+.in--v2 .in-play { left: 50%; top: 50%; bottom: auto; width: 68px; height: 68px; margin: -34px 0 0 -34px; background: #fff; box-shadow: 0 6px 24px rgba(2,19,64,.18); transition: transform .3s cubic-bezier(.22,1,.36,1), background .2s ease; }
+.in--v2 .in-play::after { left: 27px; top: 23px; border-width: 11px 0 11px 17px; border-color: transparent transparent transparent var(--blue); }
+.in--v2 a:hover .in-play { transform: scale(1.08); background: var(--blue); }
+.in--v2 a:hover .in-play::after { border-left-color: #fff; }
+.in-feature-img .in-play { width: 88px; height: 88px; margin: -44px 0 0 -44px; }
+.in--v2 .in-feature-img .in-play::after { left: 35px; top: 30px; border-width: 14px 0 14px 22px; }
+
+/* ── Events: what kind, who runs it, and the dates ────────────────────── */
+.in--v2 .in-lg--events { --lg-cols: 130px minmax(0, 1fr) 190px 150px 40px; }
+.in-date small { display: block; margin-top: 4px; font-size: 13px; color: var(--ink-muted); }
+.in-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.in-tag { display: inline-flex; align-items: center; min-height: 26px; padding: 0 10px; border-radius: 8px; background: var(--blue-light); color: var(--blue); font-size: 13px; font-weight: 500; }
+.in-tag--host { background: rgba(16,16,20,.06); color: var(--ink-muted); }
+.in-event-act { font-size: 15px; font-weight: 500; color: var(--ink); }
+.in-event.is-upcoming .in-event-act { color: var(--blue); }
+.in .lg-main .in-tags span { display: inline-flex; -webkit-line-clamp: unset; }
+.in-none { padding: 28px 0; font-size: 17px; color: var(--ink-muted); }
+
+/* ── Guides apart from reports ────────────────────────────────────────── */
+.in--v2 .lt-section + .lt-section { padding-top: 0; }
+.in-grid + .lg-more { margin-top: 36px; }
+.in-grid .in-card.is-later { display: none; }
+
+/* ── Article: Updated, mid CTA, FAQ and the body elements ─────────────── */
+.in--v2 .prose h3 { margin-top: 1.6em; font-size: clamp(22px, 1.9vw, 25px); line-height: 1.25; letter-spacing: -.01em; font-weight: 500; color: var(--ink); text-wrap: balance; }
+.in--v2 .prose h4 { margin-top: 1.5em; font-size: 20px; line-height: 1.3; font-weight: 500; color: var(--ink); }
+.in--v2 .prose h5, .in--v2 .prose h6 { margin-top: 1.4em; font-size: 15px; line-height: 1.4; font-weight: 500; color: var(--blue); }
+.in--v2 .prose :is(h3, h4, h5) + * { margin-top: .5em; }
+.in--v2 .prose ol { padding-left: 1.35em; list-style: decimal; }
+.in--v2 .prose ol li::marker { color: var(--blue); font-weight: 500; }
+/* Pull quote: big, light, with Pave's blue mark; no side rule */
+.in--v2 .prose blockquote { position: relative; margin: 2.2em 0; padding: 52px 0 0; font-size: clamp(24px, 2.3vw, 32px); line-height: 1.3; letter-spacing: -.02em; font-weight: 300; color: var(--ink); text-wrap: pretty; }
+.in--v2 .prose blockquote::before { content: '\201C'; position: absolute; left: -4px; top: -6px; font-size: 96px; line-height: 1; font-weight: 500; color: var(--blue); }
+.in--v2 .prose blockquote em { font-style: normal; }
+.in--v2 .prose blockquote cite { display: block; margin-top: 20px; font-size: 15px; line-height: 1.45; font-style: normal; letter-spacing: 0; font-weight: 500; color: var(--ink-muted); }
+.in--v2 .prose blockquote cite a { color: inherit; text-decoration: none; }
+.in--v2 .prose blockquote cite a:hover { color: var(--blue); }
+/* Embedded video keeps its place in the story (Sasha: the hole was the video) */
+.in--v2 .prose .in-embed { position: relative; aspect-ratio: 16 / 9; border-radius: 20px; overflow: hidden; background: var(--blue-dark); }
+.in--v2 .prose .in-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.in--v2 .mid-cta h3 { margin: 0; font-size: 24px; line-height: 1.2; color: #fff; }
+.in--v2 .mid-cta p { margin-top: 10px; }
+.in-faq { margin-top: 64px; }
+.in-faq > h2 { font-size: clamp(26px, 2.4vw, 32px); line-height: 1.18; letter-spacing: -.015em; }
+.in-faq details { border-bottom: 1px solid var(--hairline); }
+.in-faq details:first-of-type { margin-top: 20px; border-top: 1px solid var(--hairline); }
+.in-faq summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 22px 0; font-size: 19px; line-height: 1.35; font-weight: 500; cursor: pointer; list-style: none; transition: color .2s ease; }
+.in-faq summary::-webkit-details-marker { display: none; }
+.in-faq summary:hover { color: var(--blue); }
+.in-faq summary::after { content: ''; flex: none; width: 12px; height: 12px; border-right: 1.6px solid currentColor; border-bottom: 1.6px solid currentColor; transform: translateY(-3px) rotate(45deg); transition: transform .25s ease; }
+.in-faq details[open] summary::after { transform: translateY(3px) rotate(-135deg); }
+.in-faq .prose { padding-bottom: 24px; font-size: 17px; }
+
+/* Customer story: featured products in place of Format (Sasha) */
+.in-products { display: flex; flex-wrap: wrap; gap: 6px; }
+
+@media (max-width: 1100px) {
+  .in--v2 .in-lg--events { --lg-cols: 100px minmax(0, 1fr) 150px 40px; }
+  .in--v2 .in-lg--events .in-event-img { display: none; }
+}
+@media (max-width: 900px) {
+  .in--v2 .in-lg--events { --lg-cols: 76px minmax(0, 1fr) 40px; }
+  .in--v2 .in-lg--events .in-event-act { display: none; }
+  [data-hero="corners"] .in-hero-art { --r1: 110px; --r2: 150px; }
+}
+@media (max-width: 640px) {
+  .in-hero h1 { font-size: clamp(52px, 15vw, 64px); }
+  [data-hero="top"] .in-hero { padding-top: 190px; }
+  [data-hero="top"] .in-hero-art { height: 140px; }
+  [data-hero="corners"] .in-hero-art { --r1: 80px; --r2: 120px;
+    -webkit-mask: radial-gradient(circle at -6% 94%, #000 var(--r1), transparent calc(var(--r1) + 1px)), radial-gradient(circle at 106% 104%, #000 var(--r2), transparent calc(var(--r2) + 1px));
+            mask: radial-gradient(circle at -6% 94%, #000 var(--r1), transparent calc(var(--r1) + 1px)), radial-gradient(circle at 106% 104%, #000 var(--r2), transparent calc(var(--r2) + 1px)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-hero="top"] .in-hero-art { animation: none; }
+  .in--v2 .in-play { transition: none; }
+}
+
+/* Customer story: a contents rail when the story has sections (Sasha), and stat callouts */
+.in-story-grid { padding-block: clamp(56px, 6vw, 88px); }
+.in-story-grid.is-solo { display: block; max-width: 760px; margin: 0 auto; }
+.in-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 48px; }
+.in-stat { padding: 28px; border-radius: 20px; background: var(--blue-ultra-light); }
+.in-stat b { display: flex; align-items: baseline; font-size: clamp(56px, 5.4vw, 80px); line-height: .95; letter-spacing: -.045em; font-weight: 300; color: var(--blue); }
+.in-stat b span { font-size: .5em; letter-spacing: -.02em; margin-left: 2px; }
+.in-stat p { max-width: 30ch; margin-top: 14px; font-size: 16px; line-height: 1.45; color: var(--ink-muted); }
+/* On the white heroes the jump links take the page's soft grey. */
+:is([data-hero="top"], [data-hero="corners"]) .in-jump a { background: rgba(16,16,20,.06); box-shadow: none; }
+
+/* Glow V2 (?hero=glow2, Teresa's pick with her Oct 27 notes): the gradient runs
+   from under the nav to the bottom of the featured band, then a crisp edge. */
+[data-hero="glow2"] .in-hero { overflow: visible; }
+[data-hero="glow2"] .in-hero-art { bottom: auto; height: 100%; overflow: hidden; }
+[data-hero="glow2"] .lt-band.in-through { position: relative; background: transparent; }
+

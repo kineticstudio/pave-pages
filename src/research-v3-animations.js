@@ -38,6 +38,34 @@
       c.colors[5] = [.62, .58, .95];
       return c;
     },
+    // Insights V2 heroes (Teresa's Oct 27 loom: the shapes stay Research's
+    // own). Light blues only, so the light nav reads over every one of them.
+    // Glow: a pale wash with the brand blue low in the middle.
+    inGlow: function () {
+      return lightMesh({ speed: .35, blur: 1.05, spread: 1.25 },
+        ['#f7faff', '#f7faff', '#d0e1ff', '#97b9ff', '#d6e5ff', '#a9c6ff', '#c8dbff', '#eaf2ff', '#f3f8ff', '#ffffff', '#ffffff']);
+    },
+    // Top wave: pale where the nav sits, deepening to the brand blue at the wave's edge.
+    inTop: function () {
+      // The band is about seven times as wide as it is tall: wider, softer nodes reach its ends.
+      return lightMesh({ speed: .4, blur: 2.4, spread: 3.6 },
+        ['#e3efff', '#dbe8ff', '#b9d0ff', '#8fb2ff', '#c4d7ff', '#6f98ff', '#9dbbff', '#4f80fa', '#7aa0ff', '#3a6ef5', '#ffffff']);
+    },
+    // Glow V2 (Teresa, Oct 27: "a bit random"; carry it through the featured
+    // article; a tiny bit of #235CF3): one composition behind the hero and the
+    // featured band, pale under the nav, the brand blue low on the right behind
+    // the featured image, light blue at the bottom edge. Holds still (Hunter, Oct 28).
+    inGlow2: function () {
+      var c = lightMesh({ speed: 0, blur: 1.1, spread: 1.15 },
+        ['#f7faff', '#f7faff', '#dce8ff', '#c2d6ff', '#6d98f8', '#b3ccff', '#235cf3', '#d0e1ff', '#7fa6fb', '#e3efff', '#ffffff']);
+      c.weights[6] = .8;
+      return c;
+    },
+    // Corners: the full brand range, seen only through the two corner shapes.
+    inCorners: function () {
+      return lightMesh({ speed: .45, blur: .8, spread: 1.15 },
+        ['#235cf3', '#3a6ef5', '#0b2a8a', '#235cf3', '#4f86ff', '#7ea6ff', '#a9c6ff', '#cfe0ff', '#e3efff', '#f3f8ff', '#ffffff']);
+    },
     // The Customers page's purple colourway, as Hunter dialled it (customers.html, Aug 27)
     purple: function () {
       var c = PaveMesh.defaultConfig();
@@ -48,6 +76,14 @@
       return c;
     }
   };
+  // The node colours as given: no darkening, boost or hue turn on top.
+  function lightMesh(params, hex) {
+    var c = PaveMesh.defaultConfig();
+    Object.assign(c.params, { darkness: 0, aqua: 0, saturation: 1, brightness: 1, hue: 0, greenTrim: 0, mouseStrength: 0 }, params);
+    c.colors = hex.map(function (h) { return [1, 3, 5].map(function (i) { return parseInt(h.slice(i, i + 2), 16) / 255; }); });
+    c.weights = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0];
+    return c;
+  }
   function initMeshes() {
     if (!PaveMesh) return;
     document.querySelectorAll('canvas[data-mesh]').forEach(function (canvas) {

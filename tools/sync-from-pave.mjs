@@ -43,6 +43,12 @@ vm.runInNewContext(await fs.readFile(path.join(PAVE, 'research-posts.js'), 'utf8
 const POSTS = sandbox.window.PaveResearch;
 // The Pave Agent use cases, from their data file.
 const CASES = JSON.parse(await fs.readFile(path.join(PAVE, 'use-cases-data.json'), 'utf8')).useCases;
+// Insights: the articles (plus the two specimen articles) and the customer
+// stories, one per company as the pages list them.
+const INSIGHTS = JSON.parse(await fs.readFile(path.join(PAVE, 'insights-data.json'), 'utf8'));
+const ARTICLES = INSIGHTS.articles.concat(INSIGHTS.extra || []);
+const STORIES = INSIGHTS.caseStudies.filter((c, i, all) => all.findIndex(x => x.company === c.company) === i);
+const IN_LISTS = {'insights-v2.html': 'insights/', 'insights-articles-v2.html': 'insights/articles/', 'insights-guides-v2.html': 'insights/guides-and-reports/', 'insights-events-v2.html': 'insights/events-and-webinars/'};
 
 // Each page: the prototype page and query, the file here, its name, and an
 // element that shows it has rendered.
@@ -62,6 +68,16 @@ const PAGES = [
   // notes). The hero is pave.com's own homepage hero code; the reasons' visuals
   // and the logo wall move on top of the written-in markup.
   {src: 'hire-agent-v7.html', query: '', out: 'hire-pave-agent/index.html', name: 'Hire Pave Agent', ready: '.ha-reason'},
+  // Insights, approved by Pave on November 4 (Round 5, Glow V2 on the four
+  // main pages; the article and customer story templates from Round 2).
+  // src/insights.js still runs the lists, the filters and Show more from
+  // src/insights-data.json; the markup is written in.
+  {src: 'insights-v2.html', query: '?hero=glow2', out: 'insights/index.html', name: 'Insights', ready: '[data-insights-root].is-ready'},
+  {src: 'insights-articles-v2.html', query: '?hero=glow2', out: 'insights/articles/index.html', name: 'Insights: articles', ready: '[data-insights-root].is-ready'},
+  {src: 'insights-guides-v2.html', query: '?hero=glow2', out: 'insights/guides-and-reports/index.html', name: 'Insights: guides & reports', ready: '[data-insights-root].is-ready'},
+  {src: 'insights-events-v2.html', query: '?hero=glow2', out: 'insights/events-and-webinars/index.html', name: 'Insights: events & webinars', ready: '[data-insights-root].is-ready'},
+  ...ARTICLES.map(a => ({src: 'insights-article-v2.html', query: `?post=${a.slug}`, out: `insights/articles/${a.slug}.html`, name: a.title, ready: '[data-insights-root].is-ready'})),
+  ...STORIES.map(c => ({src: 'insights-case-study-v2.html', query: `?case=${c.slug}${c.video ? '&layout=video' : ''}`, out: `insights/customer-stories/${c.slug}.html`, name: `${c.company} customer story${c.video ? ' (video)' : ''}`, ready: '[data-insights-root].is-ready'})),
   ...CASES.map(u => ({src: 'use-case-v2.html', query: `?case=${u.id}&from=grid`, out: `use-cases/${u.id}.html`, name: u.title, ready: '[data-uc-root].is-ready [data-title]:not(:empty)'})),
 ];
 // Scripts whose only job is writing markup that is now written in.
@@ -152,6 +168,12 @@ function relink(value) {
   if (/^research-light-post-v[23]\.html$/.test(file) && params.get('post')) return `/research/${params.get('post')}.html${hash ? '#' + hash : ''}`;
   if (/^use-case(?:-v2)?\.html$/.test(file) && params.get('case')) return `/use-cases/${params.get('case')}.html${hash ? '#' + hash : ''}`;
   if (/^use-cases-(?:grid|hub|ledger)(?:-v2)?\.html$/.test(file)) return '/use-cases/' + (hash ? '#' + hash : '');
+  if (/^insights-article(?:-v2)?\.html$/.test(file) && params.get('post')) return `/insights/articles/${params.get('post')}.html${hash ? '#' + hash : ''}`;
+  if (/^insights-case-study(?:-v2)?\.html$/.test(file) && params.get('case')) return `/insights/customer-stories/${params.get('case')}.html${hash ? '#' + hash : ''}`;
+  const list = (/^insights/.test(file) && IN_LISTS[file.replace(/(?:-v2)?\.html$/, '-v2.html')]);
+  if (list) return '/' + list + (hash ? '#' + hash : '');
+  // The customer stories listing stayed out (Pave redid the Customers page).
+  if (/^insights-case-studies(?:-v2)?\.html$/.test(file)) return `${SITE}/customers`;
   if (ELSEWHERE[file]) return ELSEWHERE[file] + (hash ? '#' + hash : '');
   if (/\.[a-z0-9]+$/i.test(file)) return `/src/${file}`;
   return value;
@@ -163,6 +185,10 @@ const OG_BASE = 'https://cdn.jsdelivr.net/gh/kineticstudio/pave-pages@og-2026-10
 const OG = {
   'research/index.html': {name: 'research', video: true, alt: 'Pave research: the purple gradient shapes beside the title.'},
   'calculator/index.html': {name: 'calculator', video: true, alt: 'Pave value calculator: $38.2M total value per year for 4,500 employees.'},
+  'insights/index.html': {name: 'insights', alt: 'Pave Insights: the light blue Glow gradient behind the title and the featured article.'},
+  'insights/articles/index.html': {name: 'insights', alt: 'Pave Insights: the light blue Glow gradient behind the title and the featured article.'},
+  'insights/guides-and-reports/index.html': {name: 'insights', alt: 'Pave Insights: the light blue Glow gradient behind the title and the featured article.'},
+  'insights/events-and-webinars/index.html': {name: 'insights', alt: 'Pave Insights: the light blue Glow gradient behind the title.'},
   'hire-pave-agent/index.html': {name: 'hire-pave-agent', video: true, base: 'https://cdn.jsdelivr.net/gh/kineticstudio/pave-pages@og-2026-11-06/og', alt: 'Build a Frontier Compensation Team: Pave\'s gradient, with market data flowing in below.'},
 };
 function ogTags(og) {
@@ -201,16 +227,24 @@ function finish(html, page) {
     const id = new URLSearchParams(page.query).get('case');
     html = html.replace(/<body ([^>]*)data-uc="(\w+)"/, `<body $1data-uc="$2" data-uc-href="/use-cases/{id}.html" data-uc-index="/use-cases/"${id ? ` data-uc-case="${id}"` : ''}`);
   }
+  // Insights fetch their data from here, link to these pages, and keep the query on the body.
+  if (page.src.startsWith('insights')) {
+    html = html.replace(/data-insights-root="insights-data\.json"/, 'data-insights-root="/src/insights-data.json"');
+    const q = new URLSearchParams(page.query);
+    const extra = [['article', '/insights/articles/{slug}.html'], ['case', '/insights/customer-stories/{slug}.html'], ['hub', '/insights/'], ['articles', '/insights/articles/'],
+      ['post', q.get('post')], ['case-slug', q.get('case')], ['layout', q.get('layout')]].filter(([, v]) => v).map(([k, v]) => ` data-in-${k}="${v}"`).join('');
+    html = html.replace(/<body ([^>]*)data-insights="(\w+)"/, `<body $1data-insights="$2"${extra}`);
+  }
   if (page.out === 'nav/index.html') html = html.replace(/<title>[^<]*<\/title>/, '<title>Pave navigation</title>');
   if (OG[page.out]) html = html.replace(/(<meta name="description"[^>]*>)/, `$1\n${ogTags(OG[page.out])}`);
-  const runs = page.src.startsWith('hire-agent') ? 'src/home-hero.js runs the hero (pave.com\'s own), and src/hire-agent.js, src/hire-agent-v3.js and src/hire-agent-v7.js the reveals, the logo wall and the nav at the top' : page.src.startsWith('nav') ? 'nothing else runs' : page.src.startsWith('calculator') ? 'src/calculator-ui.js runs the calculator from src/calculator-data.json (with src/calculator-v21.js, the math), and src/research-v3-animations.js the motion' : page.src.startsWith('use-case') ? 'src/use-cases.js runs the filters and the copy button from src/use-cases-data.json, and src/research-v3-animations.js the motion' : 'src/research-v3-animations.js the motion';
+  const runs = page.src.startsWith('hire-agent') ? 'src/home-hero.js runs the hero (pave.com\'s own), and src/hire-agent.js, src/hire-agent-v3.js and src/hire-agent-v7.js the reveals, the logo wall and the nav at the top' : page.src.startsWith('nav') ? 'nothing else runs' : page.src.startsWith('calculator') ? 'src/calculator-ui.js runs the calculator from src/calculator-data.json (with src/calculator-v21.js, the math), and src/research-v3-animations.js the motion' : page.src.startsWith('insights') ? 'src/insights.js runs the lists, the filters and Show more from src/insights-data.json, and src/research-v3-animations.js the motion' : page.src.startsWith('use-case') ? 'src/use-cases.js runs the filters and the copy button from src/use-cases-data.json, and src/research-v3-animations.js the motion' : 'src/research-v3-animations.js the motion';
   const note = `<!-- Generated by tools/sync-from-pave.mjs from pave-v2's ${page.src}${page.query}. The markup is written in; src/nav.js mounts the menus and ${runs}. -->`;
   return html.replace(/^<!DOCTYPE html>/i, `<!doctype html>\n${note}`);
 }
 
 async function write(files, markup) {
   await fs.rm(path.join(ROOT, 'src'), {recursive: true, force: true});
-  for (const dir of ['nav', 'research', 'calculator', 'use-cases', 'hire-pave-agent']) await fs.rm(path.join(ROOT, dir), {recursive: true, force: true});
+  for (const dir of ['nav', 'research', 'calculator', 'use-cases', 'hire-pave-agent', 'insights']) await fs.rm(path.join(ROOT, dir), {recursive: true, force: true});
   const copied = [];
   for (const file of [...new Set([...files, ...REFERENCE])].sort()) {
     if (file.endsWith('.html') || SKIP.includes(file) || DIALS.includes(file) || HIRE_CSS.includes(file) || file.startsWith('shared/') || (HIRE_UNUSED.includes(file) && !['vendor/gsap/gsap.min.js', 'vendor/gsap/ScrollTrigger.min.js', 'vendor/lenis/lenis.min.js', 'mesh.js'].includes(file)) || (RENDERERS.includes(file) && !REFERENCE.includes(file)) || !file) continue;
@@ -289,6 +323,7 @@ async function verify(browser) {
         h1: document.querySelectorAll('h1').length,
         tiles: document.querySelectorAll('[data-list] .uc-tile').length,
         reasons: document.querySelectorAll('.ha-reason').length,
+        insights: !!document.querySelector('[data-insights-root].is-ready [data-title]:not(:empty), [data-insights-root].is-ready .in-card, [data-insights-root].is-ready .lg-row'),
         dials: !!document.querySelector('.px-dials, [data-px-dials]') || !!window.__pxDials,
         wide: document.documentElement.scrollWidth > innerWidth + 1,
       }));
@@ -304,6 +339,11 @@ async function verify(browser) {
         if (state.h1 !== 1) say(`expected one h1, found ${state.h1}`);
         if (state.reasons !== 17) say(`expected 17 reasons, found ${state.reasons}`);
         if (state.dials) say('the prototype dials are still on the page');
+      }
+      if (page.out.startsWith('insights/')) {
+        if (state.footers !== 1) say(`expected one footer, found ${state.footers}`);
+        if (state.h1 !== 1) say(`expected one h1, found ${state.h1}`);
+        if (!state.insights) say('the Insights content did not render');
       }
       if (page.out.startsWith('use-cases/') && state.footers !== 1) say(`expected one footer, found ${state.footers}`);
       if (page.out === 'use-cases/index.html' && state.tiles !== CASES.length) say(`expected ${CASES.length} use cases, found ${state.tiles}`);

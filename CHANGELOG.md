@@ -1,5 +1,20 @@
 # Changelog
 
+## November 12, 2026: Insights
+
+- **New:** the Insights refresh, approved November 4: `insights/index.html`,
+  `insights/articles/index.html`, `insights/guides-and-reports/index.html`
+  and `insights/events-and-webinars/index.html` (Glow V2), every article at
+  `insights/articles/<slug>.html` and every customer story at
+  `insights/customer-stories/<slug>.html`. They run live from
+  `src/insights-data.json` with `src/insights.js`, `src/insights.css` and
+  `src/insights-v2.css`; the Glow V2 gradient is `inGlow2` in
+  `src/research-v3-animations.js` (the other three Insights meshes came along
+  but aren't used). Link previews use `og/insights-og.jpg`. See README.md,
+  "Insights". Build it on a Webflow branch and don't publish until Hunter
+  gives the go.
+- **Unchanged:** every other page.
+
 ## November 6, 2026: Hire Pave Agent
 
 - **New:** `hire-pave-agent/index.html`, approved by Tim on November 6 (V6,
