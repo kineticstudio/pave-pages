@@ -48,6 +48,10 @@ const CASES = JSON.parse(await fs.readFile(path.join(PAVE, 'use-cases-data.json'
 const INSIGHTS = JSON.parse(await fs.readFile(path.join(PAVE, 'insights-data.json'), 'utf8'));
 const ARTICLES = INSIGHTS.articles.concat(INSIGHTS.extra || []);
 const STORIES = INSIGHTS.caseStudies.filter((c, i, all) => all.findIndex(x => x.company === c.company) === i);
+// Product updates (round three, approved for dev Nov 16): every update, from the data file.
+const upSandbox = {window: {}};
+vm.runInNewContext(await fs.readFile(path.join(PAVE, 'updates-v2-data.js'), 'utf8'), upSandbox);
+const UPDATES = upSandbox.window.PaveUpdates.updates;
 const IN_LISTS = {'insights-v2.html': 'insights/', 'insights-articles-v2.html': 'insights/articles/', 'insights-guides-v2.html': 'insights/guides-and-reports/', 'insights-events-v2.html': 'insights/events-and-webinars/'};
 
 // Each page: the prototype page and query, the file here, its name, and an
@@ -78,6 +82,13 @@ const PAGES = [
   {src: 'insights-events-v2.html', query: '?hero=glow2', out: 'insights/events-and-webinars/index.html', name: 'Insights: events & webinars', ready: '[data-insights-root].is-ready'},
   ...ARTICLES.map(a => ({src: 'insights-article-v2.html', query: `?post=${a.slug}`, out: `insights/articles/${a.slug}.html`, name: a.title, ready: '[data-insights-root].is-ready'})),
   ...STORIES.map(c => ({src: 'insights-case-study-v2.html', query: `?case=${c.slug}${c.video ? '&layout=video' : ''}`, out: `insights/customer-stories/${c.slug}.html`, name: `${c.company} customer story${c.video ? ' (video)' : ''}`, ready: '[data-insights-root].is-ready'})),
+  // Customers: the live story grid with video story cards (approved Nov 16).
+  // src/customers-video.js writes the grid and runs the hover previews.
+  {src: 'customers-video.html', query: '', out: 'customers/index.html', name: 'Customers: video story cards', ready: '[data-grid="cases"] .cs-card2--clip'},
+  // Product updates, round three (approved for dev Nov 16; content to come).
+  // src/updates-v2.js writes the feed and each update from src/updates-v2-data.js.
+  {src: 'updates-v3.html', query: '', out: 'product-updates/index.html', name: 'Product updates', ready: '[data-up-list] .up2-entry'},
+  ...UPDATES.map(u => ({src: 'update-v2.html', query: `?u=${u.id}`, out: `product-updates/${u.id}.html`, name: `Product update: ${u.title}`, ready: '[data-up-title]:not(:empty)'})),
   ...CASES.map(u => ({src: 'use-case-v2.html', query: `?case=${u.id}&from=grid`, out: `use-cases/${u.id}.html`, name: u.title, ready: '[data-uc-root].is-ready [data-title]:not(:empty)'})),
 ];
 // Scripts whose only job is writing markup that is now written in.
@@ -174,6 +185,8 @@ function relink(value) {
   if (list) return '/' + list + (hash ? '#' + hash : '');
   // The customer stories listing stayed out (Pave redid the Customers page).
   if (/^insights-case-studies(?:-v2)?\.html$/.test(file)) return `${SITE}/customers`;
+  if (/^update-v2\.html$/.test(file) && params.get('u')) return `/product-updates/${params.get('u')}.html${hash ? '#' + hash : ''}`;
+  if (/^updates(?:-v[23])?\.html$/.test(file)) return '/product-updates/' + (hash ? '#' + hash : '');
   if (ELSEWHERE[file]) return ELSEWHERE[file] + (hash ? '#' + hash : '');
   if (/\.[a-z0-9]+$/i.test(file)) return `/src/${file}`;
   return value;
@@ -217,7 +230,7 @@ function finish(html, page) {
   }
   // The nav page opens Product on arrival, as in Pave's approved screenshot.
   html = html.replace(/if \(\/\[\?&\]product=\/\.test\(location\.search\) && /, 'if (');
-  html = html.replace(/\b(href|src)="([^"]*)"/g, (all, attr, value) => `${attr}="${relink(value)}"`);
+  html = html.replace(/\b(href|src|poster)="([^"]*)"/g, (all, attr, value) => `${attr}="${relink(value)}"`);
   html = html.replace(STAMP, '');
   // The calculator fetches its data file from wherever the page sits.
   html = html.replace(/data-calculator="calculator-data\.json"/, 'data-calculator="/src/calculator-data.json"');
@@ -235,16 +248,21 @@ function finish(html, page) {
       ['post', q.get('post')], ['case-slug', q.get('case')], ['layout', q.get('layout')]].filter(([, v]) => v).map(([k, v]) => ` data-in-${k}="${v}"`).join('');
     html = html.replace(/<body ([^>]*)data-insights="(\w+)"/, `<body $1data-insights="$2"${extra}`);
   }
+  // Product updates link to these pages and name their update on the body.
+  if (/^updates?-v[23]\.html$/.test(page.src)) {
+    const id = new URLSearchParams(page.query).get('u');
+    html = html.replace(/<body ([^>]*)data-up="(\w+)"/, `<body $1data-up="$2" data-up-href="/product-updates/{id}.html" data-up-index="/product-updates/"${id ? ` data-up-id="${id}"` : ''}`);
+  }
   if (page.out === 'nav/index.html') html = html.replace(/<title>[^<]*<\/title>/, '<title>Pave navigation</title>');
   if (OG[page.out]) html = html.replace(/(<meta name="description"[^>]*>)/, `$1\n${ogTags(OG[page.out])}`);
-  const runs = page.src.startsWith('hire-agent') ? 'src/home-hero.js runs the hero (pave.com\'s own), and src/hire-agent.js, src/hire-agent-v3.js and src/hire-agent-v7.js the reveals, the logo wall and the nav at the top' : page.src.startsWith('nav') ? 'nothing else runs' : page.src.startsWith('calculator') ? 'src/calculator-ui.js runs the calculator from src/calculator-data.json (with src/calculator-v21.js, the math), and src/research-v3-animations.js the motion' : page.src.startsWith('insights') ? 'src/insights.js runs the lists, the filters and Show more from src/insights-data.json, and src/research-v3-animations.js the motion' : page.src.startsWith('use-case') ? 'src/use-cases.js runs the filters and the copy button from src/use-cases-data.json, and src/research-v3-animations.js the motion' : 'src/research-v3-animations.js the motion';
+  const runs = page.src.startsWith('hire-agent') ? 'src/home-hero.js runs the hero (pave.com\'s own), and src/hire-agent.js, src/hire-agent-v3.js and src/hire-agent-v7.js the reveals, the logo wall and the nav at the top' : page.src.startsWith('nav') ? 'nothing else runs' : page.src.startsWith('calculator') ? 'src/calculator-ui.js runs the calculator from src/calculator-data.json (with src/calculator-v21.js, the math), and src/research-v3-animations.js the motion' : page.src.startsWith('insights') ? 'src/insights.js runs the lists, the filters and Show more from src/insights-data.json, and src/research-v3-animations.js the motion' : page.src.startsWith('customers') ? 'src/customers-video.js writes the story grid and runs the hover previews' : /^updates?-v/.test(page.src) ? 'src/updates-v2.js writes the feed or the update from src/updates-v2-data.js and plays the videos, and src/research-v3-animations.js the motion' : page.src.startsWith('use-case') ? 'src/use-cases.js runs the filters and the copy button from src/use-cases-data.json, and src/research-v3-animations.js the motion' : 'src/research-v3-animations.js the motion';
   const note = `<!-- Generated by tools/sync-from-pave.mjs from pave-v2's ${page.src}${page.query}. The markup is written in; src/nav.js mounts the menus and ${runs}. -->`;
   return html.replace(/^<!DOCTYPE html>/i, `<!doctype html>\n${note}`);
 }
 
 async function write(files, markup) {
   await fs.rm(path.join(ROOT, 'src'), {recursive: true, force: true});
-  for (const dir of ['nav', 'research', 'calculator', 'use-cases', 'hire-pave-agent', 'insights']) await fs.rm(path.join(ROOT, dir), {recursive: true, force: true});
+  for (const dir of ['nav', 'research', 'calculator', 'use-cases', 'hire-pave-agent', 'insights', 'customers', 'product-updates']) await fs.rm(path.join(ROOT, dir), {recursive: true, force: true});
   const copied = [];
   for (const file of [...new Set([...files, ...REFERENCE])].sort()) {
     if (file.endsWith('.html') || SKIP.includes(file) || DIALS.includes(file) || HIRE_CSS.includes(file) || file.startsWith('shared/') || (HIRE_UNUSED.includes(file) && !['vendor/gsap/gsap.min.js', 'vendor/gsap/ScrollTrigger.min.js', 'vendor/lenis/lenis.min.js', 'mesh.js'].includes(file)) || (RENDERERS.includes(file) && !REFERENCE.includes(file)) || !file) continue;
@@ -260,6 +278,14 @@ async function write(files, markup) {
   for (const file of HIRE_CSS) hire.push(`/* ── ${file} ── */\n` + (await fs.readFile(path.join(PAVE, file), 'utf8')).replace(STAMP, ''));
   await fs.writeFile(path.join(ROOT, 'src', 'hire-pave-agent.css'), `/* Hire Pave Agent, from pave-v2's hire-agent.css and its six rounds (V2 to V7), in order.\n   The page's <body> carries ha-v2 to ha-v7, so every round's rules apply. Generated by tools/sync-from-pave.mjs. */\n\n` + hire.join('\n\n'));
   copied.push('hire-pave-agent.css');
+  // Product updates: the sample video and poster, read from /src/media/.
+  for (const file of ['media/updates-sample.mp4', 'media/updates-sample.jpg']) {
+    await fs.mkdir(path.join(ROOT, 'src', 'media'), {recursive: true});
+    await fs.copyFile(path.join(PAVE, file), path.join(ROOT, 'src', file));
+    copied.push(file);
+  }
+  const upData = path.join(ROOT, 'src', 'updates-v2-data.js');
+  await fs.writeFile(upData, (await fs.readFile(upData, 'utf8')).replace(/(['"])media\//g, '$1/src/media/'));
   for (const page of PAGES) {
     const target = path.join(ROOT, page.out);
     await fs.mkdir(path.dirname(target), {recursive: true});

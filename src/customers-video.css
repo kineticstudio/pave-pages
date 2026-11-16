@@ -1,0 +1,340 @@
+/* Customer story cards with video (Teresa, Nov 12; Hunter's pick, Nov 13):
+   a story with a video shows its thumbnail and a play button, and on desktop
+   a short muted preview plays while you hover. The first part is pave.com/customers'
+   own card styles as they are live (Nov 13), so the new card sits in the real grid;
+   the new card is at the end (.cs-card2--clip). */
+
+
+.px-cs-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-flow: dense;
+  gap: 14px;
+}
+.cs-card2 { grid-column: span 4; }
+.cs-half { grid-column: span 6; }
+.cs-quarter { grid-column: span 3; }
+.cs-card2--video { grid-column: span 6; grid-row: span 2; }
+
+/* Filter: hidden cards drop out, grid reflows (dense keeps it hole-free) */
+.cs-card2.cs-hide { display: none; }
+
+@media (max-width: 940px) {
+  .px-cs-grid { grid-template-columns: repeat(6, 1fr); }
+  .cs-card2, .cs-half, .cs-quarter { grid-column: span 3; }
+  .cs-card2--video { grid-column: span 6; grid-row: span 2; }
+}
+@media (max-width: 640px) {
+  .px-cs-grid { grid-template-columns: 1fr; }
+  .cs-card2, .cs-half, .cs-quarter, .cs-card2--video { grid-column: auto; grid-row: auto; }
+}
+[data-span="half"] { grid-column: span 6 !important; }
+[data-span="quarter"] { grid-column: span 3 !important; }
+[data-span="third"] { grid-column: span 8 !important; }
+[data-span="video"] { grid-column: span 6 !important; grid-row: span 2 !important; color: white !important }
+
+/* Filter: hidden cards drop out, grid reflows (dense keeps it hole-free) */
+[data-card][hidden],
+[data-card][data-hidden="true"] { display: none; }
+
+@media (max-width: 991px) {
+  [data-grid="cases"] { grid-template-columns: repeat(6, 1fr); }
+  [data-span="video"] { aspect-ratio: 1/1 !important; }
+  [data-card], [data-span="half"], [data-span="quarter"] { grid-column: span 3; }
+[data-span="third"] { grid-column: span 3 !important; }
+  [data-span="video"] { grid-column: span 6; grid-row: span 2; }
+}
+
+@media (max-width: 479px) {
+  [data-grid="cases"] { grid-template-columns: 1fr; }
+  [data-card], [data-span="half"], [data-span="quarter"], [data-span="video"], [data-span="third"] { 
+    grid-column: auto !important; 
+    grid-row: auto; 
+  }
+}
+/* Filter chips */
+.csf { display: flex; gap: 6px; }
+.csf-chip {
+  height: 36px;
+  padding: 0 16px;
+  border: 1px solid rgba(16,16,20,0.16);
+  border-radius: 100px;
+  background: transparent;
+  color: rgba(16,16,20,0.7);
+  font-family: var(--font-display, sans-serif);
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.csf-chip:hover { background: rgba(16,16,20,0.05); }
+.csf-chip.is-active { background: var(--blue, #235cf3); border-color: var(--blue, #235cf3); color: #fff; }
+
+
+/* ═══ GRID ═══════════════════════════════════════════════════════ */
+.px-cs-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-flow: dense;
+  gap: 14px;
+}
+
+/* ── Size variants (grid spans) ── */
+.cs-card2        { grid-column: span 4; }   /* three across (default) */
+.cs-half         { grid-column: span 6; }   /* two across */
+.cs-quarter      { grid-column: span 3; }   /* four across */
+.cs-card2--wide  { grid-column: span 6; }
+.cs-card2--tall  { grid-row: span 2; }
+.cs-card2--video { grid-column: span 6; grid-row: span 2; }
+
+@media (max-width: 940px) {
+  .px-cs-grid { grid-template-columns: repeat(6, 1fr); }
+  .cs-card2, .cs-half, .cs-quarter, .cs-card2--wide { grid-column: span 3; }
+  .cs-card2--tall { grid-row: auto; }
+  .cs-card2--video { grid-column: span 6; grid-row: span 2; }
+}
+@media (max-width: 640px) {
+  .px-cs-grid { grid-template-columns: 1fr; }
+  .cs-card2, .cs-half, .cs-quarter, .cs-card2--wide, .cs-card2--video {
+    grid-column: auto; grid-row: auto;
+  }
+}
+
+/* ═══ BASE CARD ═══════════════════════════════════════════════════ */
+.cs-card2 {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 236px;
+  padding: 24px 26px;
+  border-radius: 28px;
+  background: #fff;
+  color: #101014;
+  text-decoration: none;
+  border: 0;
+  box-shadow: 0 1px 2px rgba(16,16,20,0.04), 0 6px 18px rgba(16,16,20,0.05);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.2s ease;
+}
+.cs-card2:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 2px 5px rgba(16,16,20,0.06), 0 18px 40px rgba(16,16,20,0.13);
+}
+
+/* ═══ TOP ROW: logo + name + badge ════════════════════════════════ */
+.cs2-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+/* Mark sits in its own white tile so it reads at size on any ground */
+.cs2-top img {
+  width: 44px;
+  height: 44px;
+  padding: 8px;
+  border-radius: 12px;
+  object-fit: contain;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(16,16,20,0.06), 0 4px 12px rgba(16,16,20,0.10);
+  flex-shrink: 0;
+}
+.cs2-top b {
+  font-family: var(--font-display, sans-serif);
+  font-weight: 500;
+  font-size: 17px;
+  color: #101014;
+}
+
+/* ── Badge (Written / Video pill) ── */
+.cs2-badge {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-body, sans-serif);
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: rgba(16,16,20,0.5);
+  border: 1px solid rgba(16,16,20,0.12);
+  border-radius: 100px;
+  padding: 4px 9px;
+}
+.cs2-badge.is-video {
+  color: #157a3a;
+  border-color: rgba(15,207,82,0.45);
+  background: var(--green-light, #e4f8e1);
+}
+
+/* ═══ BODY: title + sub, bottom-anchored ══════════════════════════ */
+.cs2-body {
+  margin-top: auto;
+  padding-right: 18px;
+}
+.cs2-title {
+  font-family: var(--font-display, sans-serif);
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 1.24;
+  letter-spacing: -0.025em;
+  color: #101014;
+}
+.cs2-sub {
+  margin-top: 9px;
+  font-family: var(--font-body, sans-serif);
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgba(16,16,20,0.62);
+}
+/* A quarter-width card has no room for the sub */
+.cs-quarter .cs2-sub { display: none; }
+@media (max-width: 940px) { .cs-quarter .cs2-sub { display: block; } }
+
+/* Wide card lets its title run longer */
+.cs-card2--wide .cs2-title { max-width: 34ch; }
+
+/* ═══ CORNER ARROW ════════════════════════════════════════════════ */
+.bcard-arrow2 {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  color: rgba(16,16,20,0.35);
+  line-height: 0;
+  transition: color 0.15s ease;
+}
+.cs-card2:hover .bcard-arrow2 { color: var(--blue, #235cf3); }
+
+/* ═══ VIDEO CARD ══════════════════════════════════════════════════ */
+.cs-card2--video {
+  overflow: hidden;
+  color: #fff;
+}
+/* iframe can't object-fit → scale a 16:9 box to cover from centre.
+   min-width 178% = 100/56.25, so a tall card is fully covered. */
+.cs2-film, .cs2-poster {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-width: 178%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  border: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.cs2-poster { object-fit: cover; min-width: 100%; }
+.cs2-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(5,10,30,0.24) 0%, rgba(5,10,30,0.78) 100%);
+}
+.cs-card2--video .cs2-top,
+.cs-card2--video .cs2-body { position: relative; z-index: 2; }
+.cs-card2--video .cs2-top b,
+.cs-card2--video .cs2-title { color: #fff; }
+.cs-card2--video .cs2-sub { color: rgba(255,255,255,0.80); }
+.cs-card2--video .bcard-arrow2 { z-index: 2; color: rgba(255,255,255,0.7); }
+.cs-card2--video:hover .bcard-arrow2 { color: #fff; }
+.cs-card2--video .cs2-title {
+  font-size: 32px;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  max-width: 16ch;
+}
+@media (max-width: 640px) {
+  .cs-card2--video .cs2-title { font-size: 24px; }
+}
+
+/* ═══ IMAGE-BG CARD (optional: real photo behind, white text) ═════ */
+.cs-card2--img {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background-size: cover;
+  background-position: center;
+}
+.cs-card2--img::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(180deg, rgba(5,10,30,0.08) 0%, rgba(5,10,30,0.84) 100%);
+}
+.cs-card2--img .cs2-top,
+.cs-card2--img .cs2-body { position: relative; z-index: 1; }
+.cs-card2--img .cs2-top b,
+.cs-card2--img .cs2-title { color: #fff; }
+.cs-card2--img .cs2-sub { color: rgba(255,255,255,0.80); }
+.cs-card2--img .bcard-arrow2 { color: rgba(255,255,255,0.72); z-index: 1; }
+
+/* ═══ BRAND-TINTED CARDS (optional: data-tone per card) ═══════════ */
+.cs-card2[data-tone="greenDark"]  { background: #045419; }
+.cs-card2[data-tone="blueSat"]    { background: var(--blue, #235cf3); }
+.cs-card2[data-tone="purpleDark"] { background: #461f7a; }
+.cs-card2[data-tone="navy"]       { background: var(--blue-medium, #092264); }
+.cs-card2[data-tone="greenLight"] { background: var(--green-light, #e4f8e1); }
+.cs-card2[data-tone="blueLight"]  { background: var(--blue-light, #e3efff); }
+.cs-card2[data-tone="blueUltra"]  { background: var(--blue-ultra-light, #f3f8ff); }
+.cs-card2[data-tone="purpleLight"]{ background: #f0e9fb; }
+.cs-card2[data-tone="yellow"]     { background: #f0ff81; }
+
+/* Light ink on the saturated tones (add data-ink="light" to those cards) */
+.cs-card2[data-ink="light"] .cs2-top b,
+.cs-card2[data-ink="light"] .cs2-title { color: #fff; }
+.cs-card2[data-ink="light"] .cs2-sub { color: rgba(255,255,255,0.80); }
+.cs-card2[data-ink="light"] .bcard-arrow2 { color: rgba(255,255,255,0.70); }
+.cs-card2[data-ink="light"]:hover .bcard-arrow2 { color: #fff; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-card2 { transition: none; }
+}
+
+/* ═══ PAGE (prototype only: the hero and the grid's frame) ═══════════ */
+body.cv { margin: 0; background: #eef2f8; color: #101014; font-family: var(--font-body, sans-serif); }
+.cv-hero { padding: 168px 0 56px; text-align: center; }
+.cv-hero h1 { max-width: 18ch; margin: 0 auto; font: 500 clamp(40px, 5vw, 72px)/1.04 var(--font-display, sans-serif); letter-spacing: -0.035em; }
+.cv-hero p { max-width: 46ch; margin: 20px auto 0; font-size: 18px; line-height: 1.5; color: rgba(16,16,20,0.62); }
+.cv-grid-wrap { padding-bottom: 120px; }
+.cs2-top .text-weight-medium { font: 500 17px var(--font-display, sans-serif); }
+.cs-card-link { position: absolute; inset: 0; z-index: 3; border-radius: inherit; }
+.cs-card2--video .text-weight-medium { color: #fff; }
+
+/* ═══ VIDEO STORY CARD (new) ══════════════════════════════════════
+   Any card size. The video's thumbnail fills the card under the same scrim
+   as the big video card, the text turns white, and a play button takes the
+   corner arrow's place. On a desktop pointer, hovering plays a short muted
+   preview over the thumbnail (customers-video.js); touch screens and reduced
+   motion keep the thumbnail. */
+.cs-card2--clip { overflow: hidden; background: #0a1a3f; color: #fff; }
+.cs-card2--clip .cs2-poster { transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+.cs-card2--clip .cs2-film { opacity: 0; transition: opacity .45s ease; }
+.cs-card2--clip .cs2-film.is-on { opacity: 1; }
+.cs-card2--clip .cs2-scrim { background: linear-gradient(180deg, rgba(5,10,30,0.10) 0%, rgba(5,10,30,0.18) 40%, rgba(5,10,30,0.80) 100%); }
+.cs-card2--clip .cs2-top, .cs-card2--clip .cs2-body { position: relative; z-index: 2; }
+.cs-card2--clip .text-weight-medium, .cs-card2--clip .cs2-title { color: #fff; }
+.cs-card2--clip .bcard-arrow2 { display: none; }
+.cs2-play {
+  position: absolute; right: 16px; top: 16px; z-index: 2;
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  color: var(--blue, #235cf3); background: #fff;
+  box-shadow: 0 6px 18px rgba(5,10,30,0.28);
+  transition: transform .25s ease;
+}
+.cs2-play svg { width: 16px; height: 16px; margin-left: 2px; }
+.cs-card2--clip:hover .cs2-play { transform: scale(1.08); }
+.cs-card2--clip:hover .cs2-poster { transform: translate(-50%, -50%) scale(1.03); }
+/* The big video card gets the same play button, so every video reads the same way. */
+.cs-card2--video .bcard-arrow2 { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .cs-card2--clip .cs2-poster, .cs-card2--clip .cs2-film, .cs2-play { transition: none; }
+  .cs-card2--clip:hover .cs2-poster { transform: translate(-50%, -50%); }
+}
+/* The corner arrow's size comes from Webflow's own stylesheet on the live page. */
+.bcard-arrow2 { width: 14px; height: 14px; }
+/* Keep a long company name clear of the play button, and the title clear of the thumbnail's own captions. */
+.cs-card2--clip .cs2-top, .cs-card2--video .cs2-top { padding-right: 48px; min-width: 0; }
+.cs-card2--clip .text-weight-medium { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.cs-card2--clip .cs2-scrim { background: linear-gradient(180deg, rgba(5,10,30,0.22) 0%, rgba(5,10,30,0.30) 38%, rgba(5,10,30,0.88) 100%); }

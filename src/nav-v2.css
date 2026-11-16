@@ -358,3 +358,32 @@
 }
 @keyframes ppSweep { 0% { transform: translateX(-100%); } 22%, 100% { transform: translateX(100%); } }
 @media (max-width: 800px) { .pb-agent { grid-template-columns: minmax(0, 1fr); } .pb-agent-copy { order: 2; } }
+
+/* Launch (Nov 13): no AI Technology tab; Customers is two tiles side by side,
+   Resources three columns (Insights, Data, the Data Lab tile). */
+.nav-card--people-launch { width: min(620px, calc(100vw - 32px)); grid-template-columns: 1fr 1fr; }
+.nav-card--people-launch .nvb--flagship .nvb-tile { min-height: 196px; }
+.nvx-st--uses { flex-direction: column; align-items: flex-start; }
+.nav-card--resources-launch { width: min(820px, calc(100vw - 32px)); grid-template-columns: 1fr 1fr 250px; }
+@media (max-width: 900px) {
+  .nav-card--people-launch .nvb--flagship { grid-column: auto; }
+  .nav-card--resources-launch { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 700px) {
+  .nav-card--people-launch, .nav-card--resources-launch { grid-template-columns: 1fr; }
+}
+
+/* V4 (Nov 16): Resources in one column beside the Data Lab tile, and the real
+   Pave mark in white on the Pave Agent tile. */
+.nav-card--resources-v4 { width: min(600px, calc(100vw - 32px)); grid-template-columns: 1fr 250px; }
+.nav-card--resources-v4 .nc-h--next { margin-top: 18px; }
+.nva-mark--pave { display: flex; align-items: center; justify-content: center; }
+.nva-mark--pave .pv-mark { transform: scale(.78); }
+.nva-mark--pave .pv-s { background: #fff; }
+@media (max-width: 900px) { .nav-card--resources-v4 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 700px) { .nav-card--resources-v4 { grid-template-columns: 1fr; } }
+/* The tile's square-dot rules would reshape the mark's pieces: give them back
+   the Pave logo's own sizes, and keep them still. */
+.nva-mark--pave .pv-mark i.pv-s { height: 12px; animation: none; transition: none; }
+.nva-mark--pave .pv-mark i.pv-tl, .nva-mark--pave .pv-mark i.pv-br { width: 15.6px; border-radius: 3.1px; }
+.nva-mark--pave .pv-mark i.pv-tr, .nva-mark--pave .pv-mark i.pv-bl { width: 12px; border-radius: 50%; }

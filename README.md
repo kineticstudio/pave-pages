@@ -23,6 +23,8 @@ Webflow, so these get built in Webflow now. They'd like to review next week.
 | Hire Pave Agent | [V7](https://pave.kineticstudio.com/?project=pave&view=designs&design=hire-pave-agent%2F07-Pave-Hire-Pave-Agent-V7.html) | Not started | Tim approved it November 6 (V6, with Teresa's notes, which are V7). `hire-pave-agent/index.html`. See "Hire Pave Agent" |
 | Insights (four main pages) | [Glow V2](https://pave.kineticstudio.com/?project=pave&view=designs&design=insights%2Fround-5%2F01-Pave-Insights-Hub-Glow-V2.html) | Not started | Restyle of the existing Insights, Articles, Guides & Reports and Events & Webinars pages, approved November 4 (Teresa, for the team). `insights/`. See "Insights" |
 | Insights article, customer story | [Article V2](https://pave.kineticstudio.com/?project=pave&view=designs&design=insights%2Fround-2%2F05-Pave-Insights-Article-V2.html), [Customer Story V2](https://pave.kineticstudio.com/?project=pave&view=designs&design=insights%2Fround-2%2F08-Pave-Insights-Customer-Story-V2.html) | Not started | Restyle of the Blog Posts and Case Studies templates. `insights/articles/<slug>.html`, `insights/customer-stories/<slug>.html` |
+| Customers: video story cards | [Video Story Cards](https://pave.kineticstudio.com/?project=pave&view=designs&design=customers%2F01-Pave-Customers-Video-Story-Cards.html) | Not started | Approved November 16 (Teresa). Adds video cards to the live Customers page. `customers/index.html`. See "Customers: video story cards" |
+| Product updates | [Round three](https://pave.kineticstudio.com/?project=pave&view=designs&design=product-updates%2F04-Pave-Product-Updates-V3.html) | Not started | New page and CMS collection, design approved for dev November 16 (Teresa); Pave's content is still to come. `product-updates/index.html`, one `product-updates/<id>.html` per update. See "Product updates" |
 
 The design links open each page on its own. On the review site the research
 pages still show the older nav they were reviewed with; here they carry the
@@ -31,7 +33,7 @@ approved nav, as they will on pave.com.
 How work moves:
 
 - **Designs** on pave.kineticstudio.com are what we build to.
-- **Changes** land here, one commit and one `CHANGELOG.md` entry each, with a
+- **Changes** land here, one commit and one `CHANGES.md` entry each, with a
   note in #pave-toqir.
 
 ### Still to confirm (Hunter, with Pave)
@@ -452,6 +454,69 @@ Code:
 - **Link previews:** `og/hire-pave-agent-og.jpg` and `.mp4`; the tags are in
   the page's head. See "Open Graph" above.
 
+## Customers: video story cards
+
+Teresa approved this on November 16. It's the live Customers page
+(pave.com/customers), the same fourteen stories in the same sizes and order,
+with one change: every story that has a video gets a video card. Nothing else
+on the page changes. `customers/index.html` is the reference; the card markup
+and the hover preview are in `src/customers-video.js` and
+`src/customers-video.css` (the live grid's own CSS is copied in so the cards
+sit exactly as they do today).
+
+- **The card** (`.cs-card2--clip`): the video's thumbnail fills the card's
+  image area, with a white play button in the corner where the arrow sits on
+  the other cards. The company logo, title and link stay as they are, and the
+  card still opens the story.
+- **Hover preview, desktop only:** on a mouse or trackpad (not touch), hovering
+  a video card for a moment starts a short muted preview in place of the
+  thumbnail (it fades in, plays about ten seconds from the clip's start time,
+  then settles back), and it stops when the pointer leaves. Phones and tablets
+  just show the thumbnail and play button. With reduced motion on, no preview.
+- **For the real build,** use a short MP4 clip per story for the hover (muted,
+  H.264, about 10 seconds, under 2 MB) rather than the YouTube player, so
+  YouTube's own buttons never flash up. The reference uses YouTube to show the
+  idea.
+- **CMS, Case Studies, new optional fields:** Video (YouTube link), Preview clip
+  (the MP4 for the hover), Thumbnail (optional image; without it, YouTube's
+  thumbnail, but Superhuman's has text baked in, so give it one), Preview start
+  (seconds, if you use the YouTube player). A story with no video stays a
+  normal card.
+- Seven stories have videos today; their IDs are the ones already embedded in
+  each story (listed at the top of `src/customers-video.js`).
+
+Build it on a Webflow branch and don't publish until Hunter gives the go.
+
+## Product updates
+
+A new page for what's new in Pave, like fin.ai/updates. Teresa approved the
+design for dev on November 16 (round three); Pave is still writing the real
+updates, so the reference runs on lorem ipsum. `product-updates/index.html` is
+the feed and `product-updates/<id>.html` one update (the collection's
+template). `src/updates-v2.js` writes both from `src/updates-v2-data.js`;
+the styles are `src/updates.css`, `src/updates-v2.css` and
+`src/updates-v3.css`, in that order.
+
+- **Hero:** "Product updates" and a line under it, on the blue mesh, and the
+  gradient runs down the whole page into Pave's light blue (`.up2-wash`).
+- **Filter chips** across the top, one per product plus All. They wrap onto a
+  second line rather than cut off.
+- **The side menu** (`.up2-ticker`, sticky): every update's date and title, a
+  plain dot beside each, and the one you're reading in blue with its date
+  showing. Round three took the halo off the dot and the line between the
+  dots, and gave the rows more room (`src/updates-v3.css`, only the menu).
+- **Each update** is a white box: date, product tag, title (to its page),
+  summary, then a video, an embed or a product visual if it has one.
+- **One update's page:** breadcrumb, title, date and tag, summary, the media,
+  the body, Book a demo, Newer and Older, and three related updates.
+- **CMS, Product Updates (new collection):** Name, Slug, Date, Product
+  (reference, drives the filter and the tag), Summary (one line), Media type
+  (Video, Embed, Visual or None), Video file and Poster image, Embed link
+  (YouTube, Vimeo or Wistia), Visual (image), Body (rich text). Newest first.
+- The address isn't confirmed; `/product-updates` is the suggestion.
+
+Build it on a Webflow branch and don't publish until Hunter gives the go.
+
 ## The navigation
 
 Top level: Product, AI Technology, Customers and Resources open menus;
@@ -577,5 +642,5 @@ PAVE=~/Developer/kinetic/pave-v2 npm run sync
 
 It rebuilds the pages from the prototype, then loads each one at 1440 and
 390 and fails on a missing file, a script error, a doubled nav or a page that
-scrolls sideways. Commit with a `CHANGELOG.md` entry and a note in
+scrolls sideways. Commit with a `CHANGES.md` entry and a note in
 #pave-toqir.

@@ -1,0 +1,16 @@
+/* Product updates, round three (Nov 10). Teresa on the side menu of round two:
+   "spacing looks a little cramped here" and "i think we can remove the halo
+   around the blue dot and the lines in between to simplify" (Sasha agreed).
+   Only the ticker changes; round two keeps its own look. */
+
+/* The hairline running between the dots is gone. */
+.up3 .up2-ticker ol::before { content:none; }
+
+/* No halo: the dot was ringed in white to mask that line, and in blue when
+   current. Both rings come off, so the dot is just a dot. */
+.up3 .up2-dot { box-shadow:none; }
+.up3 .up2-ticker a[aria-current="true"] .up2-dot { box-shadow:none; transform:scale(1.5); }
+
+/* Room to breathe: more space per row, and a little more inside the panel. */
+.up3 .up2-ticker { padding:28px 22px; }
+.up3 .up2-ticker a { padding:11px 0; }

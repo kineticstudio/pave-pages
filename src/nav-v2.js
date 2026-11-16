@@ -23,16 +23,29 @@
   function mini(label, href, sub) { return '<a class="nc-mini" href="' + href + '">' + label + (sub ? '<em>' + sub + '</em>' : '') + '</a>'; }
   function item(label, href, sub, here) { return '<a class="nc-item" href="' + href + '"' + (here ? ' aria-current="page"' : '') + '><strong>' + label + '</strong>' + (sub ? '<span>' + sub + '</span>' : '') + '</a>'; }
   var onResearch = current === 'ai' && /research/.test(location.pathname);
+  /* Launch (Nov 13, Teresa Nov 12: launch the nav now, without AI Technology,
+     since the research page waits): data-nav="launch" on the script tag or
+     ?nav=launch. No AI Technology tab, and no link to a page that doesn't
+     exist: Pave Agent and Hire Pave Agent go to their live pages, Customers is
+     stories plus use cases (by role and by stage wait for their pages), and
+     Resources drops Pave community and the calculator until they're live. */
+  /* V4 (Teresa's Studio comments, Nov 16) is the launch nav plus: Resources as
+     one column (All insights and Case studies added, Pave Data Lab as a text
+     link too, beside its tile), and the real Pave mark on the Pave Agent tile
+     instead of the four-square stand-in. data-nav="launch-v4" or ?nav=v4. */
+  var v4 = (script && script.getAttribute('data-nav') === 'launch-v4') || /[?&]nav=v4\b/.test(location.search);
+  var launch = (script && script.getAttribute('data-nav') === 'launch') || v4 || /[?&]nav=launch\b/.test(location.search);
 
   /* Product menu. Four ways to lead with Pave Agent, chosen by data-product on
      the script tag or ?product= on the page (simple, tiles, bento, panel);
      without either, the October 14 row. In every one, Hire Pave Agent is an
      action inside Pave Agent, not a second item beside it. */
   var product = (script && script.getAttribute('data-product')) || new URLSearchParams(location.search).get('product') || '';
-  var agentHref = 'agent-phase-1.html';
-  var hireHref = soon;
+  var agentHref = launch ? pave + '/pave-agent' : 'agent-phase-1.html';
+  var hireHref = launch ? pave + '/hire-pave-agent' : soon;
   var up = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>';
   var mark = '<span class="nva-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>';
+  if (v4) mark = '<span class="nva-mark nva-mark--pave" aria-hidden="true"><span class="pv-mark"><i class="pv-s pv-tl"></i><i class="pv-s pv-tr"></i><i class="pv-s pv-bl"></i><i class="pv-s pv-br"></i></span></span>';
   function ico(path) { return '<span class="nvg-ico" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + path + '</svg></span>'; }
   var ICON = {
     integrations: '<path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"/><rect x="7" y="7" width="10" height="10" rx="2.5"/>',
@@ -71,7 +84,7 @@
   function minis(list) { return list.map(function (m) { return mini(m[0], m[1], m[2]); }).join(''); }
   function toolMinis() { return TOOLS.map(function (m) { return mini(m[0], m[1]); }).join(''); }
   function globalRow() {
-    return '<div class="nvb-global">' + PLATFORM.map(function (p) {
+    return '<div class="nvb-global">' + PLATFORM.filter(function (p) { return !launch || p[1] !== soon; }).map(function (p) {
       return '<a class="nvg" href="' + p[1] + '">' + ico(ICON[p[3]]) + '<span><strong>' + p[0] + '</strong><em>' + p[2] + '</em></span></a>';
     }).join('') + '</div>';
   }
@@ -140,7 +153,7 @@
       '<div class="pp-agent">' +
         '<a class="pp-head" href="' + agentHref + '">' + mark + '<span><strong>Pave Agent <b class="nva-new">New</b></strong><em>Your AI compensation analyst</em></span></a>' +
         '<p class="pp-label">Ask Pave Agent to</p>' +
-        USES.map(function (u) { return '<a class="pp-use" href="' + agentHref + '#usecases-title"><span>' + u + '</span>' + up + '</a>'; }).join('') +
+        USES.map(function (u) { return '<a class="pp-use" href="' + (launch ? pave + '/use-cases' : agentHref + '#usecases-title') + '"><span>' + u + '</span>' + up + '</a>'; }).join('') +
         '<a class="pp-cta" href="' + hireHref + '">Hire Pave Agent</a>' +
       '</div>' + families() + globalRow());
     // The October 14 row (Pave Agent and Hire Pave Agent side by side).
@@ -153,16 +166,16 @@
 
   var html =
   '<nav class="nav nav-v2 nav-' + tone + '" aria-label="Main navigation">' +
-    '<a class="logo" href="index.html" aria-label="Pave home">' +
+    '<a class="logo" href="' + (launch ? pave + '/' : 'index.html') + '" aria-label="Pave home">' +
       '<span class="pv-mark" aria-hidden="true"><i class="pv-s pv-tl"></i><i class="pv-s pv-tr"></i><i class="pv-s pv-bl"></i><i class="pv-s pv-br"></i></span>' +
       '<svg class="pv-word" width="56" height="20" viewBox="48.85 9.28 68.9 24.62" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g fill="currentColor"><path d="M101.013 18.0521C101.013 16.297 101.357 14.7641 102.046 13.4533C102.757 12.1202 103.734 11.0983 104.978 10.3873C106.245 9.65418 107.689 9.2876 109.311 9.2876C110.955 9.2876 112.399 9.62085 113.643 10.2874C114.909 10.9539 115.898 11.8981 116.609 13.12C117.342 14.3419 117.72 15.7749 117.742 17.419C117.742 17.8633 117.709 18.3187 117.642 18.7853H104.778V18.9853C104.867 20.4738 105.334 21.6513 106.178 22.5177C107.022 23.3842 108.144 23.8174 109.544 23.8174C110.655 23.8174 111.588 23.5619 112.343 23.0509C113.099 22.5177 113.599 21.7735 113.843 20.8181H117.442C117.131 22.5511 116.287 23.9729 114.909 25.0838C113.554 26.1946 111.855 26.75 109.811 26.75C108.033 26.75 106.478 26.3946 105.145 25.6836C103.834 24.9505 102.812 23.9285 102.079 22.6177C101.368 21.3069 101.013 19.7851 101.013 18.0521ZM114.076 16.1526C113.921 14.9085 113.421 13.942 112.577 13.2533C111.755 12.5424 110.71 12.1869 109.444 12.1869C108.266 12.1869 107.245 12.5535 106.378 13.2866C105.534 13.9976 105.045 14.9529 104.912 16.1526H114.076Z"/><path d="M83.8125 9.48755H87.6782L92.3771 22.6844L97.0093 9.48755H100.808L94.5099 26.5501H90.111L83.8125 9.48755Z"/><path d="M75.9287 9.2876C78.2171 9.2876 79.9833 9.8208 81.2275 10.8872C82.4716 11.9536 83.0937 13.4755 83.0937 15.4528V26.6907H79.9594L79.6612 24.1173C79.0169 24.9616 78.2504 25.617 77.3617 26.0835C76.4953 26.5279 75.4289 26.75 74.1625 26.75C72.2741 26.75 70.7633 26.3057 69.6303 25.417C68.4972 24.5284 67.9307 23.3064 67.9307 21.7513C67.9307 19.9961 68.5527 18.652 69.7969 17.7189C71.0632 16.7636 72.885 16.2859 75.2622 16.2859H79.5279V15.2528C79.5279 14.2975 79.1946 13.5532 78.5281 13.02C77.8616 12.4646 76.9396 12.1869 75.7621 12.1869C74.7179 12.1869 73.8515 12.4091 73.1627 12.8534C72.4962 13.2977 72.0963 13.9087 71.963 14.6863H68.4305C68.6083 12.9756 69.3637 11.6537 70.6967 10.7206C72.0297 9.76526 73.7737 9.2876 75.9287 9.2876ZM74.7623 23.9507C76.2509 23.9507 77.4062 23.5508 78.2282 22.751C79.0724 21.9512 79.5056 20.8848 79.5279 19.5518V18.9519H75.0623C73.9514 18.9519 73.0961 19.1741 72.4962 19.6184C71.8964 20.0406 71.5964 20.6737 71.5964 21.518C71.5964 22.2511 71.8742 22.8399 72.4296 23.2842C73.0072 23.7286 73.7848 23.9507 74.7623 23.9507Z"/><path d="M57.9817 9.2876C59.5369 9.2876 60.9254 9.64307 62.1474 10.354C63.3693 11.0427 64.3246 12.0536 65.0133 13.3866C65.7021 14.6974 66.0464 16.2415 66.0464 18.0188C66.0464 19.7517 65.7021 21.2847 65.0133 22.6177C64.3246 23.9285 63.3693 24.9505 62.1474 25.6836C60.9254 26.3946 59.5369 26.75 57.9817 26.75C56.7154 26.75 55.6156 26.5168 54.6825 26.0502C53.7494 25.5837 53.0051 24.9505 52.4497 24.1507V33.8958H48.8506V9.48755H51.9832L52.4164 12.0203C53.7938 10.1985 55.6489 9.2876 57.9817 9.2876ZM57.3819 23.7174C58.8704 23.7174 60.0701 23.1842 60.981 22.1178C61.9141 21.0514 62.3807 19.6851 62.3807 18.0188C62.3807 16.3303 61.9141 14.964 60.981 13.9198C60.0701 12.8756 58.8704 12.3535 57.3819 12.3535C55.8933 12.3535 54.6936 12.8756 53.7827 13.9198C52.8718 14.9418 52.4164 16.2859 52.4164 17.9522C52.4164 19.6629 52.8718 21.0514 53.7827 22.1178C54.6936 23.1842 55.8933 23.7174 57.3819 23.7174Z"/></g></svg>' +
     '</a>' +
     '<div class="nav-links">' +
       top('product', 'Product') +
-      top('ai', 'AI Technology') +
+      (launch ? '' : top('ai', 'AI Technology')) +
       top('customers', 'Customers') +
       top('resources', 'Resources') +
-      plain('pricing', 'Pricing', 'pricing.html') +
+      plain('pricing', 'Pricing', launch ? pave + '/pricing' : 'pricing.html') +
     '</div>' +
     '<div class="nav-actions">' +
       '<a class="btn btn-secondary" href="https://app.pave.com/login">Sign in</a>' +
@@ -173,6 +186,7 @@
 
     productCard(product) +
 
+    (launch ? '' :
     /* 2. AI Technology: the credibility menu, not a second product menu.
        Three tiles, each drawn from what it is. */
     '<div class="nav-card nav-card--ai" data-card="ai" role="menu" aria-label="AI Technology">' +
@@ -194,10 +208,26 @@
           '<strong>AI Research</strong><span class="nc-feature-sub">Inside our AI research: evals, benchmarks and field notes.</span>' +
         '</a>' +
       '</div>' +
-    '</div>' +
+    '</div>') +
 
     /* 3. Customers: proof plus a buyer lens. Stories lead; by role and by
        company stage beside them. By industry waits for the tier two nav. */
+    (launch ?
+    '<div class="nav-card nav-card--people nav-card--people-launch" data-card="customers" role="menu" aria-label="Customers">' +
+      '<div class="nvb nvb--flagship">' +
+        '<a class="nvb-tile nvb-tile--stories" href="' + pave + '/customers">' +
+          '<span class="nvx-st" aria-hidden="true"><span class="nvx-chip is-on">Comp Leaders</span><span class="nvx-chip">Scaling</span><span class="nvx-chip">Enterprise</span></span>' +
+          '<span class="nvb-tile-copy">Customer stories<em>How comp teams run on Pave</em></span>' + arrow +
+        '</a>' +
+      '</div>' +
+      '<div class="nvb nvb--flagship">' +
+        '<a class="nvb-tile nvb-tile--uses" href="' + pave + '/use-cases">' +
+          '<span class="nvx-st nvx-st--uses" aria-hidden="true"><span class="nvx-chip is-on">Price a new role</span><span class="nvx-chip">Plan a merit cycle</span><span class="nvx-chip">Answer a pay question</span></span>' +
+          '<span class="nvb-tile-copy">Use cases<em>Proven ways teams use Pave Agent</em></span>' + arrow +
+        '</a>' +
+      '</div>' +
+    '</div>'
+    :
     '<div class="nav-card nav-card--people" data-card="customers" role="menu" aria-label="Customers">' +
       '<div class="nvb nvb--flagship">' +
         '<a class="nvb-tile nvb-tile--stories" href="customers.html">' +
@@ -214,10 +244,55 @@
         '<p class="nvb-h">By company stage</p>' +
         mini('Startup', soon) + mini('Scaling', soon) + mini('Enterprise', soon) +
       '</div>' +
-    '</div>' +
+    '</div>') +
 
     /* 4. Resources: Insights, Community, data and tools, the Data Lab tile.
        Research moved to AI Technology. */
+    (v4 ?
+    '<div class="nav-card nav-card--resources nav-card--resources-launch nav-card--resources-v4" data-card="resources" role="menu" aria-label="Resources">' +
+      '<div class="nc-col">' +
+        '<p class="nc-h">Insights</p>' +
+        item('All insights', pave + '/insights') +
+        item('Blog', pave + '/insights/articles', 'Market insights and industry trends') +
+        item('Guides &amp; Reports', pave + '/insights/guides-and-reports') +
+        item('Events &amp; Webinars', pave + '/insights/events-and-webinars') +
+        item('Case studies', pave + '/customers') +
+        '<p class="nc-h nc-h--next">Data and community</p>' +
+        item('Hot Jobs Index', pave + '/hot-jobs-index') +
+        item('Pave Data Lab', pave + '/pavedatalab', 'The insights community for comp professionals') +
+      '</div>' +
+      '<div class="nc-col nc-col--feature">' +
+        '<a class="nc-feature nc-feature--lab" href="' + pave + '/pavedatalab">' +
+          '<span class="nc-feature-tile" aria-hidden="true"><span class="nc-lab-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></span>' +
+          '<strong>Join Pave Data Lab for free</strong>' +
+          '<span class="nc-feature-sub">The AI-powered insights community for compensation professionals.</span>' +
+          '<span class="nc-read">Join for free</span>' +
+        '</a>' +
+      '</div>' +
+    '</div>'
+    :
+    (launch ?
+    '<div class="nav-card nav-card--resources nav-card--resources-launch" data-card="resources" role="menu" aria-label="Resources">' +
+      '<div class="nc-col">' +
+        '<p class="nc-h">Insights</p>' +
+        item('Blog', pave + '/insights/articles', 'Market insights and industry trends') +
+        item('Guides &amp; Reports', pave + '/insights/guides-and-reports') +
+        item('Events &amp; Webinars', pave + '/insights/events-and-webinars') +
+      '</div>' +
+      '<div class="nc-col">' +
+        '<p class="nc-h">Data</p>' +
+        item('Hot Jobs Index', pave + '/hot-jobs-index') +
+      '</div>' +
+      '<div class="nc-col nc-col--feature">' +
+        '<a class="nc-feature nc-feature--lab" href="' + pave + '/pavedatalab">' +
+          '<span class="nc-feature-tile" aria-hidden="true"><span class="nc-lab-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></span>' +
+          '<strong>Join Pave Data Lab for free</strong>' +
+          '<span class="nc-feature-sub">The AI-powered insights community for compensation professionals.</span>' +
+          '<span class="nc-read">Join for free</span>' +
+        '</a>' +
+      '</div>' +
+    '</div>'
+    :
     '<div class="nav-card nav-card--resources" data-card="resources" role="menu" aria-label="Resources">' +
       '<div class="nc-col">' +
         '<p class="nc-h">Insights</p>' +
@@ -242,7 +317,7 @@
           '<span class="nc-read">Join for free</span>' +
         '</a>' +
       '</div>' +
-    '</div>' +
+    '</div>')) +
 
     '</div>' +
   '</nav>';

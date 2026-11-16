@@ -1,4 +1,37 @@
-# Changelog
+# Changes
+
+Newest first. Each entry says what changed since the one below it, so you
+only need to update what's listed. (This file was CHANGELOG.md until
+November 16.)
+
+## November 16, 2026: video story cards and product updates (since November 12, Insights)
+
+- **New: Customers video story cards** (`customers/index.html`), approved by
+  Teresa on November 16. The live Customers page with one change: stories that
+  have a video get a video card (thumbnail, play button in the arrow's corner,
+  and a short muted preview on hover with a mouse). Built from
+  `src/customers-video.js` (card markup, hover preview, and the seven video
+  IDs) and `src/customers-video.css`. New optional Case Studies fields: Video,
+  Preview clip, Thumbnail, Preview start. See README.md, "Customers: video
+  story cards".
+- **New: Product updates** (`product-updates/index.html` and one
+  `product-updates/<id>.html` per update), round three, design approved for
+  dev on November 16. Content is lorem ipsum until Pave sends the real
+  updates. `src/updates-v2.js` writes the feed and each update from
+  `src/updates-v2-data.js`; styles are `src/updates.css`, `src/updates-v2.css`
+  and `src/updates-v3.css` (round three's simpler side menu). The sample video
+  is `src/media/updates-sample.mp4` with its poster. New CMS collection,
+  Product Updates; fields in README.md, "Product updates".
+- **Changed:** `src/updates-v2.js` reads its addresses from the page
+  (`data-up-href`, `data-up-index`, `data-up-id` on the body), so the
+  reference pages link to each other here.
+- **Sync:** `tools/sync-from-pave.mjs` builds the two new pages.
+- **Not for building yet:** `src/nav-v2.js` and `src/nav-v2.css` now also carry
+  a newer nav (V4, only behind `data-nav="launch-v4"`) that Pave is still
+  reviewing. `nav/index.html` didn't change; keep building the nav you have.
+- **Unchanged:** the navigation, research, calculator, use cases, Hire Pave
+  Agent and Insights. Build both new pages on a Webflow branch and don't
+  publish until Hunter gives the go.
 
 ## November 12, 2026: Insights
 
