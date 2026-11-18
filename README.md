@@ -13,7 +13,7 @@ Webflow, so these get built in Webflow now. They'd like to review next week.
 
 | Page | Design | Webflow | What it is |
 | --- | --- | --- | --- |
-| Navigation | [Agent Panel](https://pave.kineticstudio.com/designs/pave/site-src/nav-v2.html?product=panel) | Built on the research pages; rest of the site after Pave approves | Replaces the site-wide navbar. `nav/index.html` |
+| Navigation | [V5](https://pave.kineticstudio.com/designs/pave/site-src/nav-v5.html) | Approved by Teresa November 18, ready to build site-wide | Replaces the site-wide navbar. `nav/index.html` |
 | Research index | [Research Index Ruled V4](https://pave.kineticstudio.com/designs/pave/site-src/research-c4.html) | Built; October 20 changes to make | New static page, listing a new Research posts CMS collection. `research/index.html` |
 | Research post | [Research Post Split Header V3](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html) | Built; October 20 changes to make | The collection's template page. `research/<slug>.html`, one per post |
 | Research post, no number or image | [Text Only](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html?without=figure,image) | | The same template for a post with neither. `research/text-only.html` |
@@ -38,12 +38,8 @@ How work moves:
 
 ### Still to confirm (Hunter, with Pave)
 
-- **Nav items with no page yet.** In the design these link to `#`: AI Engine
-  and CompBench (AI Technology); Use cases, the four By role links and the
-  three By company stage links (Customers); Pave community (Resources);
-  Enterprise Controls and Observability and the Hire Pave Agent button
-  (Product). Build them as designed; Hunter will confirm where they go, or
-  whether they stay hidden, before the nav goes live.
+- **Nav items with no page yet:** settled. V5 leaves them out, and Pave adds
+  items as their pages go live.
 - **The research page's address.** `/research` is free on pave.com, so the
   suggestion is `/research` with posts at `/research/<slug>`. The AI Research
   tile in the nav points there.
@@ -68,7 +64,7 @@ pages fall back to system fonts.
 
 | Page | File | Design |
 | --- | --- | --- |
-| Navigation | `nav/index.html` | [Agent Panel](https://pave.kineticstudio.com/designs/pave/site-src/nav-v2.html?product=panel) |
+| Navigation | `nav/index.html` | [V5](https://pave.kineticstudio.com/designs/pave/site-src/nav-v5.html) |
 | Research | `research/index.html` | [Ruled V4](https://pave.kineticstudio.com/designs/pave/site-src/research-c4.html) |
 | AI-Powered Job Matching Works | `research/ai-powered-job-matching-works.html` | [Split Header V3](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html?post=ai-powered-job-matching-works) |
 | Calculated Benchmarks | `research/calculated-benchmarks-toughest-compensation-challenges.html` | [Split Header V3](https://pave.kineticstudio.com/designs/pave/site-src/research-light-post-v3.html?post=calculated-benchmarks-toughest-compensation-challenges) |
@@ -519,26 +515,28 @@ Build it on a Webflow branch and don't publish until Hunter gives the go.
 
 ## The navigation
 
-Top level: Product, AI Technology, Customers and Resources open menus;
-Pricing is a link; then Sign in and Book a demo.
+V5, approved by Teresa on November 18 for launch. It's the Agent Panel nav
+without the AI Technology tab, and every link goes to a live pave.com page.
+Pave will add items as new pages go live.
+
+Top level: Product, Customers and Resources open menus; Pricing is a link;
+then Sign in and Book a demo.
 
 - **Product** (the Agent Panel, `.nav-card.pm-panel`):
-  - **The Pave Agent panel** (`.pp-agent`, navy): the Pave Agent mark, name
-    and New tag (to the Pave Agent page), "Ask Pave Agent to" with three use
-    cases (each to the Agent page's use cases section), and the Hire Pave
-    Agent button at the bottom.
+  - **The Pave Agent panel** (`.pp-agent`, navy): the Pave mark
+    (`.nva-mark--pave`, the real four-shape Pave mark), Pave Agent and its New
+    tag (to /pave-agent), "Ask Pave Agent to" with three use cases (each to
+    /use-cases), and the Hire Pave Agent button (to /hire-pave-agent).
   - **Market Data:** Market Data, Methodology.
   - **Compensation Management Tools:** Market Pricing, Compensation Planning,
     Team View, Total Rewards, Visual Offer Letter.
-  - **Along the bottom** (`.nvb-global`): Integrations, Enterprise Controls
-    and Observability, Security.
-- **AI Technology:** three tiles, AI Engine, CompBench and AI Research (the
-  research page; marked current on the research pages).
-- **Customers:** the Customer stories tile and Use cases; By role; By company
-  stage.
-- **Resources:** Insights (Blog, Guides & Reports), Community (Pave community,
-  Events & Webinars), Data and tools (Hot Jobs Index, Calculator), and the
-  Pave Data Lab tile.
+  - **Along the bottom** (`.nvb-global`): Integrations and Security.
+- **Customers** (`.nav-card--people-launch`): two tiles, Customer stories
+  (/customers) and Use cases (/use-cases).
+- **Resources** (`.nav-card--resources-v4`, one column of links, no
+  descriptions under them): All insights, Articles, Guides & Reports, Events &
+  Webinars, Case studies (/customers); then Hot Jobs Index and Pave Data Lab.
+  Beside them the Pave Data Lab tile, which keeps its line.
 
 Behaviour (`src/nav.js`): one floating panel (`.nav-float`) resizes between
 the menus, the outgoing one fading toward the direction you moved while the
@@ -549,14 +547,13 @@ in place; nav.js builds it from the desktop menus. The tone switching
 (`data-nav-tone`) and hiding on scroll down are the Pave Agent page's, in
 `src/research-v3-animations.js`.
 
-Small CSS loops play only inside an open menu (the Pave Agent mark, the tile
-visuals) and stay still under reduced motion (`nav-v2.css`). The short
-descriptions under the links are Kinetic's placeholder copy; Pave may edit
-them.
+Small CSS loops play only inside an open menu (the tile visuals) and stay
+still under reduced motion (`nav-v2.css`). The short descriptions in the
+Product menu are Kinetic's placeholder copy; Pave may edit them.
 
-Every link points at its pave.com page, except the `#` ones listed under
-"Still to confirm" and AI Research, which points at this repo's
-`/research/`.
+Every link points at its pave.com page. (The research pages here still carry
+the older nav with AI Technology, whose AI Research tile points at this
+repo's `/research/`; that page waits on Pave.)
 
 ## The research index
 

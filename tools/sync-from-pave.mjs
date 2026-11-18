@@ -57,7 +57,7 @@ const IN_LISTS = {'insights-v2.html': 'insights/', 'insights-articles-v2.html': 
 // Each page: the prototype page and query, the file here, its name, and an
 // element that shows it has rendered.
 const PAGES = [
-  {src: 'nav-v2.html', query: '?product=panel', out: 'nav/index.html', name: 'Navigation', ready: '.nav-card.pm-panel'},
+  {src: 'nav-v5.html', query: '?product=panel', out: 'nav/index.html', name: 'Navigation', ready: '.nav-card.pm-panel'},
   {src: 'research-c4.html', query: '', out: 'research/index.html', name: 'Research', ready: '[data-rows] .lg-row'},
   ...POSTS.map(p => ({src: 'research-light-post-v3.html', query: `?post=${p.slug}&from=c4`, out: `research/${p.slug}.html`, name: p.title, ready: '[data-title]:not(:empty)'})),
   {src: 'research-light-post-v3.html', query: `?post=${POSTS[0].slug}&from=c4&without=figure,image`, out: 'research/text-only.html', name: 'A post with no number or image', ready: '[data-title]:not(:empty)'},

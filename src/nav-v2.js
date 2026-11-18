@@ -33,7 +33,10 @@
      one column (All insights and Case studies added, Pave Data Lab as a text
      link too, beside its tile), and the real Pave mark on the Pave Agent tile
      instead of the four-square stand-in. data-nav="launch-v4" or ?nav=v4. */
-  var v4 = (script && script.getAttribute('data-nav') === 'launch-v4') || /[?&]nav=v4\b/.test(location.search);
+  /* V5 (Teresa, Nov 17, on V4): Blog is "Articles", and no subheads under the
+     Resources list (the Data Lab tile keeps its line). data-nav="launch-v5" or ?nav=v5. */
+  var v5 = (script && script.getAttribute('data-nav') === 'launch-v5') || /[?&]nav=v5\b/.test(location.search);
+  var v4 = v5 || (script && script.getAttribute('data-nav') === 'launch-v4') || /[?&]nav=v4\b/.test(location.search);
   var launch = (script && script.getAttribute('data-nav') === 'launch') || v4 || /[?&]nav=launch\b/.test(location.search);
 
   /* Product menu. Four ways to lead with Pave Agent, chosen by data-product on
@@ -253,13 +256,13 @@
       '<div class="nc-col">' +
         '<p class="nc-h">Insights</p>' +
         item('All insights', pave + '/insights') +
-        item('Blog', pave + '/insights/articles', 'Market insights and industry trends') +
+        (v5 ? item('Articles', pave + '/insights/articles') : item('Blog', pave + '/insights/articles', 'Market insights and industry trends')) +
         item('Guides &amp; Reports', pave + '/insights/guides-and-reports') +
         item('Events &amp; Webinars', pave + '/insights/events-and-webinars') +
         item('Case studies', pave + '/customers') +
         '<p class="nc-h nc-h--next">Data and community</p>' +
         item('Hot Jobs Index', pave + '/hot-jobs-index') +
-        item('Pave Data Lab', pave + '/pavedatalab', 'The insights community for comp professionals') +
+        item('Pave Data Lab', pave + '/pavedatalab', v5 ? '' : 'The insights community for comp professionals') +
       '</div>' +
       '<div class="nc-col nc-col--feature">' +
         '<a class="nc-feature nc-feature--lab" href="' + pave + '/pavedatalab">' +

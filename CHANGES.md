@@ -4,6 +4,25 @@ Newest first. Each entry says what changed since the one below it, so you
 only need to update what's listed. (This file was CHANGELOG.md until
 November 16.)
 
+## November 18, 2026: Navigation V5 (since November 16)
+
+- **Changed: the navigation** (`nav/index.html`) is now V5, approved by
+  Teresa on November 18 to launch site-wide. Against the nav you have:
+  - no AI Technology tab, and nothing that links to a page that doesn't exist
+    yet (Enterprise Controls and Observability, By role, By company stage,
+    Pave community are gone);
+  - Customers is two tiles, Customer stories and Use cases;
+  - Resources is one column of plain links (All insights, Articles, Guides &
+    Reports, Events & Webinars, Case studies, Hot Jobs Index, Pave Data Lab)
+    next to the Pave Data Lab tile;
+  - the Pave Agent tile in Product uses the real Pave mark.
+  The markup and classes are in `nav/index.html`; `src/nav-v2.css` already
+  carries the styles (`.nav-card--resources-v4`, `.nva-mark--pave`) and
+  `src/nav-v2.js` the data. See README.md, "The navigation".
+- **Sync:** `tools/sync-from-pave.mjs` builds the nav page from V5.
+- **Unchanged:** every other page. Build the nav on a Webflow branch and
+  don't publish until Hunter gives the go.
+
 ## November 16, 2026: video story cards and product updates (since November 12, Insights)
 
 - **New: Customers video story cards** (`customers/index.html`), approved by
