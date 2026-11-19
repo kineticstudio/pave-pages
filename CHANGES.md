@@ -4,6 +4,24 @@ Newest first. Each entry says what changed since the one below it, so you
 only need to update what's listed. (This file was CHANGELOG.md until
 November 16.)
 
+## November 19, 2026: Product updates body styles (since November 18, Nav V5)
+
+- **Changed: Product updates, the update body** (`src/updates-v2.css`, the
+  `.up2-prose` rules). Sasha's first real updates use H3s, bulleted lists,
+  bold and links, which the placeholder copy never did, so on staging the
+  H3s run into the text, the lists have no bullets and the links look like
+  plain grey text. The new rules: H3s at 22px in the ink colour with 32px
+  above, lists with blue bullets and 8px between items, bold in the ink
+  colour, and links in Pave blue (#235CF3) with an underline. On staging the
+  rich text element is `.updates_up2-prose`, so the same rules go on that
+  class.
+- **Also:** most updates end with an empty paragraph from the CMS (it holds a
+  zero-width character, so CSS can't hide it). Either trim it on the page,
+  for example
+  `document.querySelectorAll('.updates_up2-prose > p').forEach(p => { if (!p.textContent.replace(/[\u200d\s]/g, '') && !p.querySelector('img')) p.remove(); });`,
+  or Sasha can delete the blank line at the end of each Body.
+- **Unchanged:** everything else, including the Nav V5 entry below.
+
 ## November 18, 2026: Navigation V5 (since November 16)
 
 - **Changed: the navigation** (`nav/index.html`) is now V5, approved by
